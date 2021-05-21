@@ -1,0 +1,47 @@
+version: '3'
+
+tasks:
+
+  api:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg 3.6 -f Dockerfile-api -t jitsuin-samples-api .
+
+  api-3.7:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg 3.7 -f Dockerfile-api -t jitsuin-samples-api .
+
+  api-3.8:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg 3.8 -f Dockerfile-api -t jitsuin-samples-api .
+  
+  api-3.9:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg 3.9 -f Dockerfile-api -t jitsuin-samples-api .
+
+  check:
+    desc: Check the style, bug and quality of the code
+    cmds:
+      - ./scripts/api.sh python3 --version
+      - ./scripts/api.sh pycodestyle --format=pylint samples
+      - ./scripts/api.sh python3 -m pylint --rcfile=pylintrc samples
+
+  clean:
+    desc: Clean git repo
+    cmds:
+      - git clean -fdX
+
+  format:
+    desc: Format code using black
+    cmds: 
+      - ./scripts/api.sh black samples
+
+  samples:
+    desc: Run samples tests
+    cmds:
+      - ./scripts/api.sh ./scripts/samples.sh
+
+

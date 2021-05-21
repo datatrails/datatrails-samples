@@ -1,0 +1,10 @@
+---
+  display_name: Baltimore Regional Sales Office
+  description: East Coast Regional Sales Headquarters
+  latitude: 39.28333333
+  longitude: -76.61666667
+  attributes: 
+    address: Baltimore 21201, Maryland
+    Facility Type: Sales
+    reception_email: reception_BLT@synsation.io
+    reception_phone: +1 (410) 123-4567

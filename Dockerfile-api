@@ -1,0 +1,14 @@
+ARG VERSION=3.6
+FROM python:${VERSION}-buster
+
+COPY requirements-api.txt /tmp/
+
+RUN pip3 install -r /tmp/requirements-api.txt \
+  && rm -f /tmp/requirements-api.txt
+
+ENV USER=api
+ENV HOME=/home/${USER}
+RUN mkdir -p ${HOME}
+ENV PYTHONPATH=${HOME}/samples:${PYTHONPATH}
+ENV PATH=${HOME}/.local/bin:${PATH}
+WORKDIR ${HOME}
