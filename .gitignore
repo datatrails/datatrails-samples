@@ -1,0 +1,12 @@
+**/__pycache__
+build/
+dist/
+*egg-info/
+.coverage
+*,cover
+*.xml
+htmlcov/
+.pylint.d/
+.cache/
+.eggs/
+.task/
