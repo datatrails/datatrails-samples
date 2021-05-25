@@ -3,7 +3,8 @@ FROM python:${VERSION}-buster
 
 COPY requirements-api.txt /tmp/
 
-RUN pip3 install -r /tmp/requirements-api.txt \
+RUN python3 -m pip -qq install --upgrade pip \
+  && python3 -m pip -qq install -r /tmp/requirements-api.txt \
   && rm -f /tmp/requirements-api.txt
 
 ENV USER=api
