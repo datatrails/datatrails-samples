@@ -158,7 +158,7 @@ def entry():
         type=str,
         dest="url",
         action="store",
-        default="https://playground-avid.engineering-k8s-poc-1.dev.poc.jitsuin.io",
+        default="https://rkvst.poc.jitsuin.io",
         help="location of Archivist service",
     )
     parser.add_argument(
