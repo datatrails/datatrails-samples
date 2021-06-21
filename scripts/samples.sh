@@ -2,6 +2,7 @@
 #
 # run samples tests
 #
+SAMPLESCMD="task samples"
 if [ -z "${TEST_ARCHIVIST}" ]
 then
     echo "TEST_ARCHIVIST is undefined"
@@ -22,22 +23,22 @@ if [ -z "${TEST_SELECTOR}" -o "$TEST_SELECTOR" = 'help' ]
 then
     echo "Available functional tests are:"
     echo ""
-    echo "    TEST_SELECTOR=door_entry task samples"
-    echo "    TEST_SELECTOR=estate_info task samples"
-    echo "    TEST_SELECTOR=signed_records task samples"
-    echo "    TEST_SELECTOR=synsation_initialise task samples"
-    echo "    TEST_SELECTOR=synsation_analyze task samples"
-    echo "    TEST_SELECTOR=synsation_charger task samples"
-    echo "    TEST_SELECTOR=synsation_jitsuinator task samples"
-    echo "    TEST_SELECTOR=synsation_wanderer task samples"
+    echo "    TEST_SELECTOR=door_entry ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=estate_info ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=signed_records ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_initialise ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_charger ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_jitsuinator ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_wanderer ${SAMPLESCMD}"
     echo ""
     echo "To run more than one test use a comma-separated list:"
     echo ""
-    echo "    TEST_SELECTOR=door_entry,estate_info task samples"
+    echo "    TEST_SELECTOR=door_entry,estate_info ${SAMPLESCMD}"
     echo ""
     echo "To run all tests:"
     echo ""
-    echo "    TEST_SELECTOR=all task samples"
+    echo "    TEST_SELECTOR=all ${SAMPLESCMD}"
     echo ""
     exit 0
 fi

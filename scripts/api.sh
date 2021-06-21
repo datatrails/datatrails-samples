@@ -12,7 +12,7 @@ docker run \
     --rm -it \
     -v $(pwd):/home/api \
     -u $(id -u):$(id -g) \
-	-e TEST_ARCHIVIST \
+    -e TEST_ARCHIVIST \
     -e TEST_AUTHTOKEN \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \

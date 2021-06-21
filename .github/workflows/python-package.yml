@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install -r requirements-api.txt
+        python3 -m pip install -r requirements.txt
     - name: Run integrity checks
       run: |
         export PYTHONPATH=samples:${PYTHONPATH}

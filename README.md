@@ -1,32 +1,38 @@
 # archivist-samples
 
 Sample python code that uses the archivist python SDK to manage particular types of assets
-such as 'doors', 'cards', 'containers etc.
-
-# Pre-requisites
-
-Required tools for this repo are task-runner and docker-ce.
-
-  - Install task runner: https://github.com/go-task/task
-  - Install docker-ce: https://docs.docker.com/get-docker/
+such as 'doors', 'cards', 'containers' etc.
 
 # Running the samples code
+
+Clone this repo and cd into the root directory of the repo.
+
+## Pre-requisites
+
+Python 3.6 and later versions are supported.
+
+A bash shell and the ability to install python code using requirements.txt and pip. Execute
+the following command in your virtual environment or user login:
+
+```bash
+python3 -m pip install --user -r requirements.txt
+```
 
 Add a token to the file credentials/.auth_token and set some environment vars to
 specify the archivist endpoint:
 
 ```bash
-export TEST_ARCHIVIST=https://dev-paul-0-avid.scratch-6.dev.wild.jitsuin.io
-export TEST_AUTHTOKEN=credentials/.auth_token
-export TEST_NAMESPACE="unique label"
-export TEST_VERBOSE=-v
+export ARCHIVIST="https://rkvst.poc.jitsuin.io"
+export AUTHTOKEN=credentials/.auth_token
+export NAMESPACE="unique label"
+export VERBOSE=-v
 ```
 
-If TEST_VERBOSE is "-v" debugging output will appear when running the tests.
+If VERBOSE is "-v" debugging output will appear when running the tests. Otherwise leave blank or undefined.
 
-## TEST_NAMESPACE
+## NAMESPACE
 
-If TEST_NAMESPACE is blank or unspecified then each execution of 'task samples' will not be
+If NAMESPACE is blank or unspecified then each execution of './scripts/samples.sh' will not be
 independent. Any assets events, locations will be visible to other users running the same tests
 on the same URL.
 
@@ -39,108 +45,52 @@ Due to restrictions attachments are always uploaded during every test execution.
 
 Events are created every execution of a test - currently no check is done if the event already exists.
 
-A special value of TEST_NAMESPACE:
-
-```bash
-export TEST_NAMESPACE=date
-```
-
-will set the namespace to the result of `date +%s` i.e. no of seconds since epoch. This effectively makes
-each test run independent of every other test run.
-
 ## TESTS
 
-To see what tests are available specify the help option:
+Move to correct subdirectory:
 
 ```bash
-TEST_SELECTOR=help task samples
-
-Available functional tests are:
-
-    TEST_SELECTOR=door_entry task samples
-    TEST_SELECTOR=estate_info task samples
-    TEST_SELECTOR=signed_records task samples
-    TEST_SELECTOR=synsation_initialise task samples
-    TEST_SELECTOR=synsation_analyze task samples
-    TEST_SELECTOR=synsation_charger task samples
-    TEST_SELECTOR=synsation_jitsuinator task samples
-    TEST_SELECTOR=synsation_wanderer task samples
-
-To run more than one test use a comma-separated list:
-
-    TEST_SELECTOR=door_entry,estate_info task samples
-
-To run all tests:
-
-    TEST_SELECTOR=all task samples
+cd samples
 ```
 
-and follow the instructions.
+### Door Entry Control
 
-For example:
+Some commands to simply create and manage doors and cards:
 
-```bash
-TEST_SELECTOR=door_entry,estate_info task samples
-TEST_SELECTOR=all task samples
-```
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --create
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --list all
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --list doors
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --list cards
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --list 'Courts of Justice front door'
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --list 'access_card_1'
 
-Note that the synsation example tests all share the same NAMESPACE.
+Execute opening doors with a card:
 
-# Development
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Courts of Justice front door,access_card_1"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Courts of Justice front door,access_card_3"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Courts of Justice front door,access_card_4"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Courts of Justice front door,access_card_0"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Courts of Justice front door,access_card_2"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Bastille front door,access_card_2"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "City Hall front door,access_card_2"
+python3 -m door_entry -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --open "Gare du Nord apartments side door,access_card_2"
 
-To see what options are available simply execute:
+### Manage assets and events and check for any inconsistencies
 
-```bash
-task
-```
+python3 -m estate_info -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --quick-count
+python3 -m estate_info -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --double-check
 
-## Default python 3.6
+### Signed Records
 
-Dependencies are defined in requirements-api.txt
+python3 -m signed_records -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --create 'samples'
+python3 -m signed_records -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --sign-message 'signature' 'samples'
+python3 -m signed_records -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --bad-sign-message 'signature' 'samples'
+python3 -m signed_records -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --check 'samples'
 
-To build the docker api image:
-```bash
-task api
-```
+### Synsation
 
-Make a change to the code and validate the changes:
-
-```bash
-task check
-```
-
-## Python 3.7
-
-To build the docker api image with Python 3.7:
-```bash
-task api-3.7
-```
-
-To check the style
-```bash
-task check
-```
-
-## Python 3.8
-
-To build the docker api image with Python 3.8:
-```bash
-task api-3.8
-```
-
-To check the style
-```bash
-task check
-```
-
-## Python 3.9
-
-To build the docker api image with Python 3.9:
-```bash
-task api-3.9
-```
-
-To check the style
-```bash
-task check
-```
+python3 -m synsation initialise  -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE --num-assets 100 --wait 1 --await-confirmation
+python3 -m synsation analyze     -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE
+python3 -m synsation charger     -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE -s 20190909 -S 20190923 -f 9876
+python3 -m synsation jitsuinator -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE -n tcl.ccj.001 --wait 1.0
+python3 -m synsation wanderer    -u $ARCHIVIST -t ../$AUTHTOKEN $VERBOSE --namespace $NAMESPACE
