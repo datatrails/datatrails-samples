@@ -2,6 +2,13 @@ version: '3'
 
 tasks:
 
+  about:
+    desc: Generate about.py
+    cmds:
+      - ./scripts/api.sh ./scripts/version.sh
+    status:
+      - test -s archivist/about.py
+
   api:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
@@ -24,10 +31,11 @@ tasks:
 
   check:
     desc: Check the style, bug and quality of the code
+    deps: [about]
     cmds:
       - ./scripts/api.sh python3 --version
-      - ./scripts/api.sh pycodestyle --format=pylint samples
-      - ./scripts/api.sh python3 -m pylint --rcfile=pylintrc samples
+      - ./scripts/api.sh pycodestyle --format=pylint archivist_samples
+      - ./scripts/api.sh python3 -m pylint --rcfile=pylintrc archivist_samples
 
   clean:
     desc: Clean git repo
@@ -36,12 +44,28 @@ tasks:
 
   format:
     desc: Format code using black
+    deps: [about]
     cmds: 
-      - ./scripts/api.sh black samples
+      - ./scripts/api.sh black archivist_samples
+
+  publish:
+    desc: pubish wheel package (will require username and password in TWINE_USERNAME,TWINE_PASSWORD)
+    deps: [about]
+    cmds:
+      - ./scripts/api.sh python3 -m twine check dist/*
+      - ./scripts/api.sh python3 -m twine upload --verbose --repository pypi dist/*
 
   samples:
     desc: Run samples tests
+    deps: [about]
     cmds:
       - ./scripts/api.sh ./scripts/samples.sh
 
-
+  wheel:
+    desc: Builds python wheel package
+    deps: [about]
+    cmds:
+      - rm -rf *egg-info
+      - rm -rf build 
+      - rm -f dist/*
+      - python3 setup.py bdist_wheel

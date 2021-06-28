@@ -43,7 +43,7 @@ from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
 from archivist.logger import set_logger, LOGGER
 
-from testing.namespace import (
+from ..testing.namespace import (
     assets_create,
     assets_read_by_signature,
     events_create,
@@ -514,8 +514,3 @@ def main():
 
     parser.print_help(sys_stdout)
     sys_exit(1)
-
-
-if __name__ == "__main__":
-    # execute only if run as a script
-    main()

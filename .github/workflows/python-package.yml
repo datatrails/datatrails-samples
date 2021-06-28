@@ -23,13 +23,13 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install -r requirements.txt
+        python3 -m pip install -r requirements-dev.txt
     - name: Run integrity checks
       run: |
         export PYTHONPATH=samples:${PYTHONPATH}
-        pycodestyle --format=pylint samples
-        python3 -m pylint --rcfile=pylintrc samples
-        black samples
+        pycodestyle --format=pylint archivist_samples
+        python3 -m pylint --rcfile=pylintrc archivist_samples
+        black archivist_samples
         modified=$(git status -s | wc -l)
         if [ $modified -gt 0 ]
         then

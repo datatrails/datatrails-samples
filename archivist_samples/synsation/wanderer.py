@@ -30,12 +30,12 @@ from archivist.errors import ArchivistNotFoundError
 from archivist.logger import set_logger, LOGGER
 from archivist.timestamp import make_timestamp
 
-from testing.namespace import (
+from ..testing.namespace import (
     assets_list,
     assets_read_by_signature,
     events_create,
 )
-from testing.time_warp import TimeWarp
+from ..testing.time_warp import TimeWarp
 
 from .util import make_event_json
 

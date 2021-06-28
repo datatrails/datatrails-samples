@@ -24,7 +24,7 @@ from archivist import about
 from archivist.errors import ArchivistNotFoundError
 from archivist.logger import LOGGER
 
-from testing.namespace import (
+from ..testing.namespace import (
     assets_create,
     assets_count,
     assets_list,
@@ -45,7 +45,7 @@ BEHAVIOURS = [
     "RecordEvidence",
 ]
 
-IMAGEDIR = "door_entry/images"
+IMAGEDIR = "archivist_samples/door_entry/images"
 
 
 # Door asset

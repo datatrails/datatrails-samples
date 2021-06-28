@@ -17,5 +17,7 @@ docker run \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \
     -e TEST_VERBOSE \
+    -e TWINE_USERNAME \
+    -e TWINE_PASSWORD \
     jitsuin-samples-api \
     "$@"

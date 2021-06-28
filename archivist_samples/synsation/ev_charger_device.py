@@ -24,7 +24,7 @@ import uuid
 from archivist.logger import LOGGER
 from archivist.timestamp import make_timestamp
 
-from testing.namespace import (
+from ..testing.namespace import (
     events_create,
 )
 

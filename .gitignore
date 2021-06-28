@@ -1,12 +1,15 @@
 **/__pycache__
+.bash_history
 build/
+.cache/
 dist/
 *egg-info/
+.eggs/
 .coverage
 *,cover
 *.xml
 htmlcov/
+.local/
 .pylint.d/
-.cache/
-.eggs/
+.python_history
 .task/
