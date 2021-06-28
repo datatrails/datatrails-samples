@@ -68,10 +68,8 @@ do
     eval "TEST_NO_$sel="
 done
 
-cd samples
-
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
-ARGS="-u $TEST_ARCHIVIST -t ../$TEST_AUTHTOKEN ${TEST_VERBOSE}"
+ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN ${TEST_VERBOSE}"
 
 # namespacing ensures that each run  of the tests is independent.
 if [ -n "$TEST_NAMESPACE" ]
@@ -88,7 +86,7 @@ else
     echo "No NAMESPACE specified - may share assets etc with someone else on same URL"
 fi
 
-DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} python3 -m door_entry ${ARGS} ${NAMESPACE}"
+DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} python3 -m archivist_samples.door_entry ${ARGS} ${NAMESPACE}"
 ${DOOR_ENTRY} --create
 ${DOOR_ENTRY} --list all
 ${DOOR_ENTRY} --list doors
@@ -107,27 +105,27 @@ ${OPEN} "City Hall front door,access_card_2"
 ${OPEN} "Gare du Nord apartments side door,access_card_2"
 
 # namespacing not required here
-ESTATE_INFO="${TEST_NO_ESTATE_INFO} python3 -m estate_info ${ARGS}"
+ESTATE_INFO="${TEST_NO_ESTATE_INFO} python3 -m archivist_samples.estate_info ${ARGS}"
 ${ESTATE_INFO} --quick-count
 ${ESTATE_INFO} --double-check
 
-SIGNED_RECORDS="${TEST_NO_SIGNED_RECORDS} python3 -m signed_records ${ARGS} ${NAMESPACE}"
+SIGNED_RECORDS="${TEST_NO_SIGNED_RECORDS} python3 -m archivist_samples.signed_records ${ARGS} ${NAMESPACE}"
 ${SIGNED_RECORDS} --create 'samples'
 ${SIGNED_RECORDS} --sign-message 'signature' 'samples'
 ${SIGNED_RECORDS} --bad-sign-message 'signature' 'samples'
 ${SIGNED_RECORDS} --check 'samples'
 
-SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m synsation initialise ${ARGS} ${NAMESPACE}"
+SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_samples.synsation initialise ${ARGS} ${NAMESPACE}"
 ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 
-SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m synsation analyze ${ARGS} ${NAMESPACE}"
+SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}"
 ${SYNSATION_ANALYZE}
 
-SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m synsation charger ${ARGS} ${NAMESPACE}"
+SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
 ${SYNSATION_CHARGER} -s 20190909 -S 20190923 -f 9876
 
-SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m synsation jitsuinator ${ARGS} ${NAMESPACE}"
+SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
 ${SYNSATION_JITSUINATOR} -n tcl.ccj.001 --wait 1.0
 
-SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m synsation wanderer ${ARGS} ${NAMESPACE}"
+SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}"
 ${SYNSATION_WANDERER}

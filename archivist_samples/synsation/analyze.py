@@ -29,7 +29,7 @@ from archivist.archivist import Archivist
 from archivist.logger import set_logger, LOGGER
 from archivist.timestamp import parse_timestamp
 
-from testing.namespace import (
+from ..testing.namespace import (
     assets_list,
     events_count,
     events_list,

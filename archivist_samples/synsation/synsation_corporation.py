@@ -21,7 +21,7 @@ import time
 
 from archivist.logger import LOGGER
 
-from testing.namespace import (
+from ..testing.namespace import (
     locations_create_from_yaml_file,
 )
 
@@ -29,6 +29,8 @@ from .util import (
     assets_create_if_not_exists,
     attachments_read_from_file,
 )
+
+LOCATIONS_DIR = "archivist_samples/synsation/locations"
 
 
 def initialise_asset_types(ac, timedelay):
@@ -58,29 +60,23 @@ def initialise_asset_types(ac, timedelay):
 def create_locations(ac, timedelay):
     corporation_locations = {}
 
-    newlocation = locations_create_from_yaml_file(
-        ac, "synsation/locations/grayslake.yaml"
-    )
+    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/grayslake.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(
-        ac, "synsation/locations/baltimore.yaml"
-    )
+    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/baltimore.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(
-        ac, "synsation/locations/european.yaml"
-    )
+    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/european.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, "synsation/locations/asia.yaml")
+    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/asia.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, "synsation/locations/za.yaml")
+    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/za.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 

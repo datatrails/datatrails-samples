@@ -27,7 +27,7 @@ from archivist import about
 from archivist.archivist import Archivist
 from archivist.logger import set_logger, LOGGER
 
-from testing.namespace import assets_wait_for_confirmed
+from ..testing.namespace import assets_wait_for_confirmed
 
 from . import synsation_corporation
 from . import synsation_industries

@@ -20,7 +20,7 @@
 
 from archivist.errors import ArchivistNotFoundError
 
-from testing.namespace import (
+from ..testing.namespace import (
     assets_create,
     assets_read_by_signature,
     attachments_upload_from_file,
@@ -50,7 +50,9 @@ def make_event_json(
 
 
 def attachments_read_from_file(arch, name, mtype):
-    return attachments_upload_from_file(arch, f"synsation/images/{name}", mtype)
+    return attachments_upload_from_file(
+        arch, f"archivist_samples/synsation/images/{name}", mtype
+    )
 
 
 def assets_create_if_not_exists(arch, behaviours, attrs, *, confirm=None):

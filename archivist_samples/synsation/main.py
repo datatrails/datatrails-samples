@@ -12,7 +12,15 @@ from . import wanderer
 
 
 def main():
-    key = sys.argv[1]
+    try:
+        key = sys.argv[1]
+    except IndexError:
+        print(
+            "Missing subcommand: 'initialise', 'analyze',"
+            "'charge', 'jitsuinator' or 'wanderer' is required"
+        )
+        sys.exit(1)
+
     del sys.argv[1]
 
     if key == "initialise":
@@ -36,8 +44,3 @@ def main():
         sys.exit(0)
 
     sys.exit(1)
-
-
-if __name__ == "__main__":
-    # execute only if run as a script
-    main()
