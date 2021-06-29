@@ -22,7 +22,8 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist.archivist import Archivist
-from archivist.logger import set_logger, LOGGER
+
+from ..testing.logger import set_logger, LOGGER
 
 from .run import run
 

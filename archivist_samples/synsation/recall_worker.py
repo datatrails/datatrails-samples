@@ -17,17 +17,19 @@
 
 # pylint: disable=missing-docstring
 
-import random
 import datetime
+import logging
+import random
 import time
 import threading
 import uuid
 
-from archivist.logger import LOGGER
 from archivist.timestamp import make_timestamp
 
 from . import patch_worker
 from .util import make_event_json
+
+LOGGER = logging.getLogger(__name__)
 
 
 def issue_recall(charger_list, cve_str, timewarp):

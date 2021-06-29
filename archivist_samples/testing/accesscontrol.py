@@ -18,10 +18,12 @@
 
 import datetime
 import json
+import logging
 import requests
 
 from archivist.archivist import Archivist
-from archivist.logger import LOGGER
+
+LOGGER = logging.getLogger(__name__)
 
 # Types
 #######

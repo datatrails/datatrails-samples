@@ -3,12 +3,17 @@
 Sample python code that uses the archivist python SDK to manage particular types of assets
 such as 'doors', 'cards', 'containers' etc.
 
+This document describes how to test any modifications made to the codebase.
+
 # Developer Pre-requisites
 
 Required tools for modifying this repo are task-runner and docker-ce.
 
   - Install task runner: https://github.com/go-task/task
   - Install docker-ce: https://docs.docker.com/get-docker/
+
+A running archivist instance which allows creation of arbitrary assets etc. This is usually
+a test or demo system and **not** a production system.
 
 # Running the samples code
 

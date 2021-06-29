@@ -20,12 +20,13 @@
 
 # pylint: disable=missing-docstring
 
+import logging
 import random
 import string
 
-from archivist.logger import LOGGER
-
 from .util import assets_create_if_not_exists, attachments_read_from_file
+
+LOGGER = logging.getLogger(__name__)
 
 
 def initialise_asset_types(ac):

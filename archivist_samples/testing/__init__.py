@@ -1,3 +1,3 @@
-"""Some stuff required for running example code
-   that should not be part of the installable wheel
+"""Convenience layer that ensures that assets and locations are created, read or
+   counted for a particular namespace plus a logger interface.
 """

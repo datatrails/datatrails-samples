@@ -17,12 +17,12 @@
 # pylint:  disable=missing-docstring
 
 
+import logging
 from sys import exit as sys_exit
 import uuid
 
 from archivist import about
 from archivist.errors import ArchivistNotFoundError
-from archivist.logger import LOGGER
 
 from ..testing.namespace import (
     assets_create,
@@ -46,6 +46,8 @@ BEHAVIOURS = [
 ]
 
 IMAGEDIR = "archivist_samples/door_entry/images"
+
+LOGGER = logging.getLogger(__name__)
 
 
 # Door asset

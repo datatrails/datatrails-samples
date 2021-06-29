@@ -1,4 +1,5 @@
-"""Simulates accelerated time for creating plausible logs quickly"""
+"""Simulates accelerated time for creating plausible logs quickly
+"""
 
 import datetime
 

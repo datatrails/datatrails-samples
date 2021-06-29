@@ -17,13 +17,15 @@
 
 # pylint: disable=missing-docstring
 
+import logging
 import random
 import time
 
-from archivist.logger import LOGGER
 from archivist.timestamp import make_timestamp
 
 from .util import make_event_json
+
+LOGGER = logging.getLogger(__name__)
 
 
 def service_device(charger, job_id, timewarp):

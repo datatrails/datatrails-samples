@@ -41,7 +41,8 @@ from cryptography.hazmat import backends
 from archivist import about
 from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
-from archivist.logger import set_logger, LOGGER
+
+from ..testing.logger import set_logger, LOGGER
 
 from ..testing.namespace import (
     assets_create,
