@@ -18,10 +18,10 @@
 # pylint: disable=missing-docstring
 
 
+import logging
 import threading
 import uuid
 
-from archivist.logger import LOGGER
 from archivist.timestamp import make_timestamp
 
 from ..testing.namespace import (
@@ -30,6 +30,8 @@ from ..testing.namespace import (
 
 from . import maintenance_worker
 from .util import make_event_json
+
+LOGGER = logging.getLogger(__name__)
 
 
 class EVDevice:

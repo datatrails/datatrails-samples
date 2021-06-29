@@ -31,9 +31,9 @@ import uuid
 from archivist import about
 from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
-from archivist.logger import set_logger, LOGGER
 from archivist.timestamp import make_timestamp
 
+from ..testing.logger import set_logger, LOGGER
 from ..testing.namespace import (
     assets_read_by_signature,
     events_create,

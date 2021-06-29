@@ -29,8 +29,8 @@ import time
 
 from archivist import about
 from archivist.archivist import Archivist
-from archivist.logger import set_logger, LOGGER
 
+from ..testing.logger import set_logger, LOGGER
 from ..testing.time_warp import TimeWarp
 
 from ..testing.namespace import (

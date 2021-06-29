@@ -16,9 +16,11 @@
 
 # pylint: disable=missing-docstring
 
-from archivist.logger import LOGGER
+import logging
 
 from .util import assets_create_if_not_exists, attachments_read_from_file
+
+LOGGER = logging.getLogger(__name__)
 
 
 def initialise_asset_types(ac):

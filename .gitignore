@@ -8,6 +8,8 @@ dist/
 .coverage
 *,cover
 *.xml
+*.pem
+*.aid
 htmlcov/
 .local/
 .pylint.d/

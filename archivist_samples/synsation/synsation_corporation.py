@@ -16,10 +16,9 @@
 
 # pylint: disable=missing-docstring
 
+import logging
 import random
 import time
-
-from archivist.logger import LOGGER
 
 from ..testing.namespace import (
     locations_create_from_yaml_file,
@@ -29,6 +28,8 @@ from .util import (
     assets_create_if_not_exists,
     attachments_read_from_file,
 )
+
+LOGGER = logging.getLogger(__name__)
 
 LOCATIONS_DIR = "archivist_samples/synsation/locations"
 
