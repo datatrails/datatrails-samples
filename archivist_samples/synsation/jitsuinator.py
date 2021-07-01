@@ -40,7 +40,7 @@ from ..testing.namespace import (
 )
 from ..testing.time_warp import TimeWarp
 
-from .util import make_event_json, attachments_read_from_file
+from .util import make_event_json, attachment_upload_from_file
 
 
 def demo_flow(ac, asset_id, asset_type, tw, wait):
@@ -82,7 +82,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     )
     attrs["arc_cve_id"] = "CVE2020-deadbeef"
 
-    events_create(ac, asset_id, props, attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        confirm=True,
+    )
 
     # -> OEM fixes it and issues the patch
     if wait:
@@ -106,7 +112,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         "SHA256-sum for official 1.6 release: "
         "68ada47318341d060c387a765dd854b57334ab1f7322d22c155428414feb7518"
     )
-    events_create(ac, asset_id, props, attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        confirm=True,
+    )
 
     # -> Integrator approves the patch and issues new safety certificate
     if wait:
@@ -115,10 +127,10 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact Integrator approves")
 
-    iattachment = attachments_read_from_file(
+    iattachment = attachment_upload_from_file(
         ac, "trafficlightconformance.png", "image/png"
     )
-    rattachment = attachments_read_from_file(
+    rattachment = attachment_upload_from_file(
         ac, "trafficlightconformance.pdf", "application/pdf"
     )
 
@@ -150,7 +162,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
             "arc_hash_alg": rattachment["hash"]["alg"],
         },
     ]
-    events_create(ac, asset_id, props, attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        confirm=True,
+    )
 
     # -> Owner accepts new version and issues maintenance request to have it installed
     if wait:
@@ -171,7 +189,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         maint_msg,
         job_corval,
     )
-    events_create(ac, asset_id, props, attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        confirm=True,
+    )
 
     # -> Operator schedules downtime and patches it
     if wait:
@@ -192,7 +216,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         maint_msg,
         job_corval,
     )
-    events_create(ac, asset_id, props, attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        confirm=True,
+    )
 
     patch_msg = "Responding to vulnerability 'CVE2020-deadbeef' with patch 'v1.6'"
     props, attrs = make_event_json(
@@ -207,7 +237,14 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     attrs["arc_firmware_version"] = "1.6"
     asset_attrs = {}
     asset_attrs["arc_firmware_version"] = "1.6"
-    events_create(ac, asset_id, props, attrs, asset_attrs=asset_attrs)
+    events_create(
+        ac,
+        asset_id,
+        props,
+        attrs,
+        asset_attrs=asset_attrs,
+        confirm=True,
+    )
 
     # -> All is well
     LOGGER.info("Done")

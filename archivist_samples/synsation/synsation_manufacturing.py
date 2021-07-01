@@ -21,13 +21,19 @@ import string
 import random
 import time
 
-from .util import assets_create_if_not_exists, attachments_read_from_file
+from ..testing.namespace import assets_create_if_not_exists
+
+from .util import asset_attachment_upload_from_file
 
 
 def initialise_asset_types(ac):
     type_map = {}
 
-    newattachment = attachments_read_from_file(ac, "assets/crate.jpg", "image/jpg")
+    newattachment = asset_attachment_upload_from_file(
+        ac,
+        "crate.jpg",
+        "image/jpg",
+    )
     type_map["Shipping Crate"] = newattachment
 
     return type_map

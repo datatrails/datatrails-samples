@@ -25,6 +25,7 @@ setup(
     long_description_content_type="text/markdown",
     url=REPO_URL,
     packages=find_packages(exclude=( "examples", "unittests", )),
+    include_package_data=True,
     platforms=['any'],
     classifiers=[
         'Development Status :: 3 - Alpha', #pre-delivery

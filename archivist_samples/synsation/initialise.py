@@ -55,6 +55,7 @@ def run(ac, args):
 
     # Wait for all assets to confirm before we do anything with them
     if args.await_confirmation:
+        LOGGER.info("Wait for confirmation")
         assets_wait_for_confirmed(ac, attrs={"company": "synsation"})
 
     sys_exit(0)

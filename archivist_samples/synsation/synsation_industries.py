@@ -24,7 +24,9 @@ import logging
 import random
 import string
 
-from .util import assets_create_if_not_exists, attachments_read_from_file
+from ..testing.namespace import assets_create_if_not_exists
+
+from .util import asset_attachment_upload_from_file
 
 LOGGER = logging.getLogger(__name__)
 
@@ -32,13 +34,13 @@ LOGGER = logging.getLogger(__name__)
 def initialise_asset_types(ac):
     type_map = {}
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/small_ev_charger.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "small_ev_charger.jpg", "image/jpg"
     )
     type_map["Small EV Charger"] = newattachment
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/large_ev_charger.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "large_ev_charger.jpg", "image/jpg"
     )
     type_map["Large EV Charger"] = newattachment
 
