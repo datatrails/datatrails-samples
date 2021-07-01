@@ -17,12 +17,21 @@
 # pylint:  disable=missing-docstring
 
 
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
 import logging
 from sys import exit as sys_exit
 import uuid
 
 from archivist import about
 from archivist.errors import ArchivistNotFoundError
+
+from .images import assets as images_assets
+from .images import events as images_events
 
 from ..testing.namespace import (
     assets_create,
@@ -44,8 +53,6 @@ BEHAVIOURS = [
     "Maintenance",
     "RecordEvidence",
 ]
-
-IMAGEDIR = "archivist_samples/door_entry/images"
 
 LOGGER = logging.getLogger(__name__)
 
@@ -217,7 +224,7 @@ def create_jitsuin_paris_site(arch):
 
 
 def create_jitsuin_paris_image(arch):
-    with open(f"{IMAGEDIR}/assets/entry_terminal.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "entry_terminal.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -254,7 +261,7 @@ def create_cityhall_site(arch):
 
 
 def create_cityhall_image(arch):
-    with open(f"{IMAGEDIR}/assets/cityhall.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "cityhall.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -289,7 +296,7 @@ def create_courts_site(arch):
 
 
 def create_courts_image(arch):
-    with open(f"{IMAGEDIR}/assets/courts.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "courts.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -323,7 +330,7 @@ def create_bastille_site(arch):
 
 
 def create_bastille_image(arch):
-    with open(f"{IMAGEDIR}/assets/bastille.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "bastille.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -360,7 +367,7 @@ def create_gdn_site(arch):
 
 
 def create_gdn_front_image(arch):
-    with open(f"{IMAGEDIR}/assets/gdn_front.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "gdn_front.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -381,7 +388,7 @@ def create_gdn_front(arch, location, attachments):
 
 
 def create_gdn_side_image(arch):
-    with open(f"{IMAGEDIR}/assets/gdn_side.jpg", "rb") as fd:
+    with pkg_resources.open_binary(images_assets, "gdn_side.jpg") as fd:
         return arch.attachments.upload(fd)
 
 
@@ -608,7 +615,7 @@ def open_door(arch, doorid, cardid):
     # time but if the use case demands it is perfectly possible to
     # attach the same attachment ID to multiple assets/events rather
     # than duplicating them
-    with open(f"{IMAGEDIR}/events/dooropen.png", "rb") as fd:
+    with pkg_resources.open_binary(images_events, "dooropen.png") as fd:
         image = arch.attachments.upload(fd)
 
     # Issue RecordEvidence logs on each.

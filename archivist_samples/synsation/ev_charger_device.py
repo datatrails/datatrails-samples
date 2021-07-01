@@ -97,7 +97,11 @@ class EVDevice:
         )
         attrs["arc_evidence"] = evidence_msg
         events_create(
-            self._archivist_client, self._archivist_asset_identity, props, attrs
+            self._archivist_client,
+            self._archivist_asset_identity,
+            props,
+            attrs,
+            confirm=True,
         )
 
     def service(self, timewarp):
@@ -126,7 +130,11 @@ class EVDevice:
                 corval,
             )
             events_create(
-                self._archivist_client, self._archivist_asset_identity, props, attrs
+                self._archivist_client,
+                self._archivist_asset_identity,
+                props,
+                attrs,
+                confirm=True,
             )
 
             # Call the maintenance crew
@@ -173,4 +181,5 @@ class EVDevice:
                 props,
                 attrs,
                 asset_attrs=asset_attrs,
+                confirm=True,
             )

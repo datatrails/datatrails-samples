@@ -22,7 +22,6 @@
 # pylint:  disable=missing-docstring
 
 from copy import deepcopy
-from yaml import full_load
 
 from archivist.errors import (
     ArchivistNotFoundError,
@@ -30,27 +29,6 @@ from archivist.errors import (
 
 
 NAMESPACE_KEY = "functests_namespace"
-
-
-# NB: this is not namespaced and cannot be namespaced until we get GRP2.0
-#     and a proto definition with suitable attributes
-def attachments_upload_from_file(arch, name, mtype):
-    with open(name, "rb") as fd:
-        attachment = arch.attachments.upload(fd, mtype=mtype)
-
-    return attachment
-
-
-def locations_create_from_yaml_file(arch, name):
-    """Load location from yaml file
-
-    assumes there is only one document in the file.
-    """
-    with open(name, "r") as fd:
-        data = full_load(fd)
-        attrs = data["attributes"]
-        del data["attributes"]
-        return locations_create_if_not_exists(arch, data, attrs=attrs)
 
 
 def __newattrs(arch, attrs):
@@ -82,9 +60,12 @@ def locations_create_if_not_exists(arch, props, *, attrs=None):
             },
         )
     except ArchivistNotFoundError:
-        location = locations_create(arch, props, attrs=attrs)
+        pass
 
-    return location
+    else:
+        return location
+
+    return locations_create(arch, props, attrs=attrs)
 
 
 def assets_count(arch, attrs):
@@ -99,7 +80,7 @@ def assets_read_by_signature(arch, attrs):
     return arch.assets.read_by_signature(attrs=__newattrs(arch, attrs))
 
 
-def assets_create(arch, behaviours, attrs, *, confirm=None):
+def assets_create(arch, behaviours, attrs, *, confirm=False):
     return arch.assets.create(behaviours, __newattrs(arch, attrs), confirm=confirm)
 
 
@@ -107,7 +88,33 @@ def assets_wait_for_confirmed(arch, attrs):
     arch.assets.wait_for_confirmed(attrs=__newattrs(arch, attrs))
 
 
-def events_create(arch, asset_id, props, attrs, *, asset_attrs=None, confirm=None):
+def assets_create_if_not_exists(arch, behaviours, attrs, *, confirm=False):
+    asset = None
+    try:
+        asset = assets_read_by_signature(
+            arch,
+            {
+                "arc_display_name": attrs["arc_display_name"],
+                NAMESPACE_KEY: arch.namespace,
+            },
+        )
+    except ArchivistNotFoundError:
+        # The backoff module we use seems to inherit the exception
+        # raised here so we execute the assets_create outside of this
+        # exception handler
+        pass
+
+    else:
+        return asset
+
+    return assets_create(arch, behaviours, attrs, confirm=confirm)
+
+
+def events_wait_for_confirmed(arch, attrs):
+    arch.events.wait_for_confirmed(attrs=__newattrs(arch, attrs))
+
+
+def events_create(arch, asset_id, props, attrs, *, asset_attrs=None, confirm=False):
     return arch.events.create(
         asset_id,
         props,

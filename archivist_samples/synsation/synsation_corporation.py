@@ -21,35 +21,37 @@ import random
 import time
 
 from ..testing.namespace import (
-    locations_create_from_yaml_file,
+    assets_create_if_not_exists,
 )
 
 from .util import (
-    assets_create_if_not_exists,
-    attachments_read_from_file,
+    asset_attachment_upload_from_file,
+    locations_create_from_yaml_file,
 )
 
 LOGGER = logging.getLogger(__name__)
-
-LOCATIONS_DIR = "archivist_samples/synsation/locations"
 
 
 def initialise_asset_types(ac, timedelay):
     type_map = {}
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/multifunction_printer.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "multifunction_printer.jpg", "image/jpg"
     )
     type_map["Multifunction Printer"] = newattachment
     time.sleep(timedelay)
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/coffee_machine.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "coffee_machine.jpg", "image/jpg"
     )
     type_map["Connected Coffee Machine"] = newattachment
     time.sleep(timedelay)
 
-    newattachment = attachments_read_from_file(ac, "assets/black_cctv.jpg", "image/jpg")
+    newattachment = asset_attachment_upload_from_file(
+        ac,
+        "black_cctv.jpg",
+        "image/jpg",
+    )
     type_map["Security Camera"] = newattachment
     time.sleep(timedelay)
 
@@ -61,23 +63,23 @@ def initialise_asset_types(ac, timedelay):
 def create_locations(ac, timedelay):
     corporation_locations = {}
 
-    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/grayslake.yaml")
+    newlocation = locations_create_from_yaml_file(ac, "grayslake.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/baltimore.yaml")
+    newlocation = locations_create_from_yaml_file(ac, "baltimore.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/european.yaml")
+    newlocation = locations_create_from_yaml_file(ac, "european.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/asia.yaml")
+    newlocation = locations_create_from_yaml_file(ac, "asia.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 
-    newlocation = locations_create_from_yaml_file(ac, f"{LOCATIONS_DIR}/za.yaml")
+    newlocation = locations_create_from_yaml_file(ac, "za.yaml")
     corporation_locations[newlocation["display_name"]] = newlocation["identity"]
     time.sleep(timedelay)
 

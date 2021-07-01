@@ -18,7 +18,9 @@
 
 import logging
 
-from .util import assets_create_if_not_exists, attachments_read_from_file
+from ..testing.namespace import assets_create_if_not_exists
+
+from .util import asset_attachment_upload_from_file
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,28 +28,28 @@ LOGGER = logging.getLogger(__name__)
 def initialise_asset_types(ac):
     type_map = {}
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/outdoor_cctv.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "outdoor_cctv.jpg", "image/jpg"
     )
     type_map["Outdoor security camera"] = newattachment
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/traffic_light_with_violation_camera.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "traffic_light_with_violation_camera.jpg", "image/jpg"
     )
     type_map["Traffic light with violation camera"] = newattachment
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/traffic_light.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "traffic_light.jpg", "image/jpg"
     )
     type_map["Traffic light"] = newattachment
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/street_light_controller.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "street_light_controller.jpg", "image/jpg"
     )
     type_map["Street light controller"] = newattachment
 
-    newattachment = attachments_read_from_file(
-        ac, "assets/outdoor_air_quality_meter.jpg", "image/jpg"
+    newattachment = asset_attachment_upload_from_file(
+        ac, "outdoor_air_quality_meter.jpg", "image/jpg"
     )
     type_map["Outdoor air quality meter"] = newattachment
 

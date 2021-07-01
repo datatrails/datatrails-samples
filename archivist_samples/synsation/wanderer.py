@@ -44,9 +44,7 @@ from .util import make_event_json
 #####################
 
 
-def make_event_json_template(
-    unused_asset_identity, what_str, who_str, message, lat, lng, tw
-):
+def make_event_json_template(what_str, who_str, message, lat, lng, tw):
     notnow = tw.now()
     dtstring = make_timestamp(notnow)
     props, attrs = make_event_json(
@@ -76,7 +74,6 @@ def shipit(ac, crate_id, delay, tw):
 
     LOGGER.info(f"Asset starting its journey at {start[0]}")
     props, attrs = make_event_json_template(
-        crate_id,
         "Shipping Movement",
         who_str,
         f"Crate sealed in {start[0]} with 448 units on board",
@@ -84,13 +81,12 @@ def shipit(ac, crate_id, delay, tw):
         start[2],
         tw,
     )
-    events_create(ac, crate_id, props, attrs)
+    events_create(ac, crate_id, props, attrs, confirm=True)
     time.sleep(delay)
 
     for point in waypoints:
         LOGGER.info(f"Asset arriving at {point[0]}")
         props, attrs = make_event_json_template(
-            crate_id,
             "Shipping Movement",
             who_str,
             f"Crate transferred by shipping agent at {point[0]} for onward forwarding",
@@ -98,12 +94,11 @@ def shipit(ac, crate_id, delay, tw):
             point[2],
             tw,
         )
-        events_create(ac, crate_id, props, attrs)
+        events_create(ac, crate_id, props, attrs, confirm=True)
         time.sleep(delay)
 
     LOGGER.info(f"Asset ending its journey at {end[0]}")
     props, attrs = make_event_json_template(
-        crate_id,
         "Shipping Movement",
         who_str,
         f"Crate unsealed in {end[0]} with 448 units on board",
@@ -111,7 +106,7 @@ def shipit(ac, crate_id, delay, tw):
         end[2],
         tw,
     )
-    events_create(ac, crate_id, props, attrs)
+    events_create(ac, crate_id, props, attrs, confirm=True)
 
 
 def run(ac, args):
