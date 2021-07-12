@@ -18,7 +18,6 @@
 
 from archivist import archivist
 from software_package import SoftwarePackage
-#from software_deployment import SoftwareDeployment
 
 
 def main():
@@ -27,7 +26,9 @@ def main():
         with open(".auth_token", mode="r") as tokenfile:
             authtoken = tokenfile.read().strip()
     except FileNotFoundError:
-        exit("ERROR: Auth token not found. Please store your bearer token in a file called '.auth_token' and try again.")
+        exit(
+            "ERROR: Auth token not found. Please store your bearer token in a file called '.auth_token' and try again."
+        )
 
     # Initialize connection to Archivist
     arch = archivist.Archivist(
@@ -42,7 +43,7 @@ def main():
     package.create(
         "ACME Roadrunner Detector 2013 Coyote Edition SP1",
         "Different box, same great taste!",
-        attachments=["attachments/Comp_2.jpeg"]
+        attachments=["attachments/Comp_2.jpeg"],
     )
     print(f"Software Package Created (Identity={package.asset['identity']})")
 
@@ -56,10 +57,10 @@ def main():
             "version": "v4.1.5",
             "author": "The ACME Corporation",
             "supplier": "Coyote Services, Inc.",
-            "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0"
+            "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
         },
         attachments=["attachments/v4_1_5_sbom.xml"],
-        custom_attrs={"sbom_license": "www.gnu.org/licenses/gpl.txt"}
+        custom_attrs={"sbom_license": "www.gnu.org/licenses/gpl.txt"},
     )
     print("Release registered.")
 
