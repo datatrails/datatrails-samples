@@ -1,6 +1,7 @@
 # pylint:disable=missing-function-docstring      # docstrings
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
+from operator import floordiv
 from typing import Optional
 
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
@@ -62,6 +63,27 @@ class SoftwarePackage:
         ]
         self._asset = self.arch.assets.create(behaviours, attrs, confirm=True)
         return self._asset
+
+    # Asset load by unique identity
+    def read(
+        self,
+        identity: str,
+    ):
+        self._asset = self.arch.assets.read(identity)
+
+    # Asset load by attribute(s)
+    def read_by_signature(
+        self,
+        attributes: Optional[dict],
+    ):
+        # Hard-wire the Asset type
+        newattrs = attributes.copy()
+        newattrs['arc_display_type'] = "Software Package"
+
+        # Note: underlying Archivist will raise ArchivistNotFoundError or
+        # ArchivistDuplicateError unless this set of attributes points to 
+        # a single unique asset
+        self._asset = self.arch.assets.read_by_signature(attrs=newattrs)
 
     # Release Events
     def release(
