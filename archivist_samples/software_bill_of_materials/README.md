@@ -15,7 +15,7 @@ Python 3.6 and later versions are supported.
 
 Install the [RKVST Python package](https://pypi.org/project/jitsuin-archivist/ "PyPi package page")
 
-Get an authorization bearer token and store it in the file `.auth_token`. If you don't know how to do this, please refer to the [RVKST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token")
+Get an authorization bearer token and store it in the file `.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token")
 
 
 ## Running the sample
@@ -35,7 +35,7 @@ This will create a new Asset in your RKVST tenancy and publish a single update t
 
 A SoftwarePackage represents the published version history of the evolving Software Bill of Materials for a product line.
 
-This Python class makes it easy to manage SBOM distribution in RKVST and publish the [NTIA minimum required SBOM information]( "NTIA recommendations").
+This Python class makes it easy to manage SBOM distribution in RKVST and publish the [NTIA minimum required SBOM information](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations").
 
 
 ### Creating a new SoftwarePackage
@@ -70,7 +70,7 @@ package.create(
 
 ### Loading an existing SoftwarePackage
 
-If you know the RKVST Asset Idnetity you can load the SBOM directly as a SoftwarePackage using `SoftwarePackage.read()`:
+If you know the RKVST Asset Identity you can load the SBOM directly as a SoftwarePackage using `SoftwarePackage.read()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -78,7 +78,7 @@ package = SoftwarePackage(arch)
 package.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
-If you do not know the RKVST Asset Idnetity then you can load the SBOM based on any unique set of attributes using `SoftwarePackage.read_by_signature()`:
+If you do not know the RKVST Asset Identity then you can load the SBOM based on any unique set of attributes using `SoftwarePackage.read_by_signature()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
