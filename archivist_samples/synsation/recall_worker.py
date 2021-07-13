@@ -24,15 +24,14 @@ import time
 import threading
 import uuid
 
-from archivist.timestamp import make_timestamp
+from ..testing.asset import MyAsset
 
 from . import patch_worker
-from .util import make_event_json
 
 LOGGER = logging.getLogger(__name__)
 
 
-def issue_recall(charger_list, cve_str, timewarp):
+def issue_recall(charger_list, cve_id, timewarp):
     # !!! WARNING !!! There is no thread-safety here, make sure you
     # always treat the devices as read-only.
     # The main device thread takes care of updating the variables
@@ -40,31 +39,24 @@ def issue_recall(charger_list, cve_str, timewarp):
 
     # Inform everybody...
     for charger in charger_list:
-        recall_msg = (
-            f"Synsation Industries Large EV Chargers are vulnerable "
-            f"to {cve_str}. Upgrade as soon as possible."
-        )
-        notnow = timewarp.now()
-        dtstring = make_timestamp(notnow)
-        cve_corval = cve_str + str(uuid.uuid4())
-        props, attrs = make_event_json(
-            "Firmware",
-            "Vulnerability",
-            dtstring,
+        cve_corval = cve_id + str(uuid.uuid4())
+        MyAsset(
+            charger.archivist_client,
+            charger.archivist_asset_identity,
+            timewarp,
             "VulnBot@synsation-industries.com",
-            "FW Vulnerability",
-            recall_msg,
+        ).report_vulnerability(
+            (
+                "Synsation Industries Large EV Chargers are vulnerable "
+                f"to {cve_id}. Upgrade as soon as possible."
+            ),
+            cve_id,
             cve_corval,
         )
-        attrs["arc_cve_id"] = cve_str
-        charger.archivist_client.events.create(
-            charger.archivist_asset_identity, props, attrs
-        )
-
         # Schedule the patch
         x = threading.Thread(
             target=patch_worker.threadmain,
-            args=(charger, cve_str, cve_corval, timewarp),
+            args=(charger, cve_id, cve_corval, timewarp),
             daemon=True,
         )
         x.start()

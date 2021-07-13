@@ -28,6 +28,13 @@ from archivist import about
 from archivist.archivist import Archivist
 from archivist.timestamp import parse_timestamp
 
+from ..testing.asset import (
+    MAINTENANCE_PERFORMED,
+    MAINTENANCE_REQUEST,
+    VULNERABILITY_ADDRESSED,
+    VULNERABILITY_REPORT,
+)
+
 from ..testing.logger import set_logger, LOGGER
 from ..testing.namespace import (
     assets_list,
@@ -38,8 +45,8 @@ from ..testing.namespace import (
 
 def analyze_matched_pairs(label, p1, p2, events):
     if p1 in events and p2 in events:
-        matched = set(events[p1]).intersection(set(events[p2]))
-        unmatched = set(events[p1]).difference(set(events[p2]))
+        matched = set(events[p1]).intersection(events[p2])
+        unmatched = set(events[p1]).difference(events[p2])
 
         LOGGER.info(f"There are {len(matched)} completed {label} events")
 
@@ -101,7 +108,7 @@ def analyze_asset(conn, asset):
     sortedevents = {}
     for event in allevents:
         try:
-            etype = event["operation"]
+            etype = event["event_attributes"]["arc_display_type"]
             corval = event["event_attributes"]["arc_correlation_value"]
         except KeyError:
             LOGGER.debug("Couldn't get essential info for this event.")
@@ -115,10 +122,16 @@ def analyze_asset(conn, asset):
     # Now we've got them all we can do the analysis
     #  + Which events weren't fixed at all?
     #  + For events that were fixed, how long did it take?
+
+    # maintenance events
     analyze_matched_pairs(
-        "maintenance", "MaintenanceRequired", "Maintenance", sortedevents
+        "maintenance", MAINTENANCE_REQUEST, MAINTENANCE_PERFORMED, sortedevents
     )
-    analyze_matched_pairs("firmware", "Vulnerability", "Update", sortedevents)
+
+    # vulnerability events
+    analyze_matched_pairs(
+        "firmware", VULNERABILITY_REPORT, VULNERABILITY_ADDRESSED, sortedevents
+    )
 
     # Summarize TBD
     LOGGER.info("---")

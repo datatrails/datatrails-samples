@@ -21,9 +21,7 @@ import logging
 import random
 import time
 
-from archivist.timestamp import make_timestamp
-
-from .util import make_event_json
+from ..testing.asset import MyAsset
 
 LOGGER = logging.getLogger(__name__)
 
@@ -35,24 +33,18 @@ def service_device(charger, job_id, timewarp):
     LOGGER.info("!! Agent responding to service request on %s", charger.name)
 
     # The maintenance is done...inform Archivist
-    maint_msg = (
-        f"Maintenance agent serviced device after "
-        f"{charger.total_charge} units charged.  Next service "
-        f"at {charger.next_service}."
-    )
-    notnow = timewarp.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "Maintenance",
-        "Maintenance",
-        dtstring,
+    MyAsset(
+        charger.archivist_client,
+        charger.archivist_identity,
+        timewarp,
         "Phil@evcservicing.com",
-        "Service RP",
-        maint_msg,
+    ).service(
+        (
+            f"Maintenance agent serviced device after "
+            f"{charger.total_charge} units charged.  Next service "
+            f"at {charger.next_service}."
+        ),
         job_id,
-    )
-    charger.archivist_client.events.create(
-        charger.archivist_asset_identity, props, attrs
     )
 
 

@@ -105,9 +105,6 @@ def create_shipping_crate(
     }
     behaviours = [
         "Attachments",
-        "Firmware",
-        "LocationUpdate",
-        "Maintenance",
         "RecordEvidence",
     ]
     newasset = assets_create_if_not_exists(ac, behaviours, attrs)
