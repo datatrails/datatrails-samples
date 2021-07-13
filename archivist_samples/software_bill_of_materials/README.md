@@ -18,11 +18,13 @@ Install the [RKVST Python package](https://pypi.org/project/jitsuin-archivist/ "
 Get an authorization bearer token and store it in the file `.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token")
 
 
-## Running the sample
+## Running the samples
 
-The sample script creates a SoftwarePackage object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector".
+### Simple sample
 
-To run it, simply: 
+The simple sample script creates a SoftwarePackage object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector".
+
+To run it: 
 
 ```bash
 python3 ./sbom_demo.py
@@ -30,12 +32,21 @@ python3 ./sbom_demo.py
 
 This will create a new Asset in your RKVST tenancy and publish a single update to the SBOM,registering full details for version 4.1.5 with the platform.
 
+### Complex sample
+
+The complex sample takes the concept of assured data one step further and extends to assured processes. It simulates a series of product lifecycle events that result in a variety of updates to the SBOM, including private patches for specific customers and internal planning and approval for major updates.
+
+To run it: 
+
+```bash
+python3 ./sbom_advanced_demo.py
+```
 
 ## Using the SoftwarePackage class
 
 A SoftwarePackage represents the published version history of the evolving Software Bill of Materials for a product line.
 
-This Python class makes it easy to manage SBOM distribution in RKVST and publish the [NTIA minimum required SBOM information](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations").
+This Python class makes it easy to manage SBOM distribution in RKVST and publish the [NTIA minimum required SBOM information](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations") for your own SBOMs, regardless of how you generated them.
 
 
 ### Creating a new SoftwarePackage
@@ -128,5 +139,49 @@ package.release(
 
 * `deprecation()`: An existing version of a release has gone EOL or otherwise deprecated
 
+## Access policies
 
+In order to control data sharing to restrict general customers to see only the recommended minimal SBOM elements and not private patches or planning/approval steps, create an Access Policy like this (substituting for real Subject IDs of your value chain partners):
 
+```json
+    {
+      "identity": "access_policies/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "display_name": "SBOM soft publish",
+      "filters": [
+        {
+          "or": [ "attributes.arc_display_type=Software Package" ]
+        }
+      ],
+      "access_permissions": [
+        {
+          "subjects": [ "subjects/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" ],
+          "behaviours": [ "RecordEvidence" ],
+          "include_attributes": [],
+          "user_attributes": [],
+          "asset_attributes_read": [
+            "arc_display_type",
+            "arc_display_name",
+            "arc_description",
+            "arc_attachments",
+            "sbom_component",
+            "sbom_supplier",
+            "sbom_uuid",
+            "sbom_author",
+            "sbom_version",
+            "sbom_hash"
+          ],
+          "asset_attributes_write": [],
+          "event_arc_display_type_read": [
+            "Release",
+            "Patch",
+            "Vulnerability Disclosure",
+            "Vulnerability Update"
+          ],
+          "event_arc_display_type_write": []
+        }
+      ],
+      "tenant": "tenant/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "description": "Publish minimum required SBOM params to partners"
+    }
+
+```
