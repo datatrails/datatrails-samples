@@ -48,9 +48,6 @@ DOOR_CARD = "Door entry card"
 
 BEHAVIOURS = [
     "Attachments",
-    "Firmware",
-    "LocationUpdate",
-    "Maintenance",
     "RecordEvidence",
 ]
 

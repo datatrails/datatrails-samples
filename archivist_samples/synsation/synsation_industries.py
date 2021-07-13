@@ -82,9 +82,6 @@ def make_charger_asset(
     }
     behaviours = [
         "Attachments",
-        "Firmware",
-        "LocationUpdate",
-        "Maintenance",
         "RecordEvidence",
     ]
     newasset = assets_create_if_not_exists(ac, behaviours, attrs)

@@ -60,25 +60,3 @@ def locations_create_from_yaml_file(arch, name):
         attrs = data["attributes"]
         del data["attributes"]
         return locations_create_if_not_exists(arch, data, attrs=attrs)
-
-
-def make_event_json(
-    event_behaviour, event_op, when_str, who_str, what_str, msg_str, corval
-):
-    """Create a simple Archivist event payload"""
-    props = {
-        "operation": event_op,
-        "behaviour": event_behaviour,
-        "principal_declared": {
-            "issuer": "job.idp.server/1234",
-            "subject": who_str,
-            "display_name": who_str,
-        },
-        "timestamp_declared": when_str,
-    }
-    attrs = {
-        "arc_display_type": what_str,
-        "arc_description": msg_str,
-        "arc_correlation_value": corval,
-    }
-    return props, attrs

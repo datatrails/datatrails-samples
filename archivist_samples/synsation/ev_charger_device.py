@@ -22,14 +22,9 @@ import logging
 import threading
 import uuid
 
-from archivist.timestamp import make_timestamp
-
-from ..testing.namespace import (
-    events_create,
-)
+from ..testing.asset import MyAsset
 
 from . import maintenance_worker
-from .util import make_event_json
 
 LOGGER = logging.getLogger(__name__)
 
@@ -81,27 +76,14 @@ class EVDevice:
         LOGGER.info("Device %s charging %s units", self._name, units)
         self._total_charge += units
 
-        # EvidenceLog call to trace basic usage
-        notnow = timewarp.now()
-        dtstring = make_timestamp(notnow)
-        evt_desc = f"Device {self._name} charging {units} units"
-        evidence_msg = "Attestation receipt: 0xa765dd854b57334ab1f7322d2"
-        props, attrs = make_event_json(
-            "RecordEvidence",
-            "Record",
-            dtstring,
-            f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
-            "Operational report",
-            evt_desc,
-            "",
-        )
-        attrs["arc_evidence"] = evidence_msg
-        events_create(
+        MyAsset(
             self._archivist_client,
             self._archivist_asset_identity,
-            props,
-            attrs,
-            confirm=True,
+            timewarp,
+            f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
+        ).charge(
+            f"Device {self._name} charging {units} units",
+            "Attestation receipt: 0xa765dd854b57334ab1f7322d2",
         )
 
     def service(self, timewarp):
@@ -113,28 +95,18 @@ class EVDevice:
             LOGGER.info(
                 "!! %s Service interval reached " "(%s)", self.name, self._total_charge
             )
-            maint_msg = (
-                f"Service interval reached after {self._total_charge} "
-                f"units charged. Please service."
-            )
             corval = str(uuid.uuid4())
-            notnow = timewarp.now()
-            dtstring = make_timestamp(notnow)
-            props, attrs = make_event_json(
-                "Maintenance",
-                "MaintenanceRequired",
-                dtstring,
-                f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
-                "Service RQ",
-                maint_msg,
-                corval,
-            )
-            events_create(
+            MyAsset(
                 self._archivist_client,
                 self._archivist_asset_identity,
-                props,
-                attrs,
-                confirm=True,
+                timewarp,
+                f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
+            ).service_required(
+                (
+                    f"Service interval reached after {self._total_charge} "
+                    f"units charged. Please service."
+                ),
+                corval,
             )
 
             # Call the maintenance crew
@@ -156,30 +128,14 @@ class EVDevice:
             else:
                 self._fw_version[1] += 1
 
-            versionstring = f"v{self._fw_version[0]}.{self._fw_version[1]}"
-
-            patch_msg = (
-                f"Responding to vulnerability '{cve_str}' with patch '{versionstring}'"
-            )
-            notnow = timewarp.now()
-            dtstring = make_timestamp(notnow)
-            props, attrs = make_event_json(
-                "Firmware",
-                "Update",
-                dtstring,
-                "otaService@evcservicing.com",
-                "FW Update",
-                patch_msg,
-                cve_corval,
-            )
-            attrs["arc_firmware_version"] = versionstring
-            asset_attrs = {}
-            asset_attrs["arc_firmware_version"] = versionstring
-            events_create(
+            version = f"v{self._fw_version[0]}.{self._fw_version[1]}"
+            MyAsset(
                 self._archivist_client,
                 self._archivist_asset_identity,
-                props,
-                attrs,
-                asset_attrs=asset_attrs,
-                confirm=True,
+                timewarp,
+                "otaService@evcservicing.com",
+            ).update_firmware(
+                f"Responding to vulnerability '{cve_str}' with patch '{version}'",
+                version,
+                cve_corval,
             )

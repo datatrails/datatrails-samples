@@ -27,33 +27,18 @@ import time
 from archivist import about
 from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
-from archivist.timestamp import make_timestamp
 
 from ..testing.logger import set_logger, LOGGER
+from ..testing.asset import MyAsset
 from ..testing.namespace import (
     assets_list,
     assets_read_by_signature,
-    events_create,
 )
 from ..testing.time_warp import TimeWarp
-
-from .util import make_event_json
 
 
 # Archivist utilities
 #####################
-
-
-def make_event_json_template(what_str, who_str, message, lat, lng, tw):
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "RecordEvidence", "Record", dtstring, who_str, what_str, message, ""
-    )
-    attrs["arc_evidence"] = message
-    attrs["arc_gis_lat"] = lat
-    attrs["arc_gis_lng"] = lng
-    return props, attrs
 
 
 def shipit(ac, crate_id, delay, tw):
@@ -69,44 +54,35 @@ def shipit(ac, crate_id, delay, tw):
     ]
     end = ["Synsation Stuttgart Finishing Plant", "48.783333", "9.183333"]
 
-    # Crate smart tag is the reporting entity in each case
-    who_str = "1944.smarttags.synsation.io"
-
-    LOGGER.info(f"Asset starting its journey at {start[0]}")
-    props, attrs = make_event_json_template(
-        "Shipping Movement",
-        who_str,
+    # who moves it and type of movement
+    asset = MyAsset(
+        ac,
+        crate_id,
+        tw,
+        "1944.smarttags.synsation.io",
+    )
+    asset.move(
         f"Crate sealed in {start[0]} with 448 units on board",
         start[1],
         start[2],
-        tw,
     )
-    events_create(ac, crate_id, props, attrs, confirm=True)
     time.sleep(delay)
 
     for point in waypoints:
         LOGGER.info(f"Asset arriving at {point[0]}")
-        props, attrs = make_event_json_template(
-            "Shipping Movement",
-            who_str,
+        asset.move(
             f"Crate transferred by shipping agent at {point[0]} for onward forwarding",
             point[1],
             point[2],
-            tw,
         )
-        events_create(ac, crate_id, props, attrs, confirm=True)
         time.sleep(delay)
 
     LOGGER.info(f"Asset ending its journey at {end[0]}")
-    props, attrs = make_event_json_template(
-        "Shipping Movement",
-        who_str,
+    asset.move(
         f"Crate unsealed in {end[0]} with 448 units on board",
         end[1],
         end[2],
-        tw,
     )
-    events_create(ac, crate_id, props, attrs, confirm=True)
 
 
 def run(ac, args):

@@ -31,16 +31,15 @@ import uuid
 from archivist import about
 from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
-from archivist.timestamp import make_timestamp
 
 from ..testing.logger import set_logger, LOGGER
 from ..testing.namespace import (
     assets_read_by_signature,
-    events_create,
 )
+from ..testing.asset import MyAsset
 from ..testing.time_warp import TimeWarp
 
-from .util import make_event_json, attachment_upload_from_file
+from .util import attachment_upload_from_file
 
 
 def demo_flow(ac, asset_id, asset_type, tw, wait):
@@ -65,29 +64,14 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact White Hat Hacker")
 
-    recall_msg = (
-        f"Synsation Industries {asset_type}s are vulnerable "
-        f"to CVE2020-deadbeef. Upgrade as soon as possible."
-    )
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "Firmware",
-        "Vulnerability",
-        dtstring,
-        "Brian@WhiteHatHackers.io",
-        "FW Vulnerability",
-        recall_msg,
+    cve_id = "CVE2020-deadbeef"
+    MyAsset(ac, asset_id, tw, "Brian@WhiteHatHackers.io",).report_vulnerability(
+        (
+            f"Synsation Industries {asset_type}s are vulnerable "
+            f"to {cve_id}. Upgrade as soon as possible."
+        ),
+        cve_id,
         cve_corval,
-    )
-    attrs["arc_cve_id"] = "CVE2020-deadbeef"
-
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        confirm=True,
     )
 
     # -> OEM fixes it and issues the patch
@@ -97,29 +81,13 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact OEM issue patch")
 
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "RecordEvidence",
-        "Record",
-        dtstring,
-        "Releases@SynsationIndustries.com",
-        "Config Management",
-        "Patch for critical vulnerability 'CVE2020-deadbeef' released in version 1.6",
-        "",
+    MyAsset(ac, asset_id, tw, "Releases@SynsationIndustries.com",).patch_vulnerability(
+        f"Patch for critical vulnerability '{cve_id}' released in version 1.6",
+        (
+            "SHA256-sum for official 1.6 release: "
+            "68ada47318341d060c387a765dd854b57334ab1f7322d22c155428414feb7518"
+        ),
     )
-    attrs["arc_evidence"] = (
-        "SHA256-sum for official 1.6 release: "
-        "68ada47318341d060c387a765dd854b57334ab1f7322d22c155428414feb7518"
-    )
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        confirm=True,
-    )
-
     # -> Integrator approves the patch and issues new safety certificate
     if wait:
         time.sleep(wait)
@@ -134,40 +102,27 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         ac, "trafficlightconformance.pdf", "application/pdf"
     )
 
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "RecordEvidence",
-        "Record",
-        dtstring,
-        "DesignAuthority@Integrator.com",
-        "Config Management",
+    MyAsset(ac, asset_id, tw, "Releases@SynsationIndustries.com",).certify_patch(
         "Safety conformance approved for version 1.6. See attached conformance report",
-        "",
-    )
-    attrs["arc_evidence"] = "DVA Conformance Report attached"
-    attrs["synsation_conformance_report"] = rattachment["identity"]
-    attrs["arc_primary_image_identity"] = iattachment["identity"]
-    attrs["arc_attachments"] = [
+        "DVA Conformance Report attached",
         {
-            "arc_display_name": "arc_primary_image",
-            "arc_attachment_identity": iattachment["identity"],
-            "arc_hash_value": iattachment["hash"]["value"],
-            "arc_hash_alg": iattachment["hash"]["alg"],
+            "arc_primary_image_identity": iattachment["identity"],
+            "arc_attachments": [
+                {
+                    "arc_display_name": "arc_primary_image",
+                    "arc_attachment_identity": iattachment["identity"],
+                    "arc_hash_value": iattachment["hash"]["value"],
+                    "arc_hash_alg": iattachment["hash"]["alg"],
+                },
+                {
+                    "arc_display_name": "Conformance Report",
+                    "arc_attachment_identity": rattachment["identity"],
+                    "arc_hash_value": rattachment["hash"]["value"],
+                    "arc_hash_alg": rattachment["hash"]["alg"],
+                },
+            ],
         },
-        {
-            "arc_display_name": "Conformance Report",
-            "arc_attachment_identity": rattachment["identity"],
-            "arc_hash_value": rattachment["hash"]["value"],
-            "arc_hash_alg": rattachment["hash"]["alg"],
-        },
-    ]
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        confirm=True,
+        extra_attrs={"synsation_conformance_report": rattachment["identity"]},
     )
 
     # -> Owner accepts new version and issues maintenance request to have it installed
@@ -177,24 +132,9 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact Owner approves")
 
-    maint_msg = "Version 1.6 accepted. Please install ASAP"
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "Maintenance",
-        "MaintenanceRequired",
-        dtstring,
-        "Legal@SmartCity.fr",
-        "Service RQ",
-        maint_msg,
+    MyAsset(ac, asset_id, tw, "Legal@SmartCity.fr",).service_required(
+        "Version 1.6 accepted. Please install ASAP",
         job_corval,
-    )
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        confirm=True,
     )
 
     # -> Operator schedules downtime and patches it
@@ -204,46 +144,15 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact Maintenance")
 
-    maint_msg = f"Upgraded and restarted {asset_type} during safe downtime window"
-    notnow = tw.now()
-    dtstring = make_timestamp(notnow)
-    props, attrs = make_event_json(
-        "Maintenance",
-        "Maintenance",
-        dtstring,
-        "Phil@SynsationServicing.com",
-        "Service RP",
-        maint_msg,
+    MyAsset(ac, asset_id, tw, "Phil@SynsationServicing.com",).service(
+        f"Upgraded and restarted {asset_type} during safe downtime window",
         job_corval,
     )
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        confirm=True,
-    )
 
-    patch_msg = "Responding to vulnerability 'CVE2020-deadbeef' with patch 'v1.6'"
-    props, attrs = make_event_json(
-        "Firmware",
-        "Update",
-        dtstring,
-        "otaService@SynsationServicing.com",
-        "FW Update",
-        patch_msg,
+    MyAsset(ac, asset_id, tw, "otaService@SynsationServicing.com",).update_firmware(
+        "Responding to vulnerability 'CVE2020-deadbeef' with patch 'v1.6'",
+        "1.6",
         cve_corval,
-    )
-    attrs["arc_firmware_version"] = "1.6"
-    asset_attrs = {}
-    asset_attrs["arc_firmware_version"] = "1.6"
-    events_create(
-        ac,
-        asset_id,
-        props,
-        attrs,
-        asset_attrs=asset_attrs,
-        confirm=True,
     )
 
     # -> All is well
