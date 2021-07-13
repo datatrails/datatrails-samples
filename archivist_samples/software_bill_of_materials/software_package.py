@@ -78,10 +78,10 @@ class SoftwarePackage:
     ):
         # Hard-wire the Asset type
         newattrs = attributes.copy()
-        newattrs['arc_display_type'] = "Software Package"
+        newattrs["arc_display_type"] = "Software Package"
 
         # Note: underlying Archivist will raise ArchivistNotFoundError or
-        # ArchivistDuplicateError unless this set of attributes points to 
+        # ArchivistDuplicateError unless this set of attributes points to
         # a single unique asset
         self._asset = self.arch.assets.read_by_signature(attrs=newattrs)
 
