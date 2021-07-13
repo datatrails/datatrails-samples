@@ -46,7 +46,7 @@ def main():
         attachments=["attachments/Comp_2.jpeg"],
         custom_attrs={
             "sbom_license": "www.gnu.org/licenses/gpl.txt",
-            "proprietary_secret": "For your eyes only"
+            "proprietary_secret": "For your eyes only",
         },
     )
     print(f"Software Package Created (Identity={package.asset['identity']})")
@@ -96,7 +96,7 @@ def main():
             "author": "The ACME Corporation",
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-1",
-            "reference": "CVE-20210613-1"
+            "reference": "CVE-20210613-1",
         },
         attachments=["attachments/v4_1_6_1_sbom.xml"],
     )
@@ -127,7 +127,7 @@ def main():
             "author": "The ACME Corporation",
             "date": "2021-07-13",
             "reference": "BIG_V_5",
-            "captain": "Deputy Dawg"
+            "captain": "Deputy Dawg",
         },
         attachments=["attachments/v5_0_0_sbom.xml"],
     )
@@ -142,7 +142,7 @@ def main():
             "date": "2021-07-13",
             "reference": "BIG_V_5",
             "captain": "Deputy Dawg",
-            "approver": "Yosemite Sam"
+            "approver": "Yosemite Sam",
         },
         attachments=["attachments/v5_0_0_sbom.xml"],
     )
@@ -162,6 +162,7 @@ def main():
         attachments=["attachments/v5_0_0_sbom.xml"],
     )
     print("Release registered.")
+
 
 if __name__ == "__main__":
     main()
