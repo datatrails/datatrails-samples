@@ -2,7 +2,7 @@
 
 Maintaining and publishing an accurate Software Bill of Materials (SBOM) is an essential cybersecurity activity for all vendors of critical software and cyber physical systems. However, publishing is not enough: users of the software also need to be able to find the information and be able to understand it in order to make strong and rational decisions about their own system security.
 
-The [NTIA’s SBOM Proof of Concept](https://www.ntia.doc.gov/files/ntia/publications/ntia_sbom_energy_pocplanning.pdf "NTIA Energy PoC Presentation") identifies the need for strong stakeholder community management and a trusted SBOM data sharing mechanism which protects the interests of all parties but does not describe how to achieve this.
+In its [recommendations for the minimum required elements of an SBOM](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations"). the NTIA identifies the need to balance transparency with access controls (_"SBOMs should be available in a timely fashion to those who need them and must have appropriate access permissions and roles in place"_), and illustrates in its [NTIA SBOM Proof of Concept](https://www.ntia.doc.gov/files/ntia/publications/ntia_sbom_energy_pocplanning.pdf "NTIA Energy PoC Presentation") the need for strong stakeholder community management and a trusted SBOM data sharing mechanism which protects the interests of all parties.
 
 RKVST Data Assurance Hub offers a solution to this sharing and distribution problem: vendors retain control of their proprietary information and release processes while customers have assured and reliable visibility into their digital supply chain risks with reliable access to current and historical SBOM data for the components they rely on.
 
