@@ -1,7 +1,7 @@
 # pylint:disable=missing-function-docstring      # docstrings
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
-from operator import floordiv
+
 from typing import Optional
 
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
@@ -14,7 +14,6 @@ class SoftwarePackage:
     def __init__(self, arch: "type_helper.Archivist"):
         self._arch = arch
         self._asset = None
-        self._attachments = None
 
     @property
     def arch(self):
@@ -23,10 +22,6 @@ class SoftwarePackage:
     @property
     def asset(self):
         return self._asset
-
-    @property
-    def attachments(self):
-        return self._attachments
 
     # Asset Creation
     def create(
@@ -38,21 +33,11 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
     ):
 
-        self._add_attachments(attachments)
-
         attrs = {
             "arc_display_name": sbom_name,
             "arc_description": sbom_description,
             "arc_display_type": "Software Package",
-            "arc_attachments": [
-                {
-                    "arc_display_name": "arc_primary_image",
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -104,7 +89,6 @@ class SoftwarePackage:
         # sbom_supplier: str,
         # sbom_uuid: str,
 
-        self._add_attachments(attachments)
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -122,15 +106,7 @@ class SoftwarePackage:
             "sbom_author": sbom["author"],
             "sbom_supplier": sbom["supplier"],
             "sbom_uuid": sbom["uuid"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -163,8 +139,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
     ):
 
-        self._add_attachments(attachments)
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -178,15 +152,7 @@ class SoftwarePackage:
             "sbom_planned_component": sbom_planned["name"],
             "sbom_planned_version": sbom_planned["version"],
             "sbom_planned_reference": sbom_planned["reference"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_planned["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -203,8 +169,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
     ):
 
-        self._add_attachments(attachments)
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -219,15 +183,7 @@ class SoftwarePackage:
             "sbom_accepted_version": sbom_accepted["version"],
             "sbom_accepted_approver": sbom_accepted["approver"],
             "sbom_accepted_vuln_reference": sbom_accepted["reference"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_accepted["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -245,8 +201,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
     ):
 
-        self._add_attachments(attachments)
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -261,15 +215,7 @@ class SoftwarePackage:
             "sbom_patch_author": sbom_patch["author"],
             "sbom_patch_supplier": sbom_patch["supplier"],
             "sbom_patch_uuid": sbom_patch["uuid"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_patch["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -285,7 +231,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-        self._add_attachments(attachments)
 
         props = {
             "operation": "Record",
@@ -302,15 +247,7 @@ class SoftwarePackage:
             "sbom_patch_supplier": sbom_patch["supplier"],
             "sbom_patch_uuid": sbom_patch["uuid"],
             "sbom_patch_vuln_reference": sbom_patch["reference"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_patch["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
 
         if custom_attrs is not None:
@@ -329,8 +266,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict],
     ):
 
-        self._add_attachments(attachments)
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -348,15 +283,7 @@ class SoftwarePackage:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": vuln["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
 
         if custom_attrs is not None:
@@ -372,7 +299,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-        self._add_attachments(attachments)
 
         props = {
             "operation": "Record",
@@ -391,15 +317,7 @@ class SoftwarePackage:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": vuln["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -417,8 +335,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
     ):
 
-        self._add_attachments(attachments)
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -432,15 +348,7 @@ class SoftwarePackage:
             "sbom_eol_target_version": sbom_eol["target_version"],
             "sbom_eol_target_uuid": sbom_eol["target_uuid"],
             "sbom_eol_target_date": sbom_eol["target_date"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_eol["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
+            "arc_attachments": attachments if attachments else [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -449,8 +357,3 @@ class SoftwarePackage:
             self._asset["identity"], props=props, attrs=attrs, confirm=True
         )
 
-    def _add_attachments(self, attachments: list):
-        self._attachments = []
-        for attachment in attachments:
-            with open(f"{attachment}", "rb") as fd:
-                self._attachments.append(self.arch.attachments.upload(fd))

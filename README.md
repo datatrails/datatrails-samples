@@ -13,12 +13,13 @@ Use the standard python pip utility:
 python3 -m pip install --user jitsuin-archivist-samples
 ```
 
-and this will create 4 entry points:
+and this will create 5 entry points:
 
       - archivist_samples_door_entry
       - archivist_samples_estate_info
       - archivist_samples_signed_records
       - archivist_samples_synsation
+      - archivist_samples_sbom
 
 
 ## Pre-requisites
@@ -110,4 +111,10 @@ archivist_samples_synsation analyze     $ARGS
 archivist_samples_synsation charger     $ARGS -s 20190909 -S 20190923 -f 9876
 archivist_samples_synsation jitsuinator $ARGS -n tcl.ccj.001 --wait 1.0
 archivist_samples_synsation wanderer    $ARGS
+```
+
+### Software Bill of Materials
+
+```bash
+archivist_samples_sbom $ARGS
 ```

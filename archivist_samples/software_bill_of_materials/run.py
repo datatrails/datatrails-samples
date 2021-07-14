@@ -16,43 +16,57 @@
 
 # pylint:  disable=missing-docstring
 
-from archivist import archivist
-from software_package import SoftwarePackage
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
+import logging
+
+from archivist import about
+
+from . import sbom_files
+
+from .software_package import SoftwarePackage
+
+LOGGER = logging.getLogger(__name__)
 
 
-def main():
-    # Refer to RKVST documentation for how to get an authtoken
-    try:
-        with open(".auth_token", mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-    except FileNotFoundError:
-        exit(
-            "ERROR: Auth token not found. Please store your bearer token in a file called '.auth_token' and try again."
-        )
+def upload_attachment(arch, path, name):
+    with pkg_resources.open_binary(sbom_files, path) as fd:
+        blob = arch.attachments.upload(fd)
+        attachment = {
+            "arc_display_name": name,
+            "arc_attachment_identity": blob["identity"],
+            "arc_hash_value": blob["hash"]["value"],
+            "arc_hash_alg": blob["hash"]["alg"],
+        }
+        return attachment
 
-    # Initialize connection to Archivist
-    arch = archivist.Archivist(
-        "https://rkvst.poc.jitsuin.io",
-        auth=authtoken,
-    )
+
+def run(arch):
+
+    LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", arch.namespace)
 
     # SoftwarePackage class encapsulates SBOM object in RKVST
-    print("Creating Software Package Asset...", end="")
+    LOGGER.info("Creating Software Package Asset...")
     package = SoftwarePackage(arch)
 
     package.create(
         "ACME Roadrunner Detector 2013 Coyote Edition SP1",
         "Different box, same great taste!",
-        attachments=["attachments/Comp_2.jpeg"],
+        attachments=[upload_attachment(arch , "Comp_2.jpeg", "arc_primary_image")],
         custom_attrs={
             "sbom_license": "www.gnu.org/licenses/gpl.txt",
             "proprietary_secret": "For your eyes only",
         },
     )
-    print(f"Software Package Created (Identity={package.asset['identity']})")
+    LOGGER.info("Software Package Created (Identity=%s)", package.asset["identity"])
 
     # Make a release
-    print("Making a release...", end="")
+    LOGGER.info("Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -63,12 +77,12 @@ def main():
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
         },
-        attachments=["attachments/v4_1_5_sbom.xml"],
+        attachments=[upload_attachment(arch , "v4_1_5_sbom.xml", "SWID SBOM")],
     )
-    print("Release registered.")
+    LOGGER.info("Release registered.")
 
     # Make a release
-    print("Making a release...", end="")
+    LOGGER.info("Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -79,12 +93,12 @@ def main():
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-0",
         },
-        attachments=["attachments/v4_1_6_sbom.xml"],
+        attachments=[upload_attachment(arch , "v4_1_6_sbom.xml", "SWID SBOM")],
     )
-    print("Release registered.")
+    LOGGER.info("Release registered.")
 
     # Private patch
-    print("Making a private patch...", end="")
+    LOGGER.info("Making a private patch...")
     package.private_patch(
         {
             "private_id": "special_customer",
@@ -98,12 +112,12 @@ def main():
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-1",
             "reference": "CVE-20210613-1",
         },
-        attachments=["attachments/v4_1_6_1_sbom.xml"],
+        attachments=[upload_attachment(arch , "v4_1_6_1_sbom.xml", "SWID SBOM")],
     )
-    print("Private patch registered.")
+    LOGGER.info("Private patch registered.")
 
     # Make a release
-    print("Making a release...", end="")
+    LOGGER.info("Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -114,9 +128,9 @@ def main():
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-7-0",
         },
-        attachments=["attachments/v4_1_7_sbom.xml"],
+        attachments=[upload_attachment(arch , "v4_1_7_sbom.xml", "SWID SBOM")],
     )
-    print("Release registered.")
+    LOGGER.info("Release registered.")
 
     # Plan major upgrade
     package.release_plan(
@@ -129,7 +143,7 @@ def main():
             "reference": "BIG_V_5",
             "captain": "Deputy Dawg",
         },
-        attachments=["attachments/v5_0_0_sbom.xml"],
+        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     # Approve major upgrade
@@ -144,11 +158,11 @@ def main():
             "captain": "Deputy Dawg",
             "approver": "Yosemite Sam",
         },
-        attachments=["attachments/v5_0_0_sbom.xml"],
+        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     # Release major upgrade
-    print("Making a release...", end="")
+    LOGGER.info("Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -159,10 +173,6 @@ def main():
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v5-0-0-0",
         },
-        attachments=["attachments/v5_0_0_sbom.xml"],
+        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
     )
-    print("Release registered.")
-
-
-if __name__ == "__main__":
-    main()
+    LOGGER.info("Release registered.")

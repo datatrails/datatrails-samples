@@ -11,35 +11,21 @@ This sample shows how to quickly get started with integrating your build and SBO
 
 ## Pre-requisites
 
-Python 3.6 and later versions are supported.
+* Python 3.6 and later versions are supported.
 
-Install the [RKVST Python package](https://pypi.org/project/jitsuin-archivist/ "PyPi package page")
+* Install the [RKVST Python package](https://pypi.org/project/jitsuin-archivist/ "PyPi package page")
 
-Get an authorization bearer token and store it in the file `.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token")
+* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
 
-## Running the samples
+## Running the sample
 
-### Simple sample
-
-The simple sample script creates a SoftwarePackage object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector".
+The sample creates a SoftwarePackage object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector". It takes the concept of assured data one step further and extends to assured processes by simulating a series of product lifecycle events that result in a variety of updates to the SBOM, including private patches for specific customers and internal planning and approval for major updates.
 
 To run it: 
 
 ```bash
-python3 ./sbom_demo.py
-```
-
-This will create a new Asset in your RKVST tenancy and publish a single update to the SBOM,registering full details for version 4.1.5 with the platform.
-
-### Complex sample
-
-The complex sample takes the concept of assured data one step further and extends to assured processes. It simulates a series of product lifecycle events that result in a variety of updates to the SBOM, including private patches for specific customers and internal planning and approval for major updates.
-
-To run it: 
-
-```bash
-python3 ./sbom_advanced_demo.py
+archivist_samples_sbom [-v]
 ```
 
 ## Using the SoftwarePackage class
@@ -54,28 +40,26 @@ This Python class makes it easy to manage SBOM distribution in RKVST and publish
 To create a brand new SBOM Asset and begin tracking and sharing the release history of a product line, use `SoftwarePackage.create()`:
 
 ```python
-# Essential imports
-from archivist import archivist
-from software_package import SoftwarePackage
+    # Binaries such as images and SBOM XML need to be uploaded to RKVST first
+    def upload_attachment(arch, path, name):
+        with pkg_resources.open_binary(sbom_files, path) as fd:
+            blob = arch.attachments.upload(fd)
+            attachment = {
+                "arc_display_name": name,
+                "arc_attachment_identity": blob["identity"],
+                "arc_hash_value": blob["hash"]["value"],
+                "arc_hash_alg": blob["hash"]["alg"],
+            }
+            return attachment
 
-
-# Get an authtoken and initialize RKVST connection
-with open(".auth_token", mode="r") as tokenfile:
-    authtoken = tokenfile.read().strip()
-
-arch = archivist.Archivist(
-    "https://rkvst.poc.jitsuin.io",
-    auth=authtoken,
-)
-
-# Instantiate SoftwarePackage object and create an RKVST record to begin
-# tracing and publishing its version history
-package = SoftwarePackage(arch)
-package.create(
-    "ACME Roadrunner Detector 2013 Coyote Edition SP1",
-    "Different box, same great taste!",
-    attachments=["attachments/Comp_2.jpeg"],
-)
+    # Instantiate SoftwarePackage object and create an RKVST record to begin
+    # tracing and publishing its version history
+    package = SoftwarePackage(arch)
+    package.create(
+        "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+        "Different box, same great taste!",
+        attachments=[upload_attachment(arch , "Comp_2.jpeg", "arc_primary_image")],
+    )
 ```
 
 
@@ -117,7 +101,7 @@ package.release(
         "supplier": "Coyote Services, Inc.",
         "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
     },
-    attachments=["attachments/v4_1_5_sbom.xml"],
+    attachments=[upload_attachment(arch , "v4_1_5_sbom.xml", "SWID SBOM XML")],
     custom_attrs={"sbom_license": "www.gnu.org/licenses/gpl.txt"},
 )
 ```
