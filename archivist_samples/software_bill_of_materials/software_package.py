@@ -356,4 +356,3 @@ class SoftwarePackage:
         return self.arch.events.create(
             self._asset["identity"], props=props, attrs=attrs, confirm=True
         )
-
