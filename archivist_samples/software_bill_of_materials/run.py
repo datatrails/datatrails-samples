@@ -57,7 +57,7 @@ def run(arch):
     package.create(
         "ACME Roadrunner Detector 2013 Coyote Edition SP1",
         "Different box, same great taste!",
-        attachments=[upload_attachment(arch , "Comp_2.jpeg", "arc_primary_image")],
+        attachments=[upload_attachment(arch, "Comp_2.jpeg", "arc_primary_image")],
         custom_attrs={
             "sbom_license": "www.gnu.org/licenses/gpl.txt",
             "proprietary_secret": "For your eyes only",
@@ -77,7 +77,7 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
         },
-        attachments=[upload_attachment(arch , "v4_1_5_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v4_1_5_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
@@ -93,7 +93,7 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-0",
         },
-        attachments=[upload_attachment(arch , "v4_1_6_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v4_1_6_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
@@ -112,7 +112,7 @@ def run(arch):
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-1",
             "reference": "CVE-20210613-1",
         },
-        attachments=[upload_attachment(arch , "v4_1_6_1_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v4_1_6_1_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Private patch registered.")
 
@@ -128,7 +128,7 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-7-0",
         },
-        attachments=[upload_attachment(arch , "v4_1_7_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v4_1_7_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
@@ -143,7 +143,7 @@ def run(arch):
             "reference": "BIG_V_5",
             "captain": "Deputy Dawg",
         },
-        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     # Approve major upgrade
@@ -158,7 +158,7 @@ def run(arch):
             "captain": "Deputy Dawg",
             "approver": "Yosemite Sam",
         },
-        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     # Release major upgrade
@@ -173,6 +173,6 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v5-0-0-0",
         },
-        attachments=[upload_attachment(arch , "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
