@@ -13,7 +13,7 @@ This sample shows how to quickly get started with integrating your build and SBO
 
 * Python 3.6 and later versions are supported.
 
-* Install the [RKVST Python package](https://pypi.org/project/jitsuin-archivist/ "PyPi package page")
+* Install the [RKVST samples Python package](https://pypi.org/project/jitsuin-archivist-samples/ "PyPi package page")
 
 * Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
