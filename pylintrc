@@ -144,7 +144,8 @@ disable=print-statement,
         bad-mcs-classmethod-argument, 
         no-self-argument,
         bad-continuation,
-        bad-whitespace
+        bad-whitespace,
+	unsubscriptable-object
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

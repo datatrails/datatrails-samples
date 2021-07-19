@@ -1,0 +1,30 @@
+<SoftwareIdentity
+ xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+ name="ACME Roadrunner Detector 2013 Coyote Edition SP1"
+ tagId="com.acme.rrd2013-ce-sp1-v4-1-7-0"
+ version="4.1.7">
+ <Entity
+ name="The ACME Corporation"
+ regid="acme.com"
+ role="tagCreator softwareCreator"/>
+ <Entity
+ name="Coyote Services, Inc."
+ regid="mycoyote.com"
+ role="distributor"/>
+ <Link
+ rel="license"
+ href="www.gnu.org/licenses/gpl.txt"/>
+ <Meta
+ activationStatus="trial"
+ product="Roadrunner Detector"
+ colloquialVersion="2013"
+ edition="coyote"
+ revision="sp1"/>
+ <Payload>
+ <Directory root="%programdata%" name="rrdetector">
+ <File name="rrdetector.exe" size="532712"
+SHA256:hash="a314fc2dc663ae7a6b6bc6787594057396e6b3f569c
+d50fd5ddb4d1bbafd2b6a"/>
+ </Directory>
+ </Payload>
+</SoftwareIdentity>
