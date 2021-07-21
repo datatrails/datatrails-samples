@@ -112,7 +112,7 @@ class Nuclear:
             atrrs.update(custom_attrs)
 
         asset_attrs = {
-            "arc_display_name":latest_nw["name"],
+            "arc_display_name": latest_nw["name"],
             "nw_item_activity_group_b1": latest_nw["nw_item_activity_group_b1"],
             "nw_fissile_particles": latest_nw["nw_fissile_particles"],
             "nw_active_particles": latest_nw["nw_active_particles"],

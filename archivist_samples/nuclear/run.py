@@ -34,6 +34,7 @@ from nuclear_files import assets as image_assets
 
 LOGGER = logging.getLogger(__name__)
 
+
 def upload_attachment(arch, path, name):
     with pkg_resources.open_binary(image_assets, "wasteimage.jpeg") as fd:
         blob = arch.attachments.upload(fd)
@@ -45,6 +46,7 @@ def upload_attachment(arch, path, name):
         }
         return attachment
 
+
 def run(arch):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
@@ -53,11 +55,12 @@ def run(arch):
     # Nuclear class encapsulates SBOM object in RKVST
     LOGGER.info("Creating Nuclear Asset...")
     item = Nuclear(arch)
-
+    
     item.create(
         "Item-12345", 
         "Waste Item demo creation",
-        "0","pre-treatement",
+        "0",
+        "pre-treatement",
         attachments=[upload_attachment(arch, "wasteimage.jpeg", "arc_primary_image")],
     )
     LOGGER.info("Nuclear Item Asset Created (Identity=%s)", item.asset["identity"])
