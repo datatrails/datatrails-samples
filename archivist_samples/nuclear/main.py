@@ -29,8 +29,6 @@ from .run import run
 #from archivist_samples.testing.logger import set_logger, LOGGER
 
 
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Exercises the various Wavestone door entry use cases"
