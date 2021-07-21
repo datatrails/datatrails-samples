@@ -87,6 +87,6 @@ def run(arch):
             "nw_lifecycle_stage": "characterized",
             "nw_target_stream": "Combustible",
             "nw_free_liquid": "0",
-       }
+        }
     )
     LOGGER.info("Characterization registered...")
