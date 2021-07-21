@@ -128,7 +128,7 @@ class Nuclear:
             "nw_waste_code": latest_nw["nw_waste_code"],
             "nw_lifecycle_stage": latest_nw["nw_lifecycle_stage"],
             "nw_target_stream": latest_nw["nw_target_stream"],
-            "nw_free_liquid": latest_nw["nw_free_liquid"],    
+            "nw_free_liquid": latest_nw["nw_free_liquid"],
         }
         if custom_asset_attrs is not None:
             asset_atrs.update(custom_asset_attrs)
@@ -146,5 +146,3 @@ class Nuclear:
     #    for attachment in attachments:
     #        with open(f"{attachment}", "rb") as fd:
     #            self._attachments.append(self.arch.attachements.upload(fd))
-
-        

@@ -55,9 +55,9 @@ def run(arch):
     # Nuclear class encapsulates SBOM object in RKVST
     LOGGER.info("Creating Nuclear Asset...")
     item = Nuclear(arch)
-    
+
     item.create(
-        "Item-12345", 
+        "Item-12345",
         "Waste Item demo creation",
         "0",
         "pre-treatement",
@@ -68,12 +68,12 @@ def run(arch):
     # Characterize
     LOGGER.info("Adding characterization...")
     item.characterize(
-       {
-           "name": "Item-12345",
+        {
+            "name": "Item-12345",
             "description": "Charactized",
             "nw_item_activity_group_b1": "7",
             "nw_fissile_particles": "20",
-            "nw_active_particles": "0", 
+            "nw_active_particles": "0",
             "nw_activity_nonalpha": "3",
             "nw_item_activity_group_a": "0.6",
             "nw_explosives": "0",
@@ -90,4 +90,3 @@ def run(arch):
        }
     )
     LOGGER.info("Characterization registered...")
-
