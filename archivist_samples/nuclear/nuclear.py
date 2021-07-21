@@ -41,8 +41,6 @@ class Nuclear:
         custom_attrs: Optional[dict] = None,
     ):
 
-        # self._add_attachments(attachments)
-
         attrs = {
             "arc_display_name": nw_name,
             "arc_description": nw_description,
@@ -51,15 +49,6 @@ class Nuclear:
             "nw_lifecycle_stage": nw_lifecycle,
             "nw_namespace": random(),
             "attachments": attachments or [],
-           # "arc_attachments": [
-           #     {
-           #         "arc_display_name": "arc_primary_image",
-           #         "arc_attachment_identiy": attachment["identity"],
-           #         "arc_hash_value": attachment["hash"]["value"],
-           #         "arc_hash_alg": attachment["hash"]["alg"],
-           #    }
-           #     for attachment in self._attachments //
-           # ],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -105,7 +94,7 @@ class Nuclear:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-        # self._add_attachments(attachments)
+
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -118,15 +107,6 @@ class Nuclear:
             "arc_evidence": "Characterize",
             "arc_display_type": "Characterize",
             "arc_attachments": attachments or [],
-            #"arc_attachments": [
-            #    {
-            #        "arc_display_name": nw["description"],
-            #        "arc_attachment_identity": attachment["identity"],
-            #        "arc_hash_value": attachment["hash"]["value"],
-            #        "arc_hash_alg": attachment["hash"]["alg"],
-            #    }
-            #    for attachment in self._attachments
-            #],
         }
         if custom_attrs is not None:
             atrrs.update(custom_attrs)

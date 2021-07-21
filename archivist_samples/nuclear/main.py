@@ -56,9 +56,9 @@ def main():
         dest="namespace",
         action="store",
         default=None,
-        help="namespace of item population (to enable parallel demo)",
+        help="namespace of item population to enable parallel demos",
     )
-    
+
     security = parser.add_mutually_exclusive_group(required=True)
     security.add_argument(
         "-t",
@@ -95,7 +95,7 @@ def main():
             authtoken = tokenfile.read().strip()
 
         poc = Archivist(args.url, auth=authtoken, verify=False)
-    
+
     elif args.client_cert_name:
         poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
 

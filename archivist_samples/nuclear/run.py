@@ -55,7 +55,8 @@ def run(arch):
     item = Nuclear(arch)
 
     item.create(
-        "Item-" + random(), "Waste Item demo creation",
+        "Item-12345", 
+        "Waste Item demo creation",
         "0","pre-treatement",
         attachments=[upload_attachment(arch, "wasteimage.jpeg", "arc_primary_image")],
     )
@@ -65,7 +66,7 @@ def run(arch):
     LOGGER.info("Adding characterization...")
     item.characterize(
        {
-           "name": "Item-" + random(),
+           "name": "Item-12345",
             "description": "Charactized",
             "nw_item_activity_group_b1": "7",
             "nw_fissile_particles": "20",
