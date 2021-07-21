@@ -23,10 +23,12 @@ from sys import stdout as sys_stdout
 
 from archivist.archivist import Archivist
 
-#from ..testing.logger import set_logger, LOGGER
-from archivist_samples.testing.logger import set_logger, LOGGER
+from ..testing.logger import set_logger, LOGGER
 
-from run import run
+from .run import run
+#from archivist_samples.testing.logger import set_logger, LOGGER
+
+
 
 
 def main():
@@ -110,4 +112,4 @@ def main():
     run(poc)
 
     parser.print_help(sys_stdout)
-    sys.exit(1)
+    sys_exit(1)

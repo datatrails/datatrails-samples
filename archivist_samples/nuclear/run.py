@@ -26,17 +26,16 @@ import logging
 
 from archivist import about
 
-#from . import nuclear_files
+from . import nuclear_files
 
-from nuclear import Nuclear
-from nuclear_files import assets as image_assets
+from .nuclear import Nuclear
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(image_assets, "wasteimage.jpeg") as fd:
+    with pkg_resources.open_binary(image_assets, path) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             "arc_display_name": name,

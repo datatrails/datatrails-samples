@@ -109,7 +109,7 @@ class Nuclear:
             "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
-            atrrs.update(custom_attrs)
+            attrs.update(custom_attrs)
 
         asset_attrs = {
             "arc_display_name": latest_nw["name"],
@@ -131,13 +131,13 @@ class Nuclear:
             "nw_free_liquid": latest_nw["nw_free_liquid"],
         }
         if custom_asset_attrs is not None:
-            asset_atrs.update(custom_asset_attrs)
+            asset_attrs.update(custom_asset_attrs)
 
         return self.arch.events.create(
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            asset_attrs=asset_atrs,
+            asset_attrs=asset_attrs,
             confirm=True,
         )
 
