@@ -35,7 +35,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(image_assets, path) as fd:
+    with pkg_resources.open_binary(nuclear_files, path) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             "arc_display_name": name,
