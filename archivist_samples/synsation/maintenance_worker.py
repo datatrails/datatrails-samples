@@ -35,7 +35,7 @@ def service_device(charger, job_id, timewarp):
     # The maintenance is done...inform Archivist
     MyAsset(
         charger.archivist_client,
-        charger.archivist_identity,
+        charger.archivist_asset_identity,
         timewarp,
         "Phil@evcservicing.com",
     ).service(
