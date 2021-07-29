@@ -32,6 +32,7 @@ then
     echo "    TEST_SELECTOR=synsation_jitsuinator ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_wanderer ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=sbom ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=nuclear ${SAMPLESCMD}"
     echo ""
     echo "To run more than one test use a comma-separated list:"
     echo ""
@@ -62,6 +63,7 @@ TEST_NO_SYNSATION_CHARGER=${TEST_NO}
 TEST_NO_SYNSATION_JITSUINATOR=${TEST_NO}
 TEST_NO_SYNSATION_WANDERER=${TEST_NO}
 TEST_NO_SBOM=${TEST_NO}
+TEST_NO_NUCLEAR=${TEST_NO}
 
 IFS=',' read -r -a SELECTION_LIST <<< "$TEST_SELECTOR"
 for selection in "${SELECTION_LIST[@]}"
@@ -134,3 +136,6 @@ ${SYNSATION_WANDERER}
 
 SBOM="${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${ARGS} ${NAMESPACE}"
 ${SBOM}
+
+NUCLEAR="${TEST_NO_NUCLEAR} python3 -m archivist_samples.nuclear ${ARGS} ${NAMESPACE}"
+${NUCLEAR}

@@ -54,6 +54,7 @@ setup(
             'archivist_samples_signed_records = archivist_samples.signed_records.main:main',
             'archivist_samples_synsation = archivist_samples.synsation.main:main',
             'archivist_samples_sbom = archivist_samples.software_bill_of_materials.main:main',
+            'archivist_samples_nuclear = archivist_samples.nuclear.main:main',
         ],
     },
 )
