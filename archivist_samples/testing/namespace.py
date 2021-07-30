@@ -26,6 +26,7 @@ from copy import deepcopy
 from archivist.errors import (
     ArchivistNotFoundError,
 )
+from archivist.storage_integrity import StorageIntegrity
 
 
 NAMESPACE_KEY = "functests_namespace"
@@ -81,7 +82,17 @@ def assets_read_by_signature(arch, attrs):
 
 
 def assets_create(arch, behaviours, attrs, *, confirm=False):
-    return arch.assets.create(behaviours, __newattrs(arch, attrs), confirm=confirm)
+    try:
+        storage_integrity = arch.storage_integrity
+    except AttributeError:
+        storage_integrity = StorageIntegrity.TENANT_STORAGE
+
+    return arch.assets.create(
+        behaviours,
+        __newattrs(arch, attrs),
+        storage_integrity=storage_integrity,
+        confirm=confirm,
+    )
 
 
 def assets_wait_for_confirmed(arch, attrs):
