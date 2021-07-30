@@ -20,7 +20,6 @@
 # pylint:  disable=fixme
 # pylint:  disable=missing-docstring
 
-import argparse
 import datetime
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
@@ -31,12 +30,13 @@ from archivist import about
 from archivist.archivist import Archivist
 
 from ..testing.logger import set_logger, LOGGER
-from ..testing.time_warp import TimeWarp
 
 from ..testing.namespace import (
     assets_count,
     assets_list,
 )
+from ..testing.parser import common_parser
+from ..testing.time_warp import TimeWarp
 
 from . import ev_charger_device
 from . import device_worker
@@ -141,25 +141,8 @@ def run(ac, args):
 
 
 def entry():
-    parser = argparse.ArgumentParser(
-        description="Simulates usage and maintenance of electric vehicle chargers"
-    )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbose",
-        action="store_true",
-        default=False,
-        help="print verbose debugging",
-    )
-    parser.add_argument(
-        "-u",
-        "--url",
-        type=str,
-        dest="url",
-        action="store",
-        default="https://rkvst.poc.jitsuin.io",
-        help="location of Archivist service",
+    parser, _ = common_parser(
+        "Simulates usage and maintenance of electric vehicle chargers"
     )
     parser.add_argument(
         "--namespace",
@@ -216,28 +199,6 @@ def entry():
         help="Fast forward time in event series (default: 1 second = 1 hour)",
     )
 
-    security = parser.add_mutually_exclusive_group(required=True)
-    security.add_argument(
-        "-t",
-        "--auth-token",
-        type=str,
-        dest="auth_token_file",
-        action="store",
-        default=".auth_token",
-        help="FILE containing API authentication token",
-    )
-    security.add_argument(
-        "-c",
-        "--clientcert",
-        type=str,
-        dest="client_cert_name",
-        action="store",
-        help=(
-            "name of TLS client cert (.key and .pem with matching name"
-            "must be in current directory)"
-        ),
-    )
-
     args = parser.parse_args()
 
     if args.verbose:
@@ -263,6 +224,7 @@ def entry():
     poc.namespace = (
         "_".join(["synsation", args.namespace]) if args.namespace is not None else None
     )
+    poc.storage_integrity = args.storage_integrity
 
     run(poc, args)
 

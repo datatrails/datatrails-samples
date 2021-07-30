@@ -13,10 +13,11 @@ docker run \
     -v $(pwd):/home/api \
     -u $(id -u):$(id -g) \
     -e TEST_ARCHIVIST \
-    -e TEST_AUTHTOKEN \
+    -e TEST_AUTHTOKEN_FILENAME \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \
     -e TEST_VERBOSE \
+    -e TEST_STORAGE_INTEGRITY \
     -e TWINE_USERNAME \
     -e TWINE_PASSWORD \
     jitsuin-samples-api \

@@ -23,6 +23,7 @@ except ImportError:
     import importlib_resources as pkg_resources
 
 import logging
+from sys import exit as sys_exit
 
 from archivist import about
 
@@ -52,7 +53,7 @@ def run(arch):
 
     # SoftwarePackage class encapsulates SBOM object in RKVST
     LOGGER.info("Creating Software Package Asset...")
-    package = SoftwarePackage(arch)
+    package = SoftwarePackage(arch, storage_integrity=arch.storage_integrity)
 
     package.create(
         "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -65,8 +66,7 @@ def run(arch):
     )
     LOGGER.info("Software Package Created (Identity=%s)", package.asset["identity"])
 
-    # Make a release
-    LOGGER.info("Making a release...")
+    LOGGER.info("1 Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -81,8 +81,7 @@ def run(arch):
     )
     LOGGER.info("Release registered.")
 
-    # Make a release
-    LOGGER.info("Making a release...")
+    LOGGER.info("2 Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -97,8 +96,7 @@ def run(arch):
     )
     LOGGER.info("Release registered.")
 
-    # Private patch
-    LOGGER.info("Making a private patch...")
+    LOGGER.info("3 Making a private patch...")
     package.private_patch(
         {
             "private_id": "special_customer",
@@ -116,8 +114,7 @@ def run(arch):
     )
     LOGGER.info("Private patch registered.")
 
-    # Make a release
-    LOGGER.info("Making a release...")
+    LOGGER.info("4 Making a release...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -132,7 +129,7 @@ def run(arch):
     )
     LOGGER.info("Release registered.")
 
-    # Plan major upgrade
+    LOGGER.info("5 Plan major upgrade...")
     package.release_plan(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -146,7 +143,7 @@ def run(arch):
         attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
-    # Approve major upgrade
+    LOGGER.info("6 Approve major upgrade...")
     package.release_accepted(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -161,8 +158,7 @@ def run(arch):
         attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
-    # Release major upgrade
-    LOGGER.info("Making a release...")
+    LOGGER.info("7 Release major upgrade...")
     package.release(
         {
             "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
@@ -176,3 +172,4 @@ def run(arch):
         attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
+    sys_exit(0)

@@ -17,37 +17,20 @@
 # pylint:  disable=missing-docstring
 
 
-import argparse
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist.archivist import Archivist
 
 from ..testing.logger import set_logger, LOGGER
+from ..testing.parser import common_parser
 
 from .run import run
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Exercises the various Wavestone door entry use cases"
-    )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbose",
-        action="store_true",
-        default=False,
-        help="print verbose debugging",
-    )
-    parser.add_argument(
-        "-u",
-        "--url",
-        type=str,
-        dest="url",
-        action="store",
-        default="https://rkvst.poc.jitsuin.io",
-        help="location of Archivist service",
+    parser, _ = common_parser(
+        "Simple SBOM implementation that conforms with NTIA recommendations"
     )
     parser.add_argument(
         "--namespace",
@@ -56,28 +39,6 @@ def main():
         action="store",
         default=None,
         help="namespace of item population (to enable parallel demos",
-    )
-
-    security = parser.add_mutually_exclusive_group(required=True)
-    security.add_argument(
-        "-t",
-        "--auth-token",
-        type=str,
-        dest="auth_token_file",
-        action="store",
-        default=".auth_token",
-        help="FILE containing API authentication token",
-    )
-    security.add_argument(
-        "-c",
-        "--clientcert",
-        type=str,
-        dest="client_cert_name",
-        action="store",
-        help=(
-            "name of TLS client cert (.key and .pem with matching name must"
-            "be in current directory)"
-        ),
     )
 
     args = parser.parse_args()
@@ -103,8 +64,9 @@ def main():
         sys_exit(1)
 
     poc.namespace = (
-        "_".join(["sbom", args.namespace]) if args.namespace is not None else None
+        "_".join(["sbom", args.namespace]) if args.namespace is not None else "sbom"
     )
+    poc.storage_integrity = args.storage_integrity
 
     run(poc)
 

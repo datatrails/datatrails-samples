@@ -20,7 +20,6 @@
 # pylint:  disable=missing-docstring
 
 
-import argparse
 import base64
 import os
 
@@ -50,6 +49,7 @@ from ..testing.namespace import (
     events_create,
     events_list,
 )
+from ..testing.parser import common_parser
 
 # Key management functions
 #
@@ -394,27 +394,8 @@ def run(archivist, args):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description=(
-            "Shows simple integration of a device private signing key with Archivist records"
-        )
-    )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbose",
-        action="store_true",
-        default=False,
-        help="print verbose debugging",
-    )
-    parser.add_argument(
-        "-u",
-        "--url",
-        type=str,
-        dest="url",
-        action="store",
-        default="https://rkvst.poc.jitsuin.io",
-        help="location of Archivist service",
+    parser, _ = common_parser(
+        "Shows simple integration of a device private signing key with Archivist records"
     )
     parser.add_argument(
         "--namespace",
@@ -423,28 +404,6 @@ def main():
         action="store",
         default=None,
         help="namespace of item population (to enable parallel demos",
-    )
-
-    security = parser.add_mutually_exclusive_group(required=True)
-    security.add_argument(
-        "-t",
-        "--auth-token",
-        type=str,
-        dest="auth_token_file",
-        action="store",
-        default=".auth_token",
-        help="FILE containing API authentication token",
-    )
-    security.add_argument(
-        "-c",
-        "--clientcert",
-        type=str,
-        dest="client_cert_name",
-        action="store",
-        help=(
-            "name of TLS client cert (.key and .pem with matching name"
-            "must be in current directory)"
-        ),
     )
 
     # Operations
@@ -510,6 +469,7 @@ def main():
         if args.namespace is not None
         else None
     )
+    poc.storage_integrity = args.storage_integrity
 
     run(poc, args)
 
