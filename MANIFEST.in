@@ -2,4 +2,4 @@ graft archivist_samples/door_entry/images
 graft archivist_samples/synsation/images
 graft archivist_samples/synsation/locations
 graft archivist_samples/software_bill_of_materials/sbom_files
-graft archivist_samples/nuclear/nuclear_files
+graft archivist_samples/wipp/wipp_files

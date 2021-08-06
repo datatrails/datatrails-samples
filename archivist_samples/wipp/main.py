@@ -104,7 +104,7 @@ def main():
         sys_exit(1)
 
     poc.namespace = (
-        "_".join(["nuclear", args.namespace]) if args.namespace is not None else None
+        "_".join(["wipp", args.namespace]) if args.namespace is not None else None
     )
 
     run(poc)

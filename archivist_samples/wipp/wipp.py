@@ -3,7 +3,6 @@
 # pylint:disable=missing-class-docstring      # docstrings
 
 from typing import Optional
-#from random import random
 
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
@@ -11,7 +10,7 @@ from typing import Optional
 from archivist import archivist as type_helper
 
 
-class Nuclear:
+class Wipp:
     def __init__(self, arch: "type_helper.Archivist"):
         self._arch = arch
         self._asset = None
@@ -24,20 +23,22 @@ class Nuclear:
     def asset(self):
         return self._asset
 
-    # Waste Item Asset Creation
+    # Drum Asset
     def create(
         self,
-        nw_name: str,
-        nw_description: str,
+        drum_name: str,
+        drum_description: str,
+        drum_serial: str,
         *,
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
 
         attrs = {
-            "arc_display_name": nw_name,
-            "arc_description": nw_description,
-            "arc_display_type": "Nuclear Waste Item",
+            "arc_display_name": drum_name,
+            "arc_description": drum_description,
+            "arc_display_type": "55 gallon drum",
+            "arc_serial_number": drum_serial,
             "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
@@ -52,20 +53,22 @@ class Nuclear:
         self._asset = self.arch.assets.create(behaviours, attrs, confirm=True)
         return self._asset
 
-    # Container Asset Creation
-    def concreate(
+    # Cask Asset
+    def caskcreate(
         self,
-        cw_name: str,
-        cw_description: str,
+        cask_name: str,
+        cask_description: str,
+        cask_serial: str,
         *,
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
 
         attrs = {
-            "arc_display_name": cw_name,
-            "arc_description": cw_description,
-            "arc_display_type": "Nuclear Disposal Container",
+            "arc_display_name": cask_name,
+            "arc_description": cask_description,
+            "arc_display_type": "TRU RH 72B Cask",
+            "arc_serial_number": cask_serial,
             "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
@@ -80,33 +83,33 @@ class Nuclear:
         self._asset = self.arch.assets.create(behaviours, attrs, confirm=True)
         return self._asset
 
-    # Asset load by unique identity
+    # Assset load by unique identity
     def read(
         self,
         identity: str,
     ):
-        self._asset = self.arch.assets.read(identity)
+        self._asset = self._arch.assets.read(identity)
 
-    # Asset load by attribute(s)
+    # Asset load by attributes(s)
     def read_by_signature(
         self,
         attributes: Optional[dict],
     ):
         # Hard-wire the Asset type
         newattrs = attributes.copy()
-        newattrs["arc_display_type"] = "Nuclear Waste Item"
+        newattrs["arc_display_type"] = "55 gallon drum"
 
-        # Note: underlying Archivist will raise ArchivistNotFoundError or
+        # Note: underlying Archivist will reaise ArchivistNotFoundError or
         # ArchivistDuplicateError unless this set of attributes points to
         # a single unique asset
-        self._asset = self.arch.assets.read_by_signature(attrs=newattrs)
+        self._asset = self._arch.assets.read_by_signature(attrs=newattrs)
 
-    # Characterize Events
+    # Drum Characerize Events
     def characterize(
         self,
-        nw: dict,
+        wipp: dict,
         *,
-        latest_nw: Optional[dict] = None,
+        attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
@@ -115,35 +118,20 @@ class Nuclear:
             "operation": "Record",
             "behaviour": "RecordEvidence",
         }
-
-        if latest_nw is None:
-            latest_nw = nw
         attrs = {
-            "arc_description": nw["description"],
-            "arc_evidence": "No evidence provided",
-            "arc_display_type": "Characterize",
+            "arc_display_type": "WO Characterize",
+            "arc_description": wipp["description"],
+            "arc_evidence": "N/A",
+            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
         asset_attrs = {
-            "arc_display_name": latest_nw["name"],
-            "nw_item_activity_group_b1": latest_nw["nw_item_activity_group_b1"],
-            "nw_fissile_particles": latest_nw["nw_fissile_particles"],
-            "nw_active_particles": latest_nw["nw_active_particles"],
-            "nw_activity_nonalpha": latest_nw["nw_activity_nonalpha"],
-            "nw_item_activity_group_a": latest_nw["nw_item_activity_group_a"],
-            "nw_explosives": latest_nw["nw_explosives"],
-            "nw_soluble_solids": latest_nw["nw_soluble_solids"],
-            "nw_oxidizing_agents": latest_nw["nw_oxidizing_agents"],
-            "nw_item_activity_group_b2": latest_nw["nw_item_activity_group_b2"],
-            "nw_item_activity_group_c": latest_nw["nw_item_activity_group_c"],
-            "nw_waste_weight": latest_nw["nw_waste_weight"],
-            "nw_activity_alpha": latest_nw["nw_activity_alpha"],
-            "nw_waste_code": latest_nw["nw_waste_code"],
-            "nw_lifecycle_stage": latest_nw["nw_lifecycle_stage"],
-            "nw_target_stream": latest_nw["nw_target_stream"],
-            "nw_free_liquid": latest_nw["nw_free_liquid"],
+            "wipp_weight": wipp["weight"],
+            "wipp_a2fraction_characterized": wipp["a2fraction_characterized"],
+            "wipp_activity_characterized": wipp["activity_characterized"],
+            "wipp_total_characterized": wipp["total_characterized"],
         }
         if custom_asset_attrs is not None:
             asset_attrs.update(custom_asset_attrs)
@@ -156,11 +144,12 @@ class Nuclear:
             confirm=True,
         )
 
-    # Package Events
-    def package(
+    # Tomography Events
+    def tomography(
         self,
-        nw_packaged: dict,
+        wipp_tom: dict,
         *,
+        attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
@@ -170,16 +159,19 @@ class Nuclear:
             "behaviour": "RecordEvidence",
         }
         attrs = {
-            "arc_description": nw_packaged["description"],
-            "arc_evidence": "No evidence provided",
-            "arc_display_type": "Package",
+            "arc_display_type": "WO Confirmation",
+            "arc_description": wipp_tom["description"],
+            "arc_evidence": "Radiograph attached",
+            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
         asset_attrs = {
-            "nw_in_container": nw_packaged["nw_in_container"],
-            "nw_lifecycle_stage": nw_packaged["nw_lifecycle_stage"],
+            "wipp_weight": wipp_tom["weight"],
+            "wipp_a2fraction_confirmed": wipp_tom["a2fraction_confirmed"],
+            "wipp_activity_confirmed": wipp_tom["activity_confirmed"],
+            "wipp_total_confirmed": wipp_tom["total_confirmed"],
         }
         if custom_asset_attrs is not None:
             asset_attrs.update(custom_asset_attrs)
@@ -192,11 +184,12 @@ class Nuclear:
             confirm=True,
         )
 
-    # Buffer Storage
-    def buffer(
+    # Loading Events
+    def loading(
         self,
-        nw_buffered: dict,
+        wipp_load: dict,
         *,
+        attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
@@ -206,15 +199,16 @@ class Nuclear:
             "behaviour": "RecordEvidence",
         }
         attrs = {
-            "arc_description": nw_buffered["description"],
-            "arc_evidence": nw_buffered["evidence"],
-            "arc_display_type": "BufferStore",
+            "arc_display_type": "WO Loading",
+            "arc_description": wipp_load["description"],
+            "arc_evidence": "Loading placement image attached",
+            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
         asset_attrs = {
-            "nw_lifecycle_stage": nw_buffered["nw_lifecycle_stage"],
+            "wipp_container": wipp_load["container"],
         }
         if custom_asset_attrs is not None:
             asset_attrs.update(custom_asset_attrs)
@@ -227,11 +221,128 @@ class Nuclear:
             confirm=True,
         )
 
-    # Treatment
-    def treat(
+    # Pre-Shipping Events
+    def preshipping(
         self,
-        nw_treated: dict,
+        wipp_preship: dict,
         *,
+        attachments: Optional[list] = None,
+        custom_attrs: Optional[dict] = None,
+    ):
+
+        props = {
+            "operation": "Record",
+            "behaviour": "RecordEvidence",
+        }
+        attrs = {
+            "arc_display_type": "WO Preship Inspection",
+            "arc_description": wipp_preship["description"],
+            "arc_evidence": "Image attached",
+            "arc_attachments": attachments or [],
+        }
+        if custom_attrs is not None:
+            attrs.update(custom_attrs)
+
+        return self.arch.events.create(
+            self.asset["identity"],
+            props=props,
+            attrs=attrs,
+            confirm=True,
+        )
+
+    # Departure Events
+    def departure(
+        self,
+        wipp_dep: dict,
+        *,
+        attachments: Optional[list] = None,
+        custom_attrs: Optional[dict] = None,
+    ):
+
+        props = {
+            "operation": "Record",
+            "behaviour": "RecordEvidence",
+        }
+        attrs = {
+            "arc_display_type": "WO Transit",
+            "arc_description": wipp_dep["description"],
+            "arc_evidence": "Routing instructions in attachments",
+            "arc_attachments": attachments or [],
+        }
+        if custom_attrs is not None:
+            attrs.update(custom_attrs)
+
+        return self.arch.events.create(
+            self.asset["identity"],
+            props=props,
+            attrs=attrs,
+            confirm=True,
+        )
+
+    # Waypoint Events
+    def waypoint(
+        self,
+        wipp_way: dict,
+        *,
+        attachments: Optional[list] = None,
+        custom_attrs: Optional[dict] = None,
+    ):
+
+        props = {
+            "operation": "Record",
+            "behaviour": "RecordEvidence",
+        }
+        attrs = {
+            "arc_display_type": "WO Transit",
+            "arc_description": wipp_way["description"],
+            "arc_evidence": "Signature: 0x1234abcd",
+            "arc_attachments": attachments or [],
+        }
+        if custom_attrs is not None:
+            attrs.update(custom_attrs)
+
+        return self.arch.events.create(
+            self.asset["identity"],
+            props=props,
+            attrs=attrs,
+            confirm=True,
+        )
+
+    # Arrival Events
+    def arrival(
+        self,
+        wipp_arr: dict,
+        *,
+        attachments: Optional[list] = None,
+        custom_attrs: Optional[dict] = None,
+    ):
+
+        props = {
+            "operation": "Record",
+            "behaviour": "RecordEvidence",
+        }
+        attrs = {
+            "arc_display_type": "WO Transit",
+            "arc_description": wipp_arr["description"],
+            "arc_evidence": "Routing instructions in attachments",
+            "arc_attachments": attachments or [],
+        }
+        if custom_attrs is not None:
+            attrs.update(custom_attrs)
+
+        return self.arch.events.create(
+            self.asset["identity"],
+            props=props,
+            attrs=attrs,
+            confirm=True,
+        )
+
+    # Unloading Events
+    def unloading(
+        self,
+        wipp_unload: dict,
+        *,
+        attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
@@ -241,17 +352,16 @@ class Nuclear:
             "behaviour": "RecordEvidence",
         }
         attrs = {
-            "arc_description": nw_treated["description"],
-            "arc_evidence": "No evidence provided",
-            "arc_display_type": "Treat",
+            "arc_display_type": "WO Unloading",
+            "arc_description": wipp_unload["description"],
+            "arc_evidence": "Packing image attached",
+            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_treated["nw_lifecycle_stage"],
-            "nw_waste_inventory": nw_treated["nw_waste_inventory"],
-        }
+        asset_attrs = {}
+
         if custom_asset_attrs is not None:
             asset_attrs.update(custom_asset_attrs)
 
@@ -263,11 +373,12 @@ class Nuclear:
             confirm=True,
         )
 
-    # Condition
-    def condition(
+    # Emplacement Events
+    def emplacement(
         self,
-        nw_condition: dict,
+        wipp_emplace: dict,
         *,
+        attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
@@ -277,193 +388,18 @@ class Nuclear:
             "behaviour": "RecordEvidence",
         }
         attrs = {
-            "arc_description": nw_condition["description"],
-            "arc_evidence": "No evidence provided",
-            "arc_display_type": "Condition",
+            "arc_display_type": "WO Emplacement",
+            "arc_description": wipp_emplace["description"],
+            "arc_evidence": "Packing image attached",
+            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
         asset_attrs = {
-            "nw_lifecycle_stage": nw_condition["nw_lifecycle_stage"],
-            "nw_waste_code": nw_condition["nw_waste_code"],
+            "wipp_emplacement_location": wipp_emplace["location"],
         }
-        if custom_asset_attrs is not None:
-            asset_attrs.update(custom_asset_attrs)
 
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Iterim Storage
-    def iterim(
-        self,
-        nw_interim: dict,
-        *,
-        custom_attrs: Optional[dict] = None,
-        custom_asset_attrs: Optional[dict] = None,
-    ):
-
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {
-            "arc_description": nw_interim["description"],
-            "arc_evidence": nw_interim["evidence"],
-            "arc_display_type": "InterimStore",
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_interim["nw_lifecycle_stage"],
-        }
-        if custom_asset_attrs is not None:
-            asset_attrs.update(custom_asset_attrs)
-
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Sentence Container
-    def sentence(
-        self,
-        nw_sentence: dict,
-        *,
-        custom_attrs: Optional[dict] = None,
-        custom_asset_attrs: Optional[dict] = None,
-    ):
-
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {
-            "arc_description": nw_sentence["description"],
-            "arc_evidence": nw_sentence["evidence"],
-            "arc_display_type": "Sentence",
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_sentence["nw_lifecycle_stage"],
-            "nw_waste_stream": nw_sentence["nw_waste_stream"],
-        }
-        if custom_asset_attrs is not None:
-            asset_attrs.update(custom_asset_attrs)
-
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Commit Container
-    def commit(
-        self,
-        nw_commit: dict,
-        *,
-        custom_attrs: Optional[dict] = None,
-        custom_asset_attrs: Optional[dict] = None,
-    ):
-
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {
-            "arc_description": nw_commit["description"],
-            "arc_evidence": nw_commit["evidence"],
-            "arc_display_type": "Commit",
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_commit["nw_lifecycle_stage"],
-        }
-        if custom_asset_attrs is not None:
-            asset_attrs.update(custom_asset_attrs)
-
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Transport Container
-    def transport(
-        self,
-        nw_transport: dict,
-        *,
-        custom_attrs: Optional[dict] = None,
-        custom_asset_attrs: Optional[dict] = None,
-    ):
-
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {
-            "arc_description": nw_transport["description"],
-            "arc_evidence": nw_transport["evidence"],
-            "arc_display_type": "Transport",
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_transport["nw_lifecycle_stage"],
-        }
-        if custom_asset_attrs is not None:
-            asset_attrs.update(custom_asset_attrs)
-
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Accept Container
-    def accept(
-        self,
-        nw_accept: dict,
-        *,
-        custom_attrs: Optional[dict] = None,
-        custom_asset_attrs: Optional[dict] = None,
-    ):
-
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {
-            "arc_description": nw_accept["description"],
-            "arc_evidence": nw_accept["evidence"],
-            "arc_display_type": "Dispose",
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        asset_attrs = {
-            "nw_lifecycle_stage": nw_accept["nw_lifecycle_stage"],
-        }
         if custom_asset_attrs is not None:
             asset_attrs.update(custom_asset_attrs)
 
