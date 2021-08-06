@@ -110,10 +110,10 @@ archivist_samples_signed_records $ARGS --check 'samples'
 
 ```bash
 archivist_samples_synsation initialise  $ARGS --num-assets 100 --wait 1 --await-confirmation
-archivist_samples_synsation analyze     $ARGS 
-archivist_samples_synsation charger     $ARGS -s 20190909 -S 20190923 -f 9876
+archivist_samples_synsation charger     $ARGS -s 20190909 -S 20200909 -f 9876
 archivist_samples_synsation jitsuinator $ARGS -n tcl.ccj.001 --wait 1.0
 archivist_samples_synsation wanderer    $ARGS
+archivist_samples_synsation analyze     $ARGS 
 ```
 
 ### Software Bill of Materials
