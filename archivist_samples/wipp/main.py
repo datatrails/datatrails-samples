@@ -29,9 +29,7 @@ from .run import run
 
 
 def main():
-    parser, _ = common_parser(
-        "Sample Waste Isolation Pilot Plant (WIPP) Integration"
-    )
+    parser, _ = common_parser("Sample Waste Isolation Pilot Plant (WIPP) Integration")
     parser.add_argument(
         "--namespace",
         type=str,
