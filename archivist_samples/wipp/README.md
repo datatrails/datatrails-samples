@@ -1,11 +1,10 @@
-# Waste Isolation Pilot Plant (WIPP) Sample
+# Nuclear Waste Handling Lifecycle Sample
 
 Tracking the Nuclear Waste Management lifecycle is an important aspect to ensure that all safety protocols and procedures have been successfully executed.  Fragmented communication and manual checks can lead to honest mistakes and redundancy.  Digitizing the lifecycle and exposing data to the right parties at the right time can decrease honest mistakes and increase effective communication.  
 
-RKVST Continuous Assurance Hub offers a solution to fragmented communication and manual checks. Parties have near real-time access to data increasing seamless and effective communication and stakeholders can control the sharing of data ensuring one can view information that is relevant.  Policies, procedures and images can be included/attached thus reducing multiple checks and 
-providing persons with the most recent documentation.
+RKVST Continuous Assurance Hub offers a solution to fragmented communication and manual checks. Parties have near real-time access to data increasing seamless and effective communication in addition stakeholders can control the sharing of data ensuring one can view information that is relevant.  Policies, procedures and images can be included/attached thus reducing multiple checks and providing persons with the most recent documentation.
  
-This sample shows how to quickly get started with integrating Nuclear Waste Management lifecycle with RKVST Continuous Assurance Hub.
+This sample uses publicly-available information about WIPP (the Waste Isolation Pilot Plant) and how to quickly get started with integrating Nuclear Waste Management lifecycle with RKVST Continuous Assurance Hub.
 
 
 ## Pre-requisites
@@ -19,7 +18,7 @@ This sample shows how to quickly get started with integrating Nuclear Waste Mana
 
 ## Running the sample
 
-The sample creates a WIPP object and uploads images, policies and procedures relevant to certain events.  The events simulate Nuclear Waste Disposal lifecycle from waste characterization through emplacement. Thus providing a "Continuous Assurance" example of Nuclear Waste Managment.
+The sample registers nuclear waste assets and uploads images, policies and procedures relevant to certain events.  The events simulate Nuclear Waste Disposal lifecycle from waste characterization through emplacement. Thus providing a "Continuous Assurance" example of Nuclear Waste Managment.
 
 To run it: 
 
