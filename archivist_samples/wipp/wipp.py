@@ -57,8 +57,6 @@ class Wipp:
 
         behaviours = [
             "Attachments",
-            "Firmware",
-            "Maintenance",
             "RecordEvidence",
         ]
         self._asset = self.arch.assets.create(
@@ -90,8 +88,6 @@ class Wipp:
 
         behaviours = [
             "Attachments",
-            "Firmware",
-            "Maintenance",
             "RecordEvidence",
         ]
         self._asset = self.arch.assets.create(
@@ -313,6 +309,8 @@ class Wipp:
             "arc_display_type": "WO Transit",
             "arc_description": wipp_way["description"],
             "arc_evidence": "Signature: 0x1234abcd",
+            "arc_gis_lat": wipp_way["latitude"],
+            "arc_gis_lng": wipp_way["longitude"],
             "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
