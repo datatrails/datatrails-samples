@@ -207,28 +207,31 @@ def run(arch):
     LOGGER.info("Departure registered...")
 
     # Waypoint
-    waypoints = [["Atlanta", "33.592177", "-84.406064"],
-                 ["Talladega", "33.592177", "-86.248379"],
-                 ["Birmingham", "33.494993", "-86.895403"],
-                 ["Tuscaloosa", "33.184220", "-87.610330"],
-                 ["Meridian", "32.391672", "-88.532850"],
-                 ["Jackson", "32.285409", "-90.074633"],
-                 ["Monroe", "32.463868", "-91.893769"],
-                 ["Shreveport", "32.537993", "-93.651582"],
-                 ["Tyler", "32.334001", "-95.321504"],
-                 ["South Dallas", "32.639816", "-96.826631"],
-                 ["Gordon", "32.499115", "-98.521317"],
-                 ["Abilene", "32.457004", "-99.816598"],
-                 ["Big Spring", "32.244259", "-101.458984"],
-                 ["Andrews", "32.312469", "-102.548197"],
-                 ["Seminole", "32.457004", "-99.816598"],
-                 ["Hobbs", "32.244259", "-101.458984"]]
+    waypoints = [
+        ["Atlanta", "33.592177", "-84.406064"],
+        ["Talladega", "33.592177", "-86.248379"],
+        ["Birmingham", "33.494993", "-86.895403"],
+        ["Tuscaloosa", "33.184220", "-87.610330"],
+        ["Meridian", "32.391672", "-88.532850"],
+        ["Jackson", "32.285409", "-90.074633"],
+        ["Monroe", "32.463868", "-91.893769"],
+        ["Shreveport", "32.537993", "-93.651582"],
+        ["Tyler", "32.334001", "-95.321504"],
+        ["South Dallas", "32.639816", "-96.826631"],
+        ["Gordon", "32.499115", "-98.521317"],
+        ["Abilene", "32.457004", "-99.816598"],
+        ["Big Spring", "32.244259", "-101.458984"],
+        ["Andrews", "32.312469", "-102.548197"],
+        ["Seminole", "32.457004", "-99.816598"],
+        ["Hobbs", "32.244259", "-101.458984"],
+    ]
     for point in waypoints:
         LOGGER.info("Loading waypoints from %s...", point[0])
         cask.waypoint(
             {
                 "description": "TRAGIS smart sensors ping: Checking in near "
-                + point[0] + " All sensors GREEN",
+                + point[0]
+                + " All sensors GREEN",
                 "latitude": point[1],
                 "longitude": point[2],
             },
