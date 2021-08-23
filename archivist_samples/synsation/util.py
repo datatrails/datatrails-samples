@@ -29,7 +29,7 @@ from yaml import full_load
 from . import images, locations
 from .images import assets as images_assets
 
-from ..testing.namespace import (
+from ..testing.locations import (
     locations_create_if_not_exists,
 )
 

@@ -23,11 +23,9 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
-from archivist.archivist import Archivist
 
 from ..testing.logger import set_logger, LOGGER
-from ..testing.namespace import assets_wait_for_confirmed
-from ..testing.parser import common_parser
+from ..testing.parser import common_parser, common_endpoint
 
 from . import synsation_corporation
 from . import synsation_industries
@@ -56,7 +54,7 @@ def run(ac, args):
     # Wait for all assets to confirm before we do anything with them
     if args.await_confirmation:
         LOGGER.info("Wait for confirmation")
-        assets_wait_for_confirmed(ac, attrs={"company": "synsation"})
+        ac.assets.wait_for_confirmed()
 
     sys_exit(0)
 
@@ -139,25 +137,7 @@ def entry():
     else:
         set_logger("INFO")
 
-    # Initialise connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error.  Aborting.")
-        sys_exit(1)
-
-    poc.namespace = (
-        "_".join(["synsation", args.namespace]) if args.namespace is not None else None
-    )
-    poc.storage_integrity = args.storage_integrity
+    poc = common_endpoint("synsation", args)
 
     run(poc, args)
 

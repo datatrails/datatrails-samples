@@ -20,6 +20,7 @@ and this will create 5 entry points:
       - archivist_samples_signed_records
       - archivist_samples_synsation
       - archivist_samples_sbom
+      - archivist_samples_wipp
 
 
 ## Pre-requisites
@@ -120,4 +121,10 @@ archivist_samples_synsation analyze     $ARGS
 
 ```bash
 archivist_samples_sbom $ARGS
+```
+
+### WIPP
+
+```bash
+archivist_samples_wipp $ARGS
 ```

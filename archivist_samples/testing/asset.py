@@ -23,10 +23,6 @@
 
 from archivist.timestamp import make_timestamp
 
-from .namespace import (
-    events_create,
-)
-
 CONFIG_MANAGEMENT = "Config Management"
 OPERATIONAL_REPORT = "Operational Report"
 MAINTENANCE_PERFORMED = "Maintenance Performed"
@@ -53,8 +49,7 @@ class MyAsset:
 
     def charge(self, desc, evidence):
         """Charge device"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -83,8 +78,7 @@ class MyAsset:
         if extra_attrs is not None:
             attrs.update(extra_attrs)
 
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -98,8 +92,7 @@ class MyAsset:
 
     def move(self, desc, lat, lng):
         """Move asset from one place to another"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -118,8 +111,7 @@ class MyAsset:
 
     def patch_vulnerability(self, desc, evidence):
         """Patch  vulnerability"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -137,8 +129,7 @@ class MyAsset:
 
     def report_vulnerability(self, desc, cve_id, cve_corval):
         """Report vulnerability"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -157,8 +148,7 @@ class MyAsset:
 
     def service_required(self, desc, corval):
         """Indicate that maintenance must been done"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -176,8 +166,7 @@ class MyAsset:
 
     def service(self, desc, corval):
         """Indicate that maintenance has been done"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,
@@ -195,8 +184,7 @@ class MyAsset:
 
     def update_firmware(self, desc, fw_version, corval):
         """Update firmware"""
-        events_create(
-            self.ac,
+        self.ac.events.create(
             self.crate_id,
             {
                 **self.base_props,

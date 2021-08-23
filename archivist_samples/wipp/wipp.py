@@ -2,25 +2,32 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
+from copy import deepcopy
 from typing import Optional
 
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
 from archivist import archivist as type_helper
-from archivist.storage_integrity import StorageIntegrity
 
 
 class Wipp:
     def __init__(
         self,
         arch: "type_helper.Archivist",
-        *,
-        storage_integrity=StorageIntegrity.TENANT_STORAGE,
+        display_type: str,
     ):
-        self._arch = arch
+        arch_ = deepcopy(arch)
+        arch_.fixtures = {
+            "assets": {
+                "attributes": {
+                    "arc_display_type": display_type,
+                },
+            },
+        }
+
+        self._arch = arch_
         self._asset = None
-        self._storage_integrity = storage_integrity
 
     @property
     def arch(self):
@@ -30,69 +37,26 @@ class Wipp:
     def asset(self):
         return self._asset
 
-    @property
-    def storage_integrity(self):
-        return self._storage_integrity
-
-    # Drum Asset
     def create(
         self,
-        drum_name: str,
-        drum_description: str,
-        drum_serial: str,
+        name: str,
+        description: str,
+        serial: str,
         *,
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
 
         attrs = {
-            "arc_display_name": drum_name,
-            "arc_description": drum_description,
-            "arc_display_type": "55 gallon drum",
-            "arc_serial_number": drum_serial,
+            "arc_display_name": name,
+            "arc_description": description,
+            "arc_serial_number": serial,
             "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        behaviours = [
-            "Attachments",
-            "RecordEvidence",
-        ]
-        self._asset = self.arch.assets.create(
-            behaviours, attrs, storage_integrity=self._storage_integrity, confirm=True
-        )
-
-        return self._asset
-
-    # Cask Asset
-    def caskcreate(
-        self,
-        cask_name: str,
-        cask_description: str,
-        cask_serial: str,
-        *,
-        attachments: Optional[list] = None,
-        custom_attrs: Optional[dict] = None,
-    ):
-
-        attrs = {
-            "arc_display_name": cask_name,
-            "arc_description": cask_description,
-            "arc_display_type": "TRU RH 72B Cask",
-            "arc_serial_number": cask_serial,
-            "arc_attachments": attachments or [],
-        }
-        if custom_attrs is not None:
-            attrs.update(custom_attrs)
-
-        behaviours = [
-            "Attachments",
-            "RecordEvidence",
-        ]
-        self._asset = self.arch.assets.create(
-            behaviours, attrs, storage_integrity=self._storage_integrity, confirm=True
-        )
+        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
 
         return self._asset
 

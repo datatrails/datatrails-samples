@@ -52,7 +52,7 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
     # Instantiate WIPP object and create an RKVST record to begin
     # tracing and publishing its lifecycle
     # Drum Asset
-    drum = Wipp(arch, storage_integrity=arch.storage_integrity)
+    drum = Wipp(arch)
     serial_num = "".join(
         random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
     )
@@ -70,7 +70,7 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
     )
 
     # Cask Asset
-    cask = Wipp(arch, storage_integrity=arch.storage_integrity)
+    cask = Wipp(arch)
     serial_num = "".join(
         random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
     )
@@ -95,7 +95,7 @@ to the Drum and/or Cask Assset using `Wipp.read()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-Drum = Wipp(arch, storage_integrity=arch.storage_integrity)
+Drum = Wipp(arch)
 drum.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
@@ -103,7 +103,7 @@ If you do not know the RKVST Asset Identity then you can load data based on any 
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-Drum = Wipp(arch, storage_integrity=arch.storage_integrity)
+Drum = Wipp(arch)
 drum.read_by_signature({"wipp_package_id": "gklh588i8wd9"})
 ```
 
@@ -115,7 +115,7 @@ When adding characterization, update the Drum Asset in RKVST with
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-drum = Wipp(arch, storage_integrity=arch.storage_integrity)
+drum = Wipp(arch)
 
 drum.characterize(
         {
@@ -170,7 +170,7 @@ In order to control data sharing one can restrict access allowing certain partie
       "access_permissions": [
         {
           "subjects": [ "subjects/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" ],
-          "behaviours": [ "RecordEvidence" ],
+          "sehaviours": [ "RecordEvidence" ],
           "include_attributes": [],
           "user_attributes": [],
           "asset_attributes_read": [

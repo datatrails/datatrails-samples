@@ -8,19 +8,12 @@ from typing import Optional
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
 from archivist import archivist as type_helper
-from archivist.storage_integrity import StorageIntegrity
 
 
 class SoftwarePackage:
-    def __init__(
-        self,
-        arch: "type_helper.Archivist",
-        *,
-        storage_integrity=StorageIntegrity.TENANT_STORAGE,
-    ):
+    def __init__(self, arch: "type_helper.Archivist"):
         self._arch = arch
         self._asset = None
-        self._storage_integrity = storage_integrity
 
     @property
     def arch(self):
@@ -29,10 +22,6 @@ class SoftwarePackage:
     @property
     def asset(self):
         return self._asset
-
-    @property
-    def storage_integrity(self):
-        return self._storage_integrity
 
     # Asset Creation
     def create(
@@ -53,13 +42,7 @@ class SoftwarePackage:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        behaviours = [
-            "Attachments",
-            "RecordEvidence",
-        ]
-        self._asset = self.arch.assets.create(
-            behaviours, attrs, storage_integrity=self._storage_integrity, confirm=True
-        )
+        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
         return self._asset
 
     # Asset load by unique identity

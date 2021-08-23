@@ -21,7 +21,7 @@ import string
 import random
 import time
 
-from ..testing.namespace import assets_create_if_not_exists
+from ..testing.assets import assets_create_if_not_exists
 
 from .util import asset_attachment_upload_from_file
 
@@ -103,11 +103,7 @@ def create_shipping_crate(
             }
         ],
     }
-    behaviours = [
-        "Attachments",
-        "RecordEvidence",
-    ]
-    newasset = assets_create_if_not_exists(ac, behaviours, attrs)
+    newasset = assets_create_if_not_exists(ac, attrs)
     return newasset
 
 

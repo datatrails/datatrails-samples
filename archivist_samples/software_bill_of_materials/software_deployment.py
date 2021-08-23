@@ -7,20 +7,16 @@ from typing import Optional
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
 from archivist import archivist as type_helper
-from archivist.storage_integrity import StorageIntegrity
 
 
 class SoftwareDeployment:
     def __init__(
         self,
         arch: "type_helper.Archivist",
-        *,
-        storage_integrity=StorageIntegrity.TENANT_STORAGE,
     ):
         self._arch = arch
         self._asset = None
         self._attachments = None
-        self._storage_integrity = storage_integrity
         self._environment = None
 
     @property
@@ -38,10 +34,6 @@ class SoftwareDeployment:
     @property
     def environment(self):
         return self._environment
-
-    @property
-    def storage_integrity(self):
-        return self._storage_integrity
 
     # Create Software Deployment
 
@@ -80,14 +72,7 @@ class SoftwareDeployment:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        behaviours = [
-            "Attachments",
-            "RecordEvidence",
-        ]
-
-        self._asset = self.arch.assets.create(
-            behaviours, attrs, storage_integrity=self._storage_integrity, confirm=True
-        )
+        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
         return self._asset
 
     # Installation Event

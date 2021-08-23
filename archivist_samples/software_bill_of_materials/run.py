@@ -49,11 +49,10 @@ def upload_attachment(arch, path, name):
 def run(arch):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    LOGGER.info("Fetching use case test assets namespace %s", arch.namespace)
 
     # SoftwarePackage class encapsulates SBOM object in RKVST
     LOGGER.info("Creating Software Package Asset...")
-    package = SoftwarePackage(arch, storage_integrity=arch.storage_integrity)
+    package = SoftwarePackage(arch)
 
     package.create(
         "ACME Roadrunner Detector 2013 Coyote Edition SP1",

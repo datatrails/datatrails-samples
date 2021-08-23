@@ -24,16 +24,11 @@ from sys import stdout as sys_stdout
 import time
 
 from archivist import about
-from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
 
 from ..testing.asset import MyAsset
 from ..testing.logger import set_logger, LOGGER
-from ..testing.namespace import (
-    assets_list,
-    assets_read_by_signature,
-)
-from ..testing.parser import common_parser
+from ..testing.parser import common_parser, common_endpoint
 from ..testing.time_warp import TimeWarp
 
 
@@ -93,8 +88,8 @@ def run(ac, args):
     if args.asset_name:
         LOGGER.info(f"Looking for smart shipping crate '{args.asset_name}'...")
         try:
-            crate = assets_read_by_signature(
-                ac, attrs={"arc_display_name": args.asset_name}
+            crate = ac.assets.read_by_signature(
+                attrs={"arc_display_name": args.asset_name}
             )
         except ArchivistNotFoundError:
             pass
@@ -103,8 +98,7 @@ def run(ac, args):
     else:
         LOGGER.info("No crate specified...searching for one...")
         crates = list(
-            assets_list(
-                ac,
+            ac.assets.list(
                 attrs={"arc_display_type": "Widget shipping crate"},
             )
         )
@@ -184,26 +178,7 @@ def entry():
     else:
         set_logger("INFO")
 
-    # Initialise connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error.  Aborting.")
-        sys_exit(1)
-
-    poc.namespace = (
-        "_".join(["synsation", args.namespace]) if args.namespace is not None else None
-    )
-    poc.storage_integrity = args.storage_integrity
-
+    poc = common_endpoint("synsation", args)
     run(poc, args)
 
     parser.print_help(sys_stdout)
