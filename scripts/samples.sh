@@ -138,4 +138,4 @@ SBOM="${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${
 ${SBOM}
 
 WIPP="${TEST_NO_WIPP} python3 -m archivist_samples.wipp ${ARGS} ${NAMESPACE}"
-${WIPP} -i LEDGER
+${WIPP}

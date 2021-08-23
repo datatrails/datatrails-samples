@@ -38,18 +38,10 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat import backends
 
 from archivist import about
-from archivist.archivist import Archivist
 from archivist.errors import ArchivistNotFoundError
 
 from ..testing.logger import set_logger, LOGGER
-
-from ..testing.namespace import (
-    assets_create,
-    assets_read_by_signature,
-    events_create,
-    events_list,
-)
-from ..testing.parser import common_parser
+from ..testing.parser import common_parser, common_endpoint
 
 # Key management functions
 #
@@ -106,8 +98,7 @@ def asset_exists(archivist, asset_name):
     # advantage of this information here and load it locally when
     # needed instead.
     try:
-        assets_read_by_signature(
-            archivist,
+        archivist.assets.read_by_signature(
             attrs={"arc_display_name": asset_name},
         )
     except ArchivistNotFoundError:
@@ -172,8 +163,7 @@ def generate_crypto_asset(archivist, asset_name):
         "arc_display_type": "Crypto endpoint",
         "arc_evidence_signing_pubkey": pubkey_pem.decode("utf-8"),
     }
-    behaviours = ["RecordEvidence"]
-    newasset = assets_create(archivist, behaviours, attrs, confirm=True)
+    newasset = archivist.assets.create(attrs=attrs, confirm=True)
     LOGGER.debug(newasset)
     if not newasset:
         LOGGER.error("Failed to register new asset with Archivist")
@@ -264,7 +254,7 @@ def submit_signed_evidence(archivist, asset_name, message, corrupt_sig):
         # should cover the complete 'arc_evidence' field (and no more)
         "arc_evidence_signature": signature,
     }
-    events_create(archivist, a_id, props, attrs, confirm=True)
+    archivist.events.create(a_id, props, attrs, confirm=True)
 
 
 def print_history(archivist, asset_name):
@@ -276,8 +266,7 @@ def print_history(archivist, asset_name):
     # also useful to see how it can be done externally
 
     # Get the trusted public key from the asset record
-    asset = assets_read_by_signature(
-        archivist,
+    asset = archivist.assets.read_by_signature(
         attrs={"arc_display_name": asset_name},
     )
     if not asset:
@@ -298,7 +287,7 @@ def print_history(archivist, asset_name):
         return
 
     # Fetch all the events for this asset
-    events = events_list(archivist, asset_id=asset["identity"])
+    events = archivist.events.list(asset_id=asset["identity"])
 
     # Now check each one in turn
     for event in events:
@@ -332,7 +321,7 @@ def print_history(archivist, asset_name):
 def run(archivist, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    asset_name = " ".join([args.asset_name, archivist.namespace])
+    asset_name = " ".join([args.asset_name, args.namespace])
     # Check which operation we're doing, and ensure we have the info
     # we need to do it
 
@@ -449,27 +438,7 @@ def main():
     else:
         set_logger("INFO")
 
-    # Initialise connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error.  Aborting.")
-        sys_exit(1)
-
-    poc.namespace = (
-        "_".join(["signed_records", args.namespace])
-        if args.namespace is not None
-        else None
-    )
-    poc.storage_integrity = args.storage_integrity
+    poc = common_endpoint("signed_records", args)
 
     run(poc, args)
 

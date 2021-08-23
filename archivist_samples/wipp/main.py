@@ -20,10 +20,8 @@
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
-from archivist.archivist import Archivist
-
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser
+from ..testing.logger import set_logger
+from ..testing.parser import common_parser, common_endpoint
 
 from .run import run
 
@@ -46,27 +44,9 @@ def main():
     else:
         set_logger("INFO")
 
-    # Initialize connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
+    poc = common_endpoint("wipp", args)
 
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error, Aborting.")
-        sys_exit(1)
-
-    poc.namespace = (
-        "_".join(["wipp", args.namespace]) if args.namespace is not None else "wipp"
-    )
-    poc.storage_integrity = args.storage_integrity
-
-    run(poc)
+    run(poc, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

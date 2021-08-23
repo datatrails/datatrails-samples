@@ -7,8 +7,13 @@
 
 import argparse
 from enum import Enum
+import logging
+from sys import exit as sys_exit
 
+from archivist.archivist import Archivist
 from archivist.storage_integrity import StorageIntegrity
+
+LOGGER = logging.getLogger(__name__)
 
 
 # from https://stackoverflow.com/questions/43968006/support-for-enum-arguments-in-argparse
@@ -96,3 +101,49 @@ def common_parser(description):
     )
 
     return parser, security
+
+
+def common_endpoint(label, args):
+    LOGGER.info("Initialising connection to Jitsuin Archivist...")
+    try:
+        namespace = (
+            "_".join([label, args.namespace]) if args.namespace is not None else label
+        )
+    except AttributeError:
+        fixtures = {
+            "assets": {
+                "storage_integrity": args.storage_integrity.name,
+            },
+        }
+
+    else:
+        fixtures = {
+            "assets": {
+                "storage_integrity": args.storage_integrity.name,
+                "attributes": {
+                    "arc_namespace": namespace,
+                },
+            },
+            "locations": {
+                "attributes": {
+                    "arc_namespace": namespace,
+                },
+            },
+        }
+
+    if args.auth_token_file:
+        with open(args.auth_token_file, mode="r") as tokenfile:
+            authtoken = tokenfile.read().strip()
+
+        poc = Archivist(args.url, auth=authtoken, verify=False, fixtures=fixtures)
+
+    elif args.client_cert_name:
+        poc = Archivist(
+            args.url, cert=args.client_cert_name, verify=False, fixtures=fixtures
+        )
+
+    if poc is None:
+        LOGGER.error("Critical error.  Aborting.")
+        sys_exit(1)
+
+    return poc

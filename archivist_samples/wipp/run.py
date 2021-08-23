@@ -48,14 +48,15 @@ def upload_attachment(arch, path, name):
         return attachment
 
 
-def run(arch):
+def run(arch, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    LOGGER.info("Fetching use case test assets namespace %s", arch.namespace)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     # Wipp class encapsulates wipp object in RKVST
     LOGGER.info("Creating Drum Asset...")
-    drum = Wipp(arch, storage_integrity=arch.storage_integrity)
+    drum = Wipp(arch, "55 gallon drum")
+    cask = Wipp(arch, "TRU RH 72B Cask")
     serial_num = "".join(
         random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
     )
@@ -75,13 +76,12 @@ def run(arch):
 
     # Cask Asset
     LOGGER.info("Creating Cask Asset...")
-    cask = Wipp(arch, storage_integrity=arch.storage_integrity)
     serial_num = "".join(
         random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
     )
     caskname = "Cask-" + serial_num
 
-    cask.caskcreate(
+    cask.create(
         caskname,
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
         serial_num,

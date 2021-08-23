@@ -20,7 +20,7 @@ import logging
 import random
 import time
 
-from ..testing.namespace import (
+from ..testing.assets import (
     assets_create_if_not_exists,
 )
 
@@ -121,11 +121,7 @@ def create_assets(ac, asset_types, locations, num_assets, timedelay):
                 }
             ],
         }
-        behaviours = [
-            "Attachments",
-            "RecordEvidence",
-        ]
-        newasset = assets_create_if_not_exists(ac, behaviours, attrs)
+        newasset = assets_create_if_not_exists(ac, attrs)
         corporation_assets[displayname] = newasset["identity"]
 
         time.sleep(timedelay)

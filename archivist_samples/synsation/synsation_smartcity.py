@@ -18,7 +18,7 @@
 
 import logging
 
-from ..testing.namespace import assets_create_if_not_exists
+from ..testing.assets import assets_create_if_not_exists
 
 from .util import asset_attachment_upload_from_file
 
@@ -77,11 +77,7 @@ def create_smartcity_device(
             }
         ],
     }
-    behaviours = [
-        "Attachments",
-        "RecordEvidence",
-    ]
-    newasset = assets_create_if_not_exists(ac, behaviours, attrs)
+    newasset = assets_create_if_not_exists(ac, attrs)
     LOGGER.debug(newasset)
     return newasset
 

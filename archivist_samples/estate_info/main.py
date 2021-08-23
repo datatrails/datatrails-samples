@@ -24,10 +24,9 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
-from archivist.archivist import Archivist
 
 from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser
+from ..testing.parser import common_parser, common_endpoint
 
 # Main app
 ##########
@@ -36,30 +35,24 @@ from ..testing.parser import common_parser
 def run(poc, args):
     """logic goes here"""
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    # NB: a non-null namespace will print warnings as there are some internally generated
-    # events that will not be namespaced.
-    namespace = (
-        {"functests_namespace": poc.namespace} if poc.namespace is not None else None
-    )
-    LOGGER.info("Namespace is %s", namespace)
     if args.quick_count:
-        LOGGER.info("Number of events is %d", poc.events.count(attrs=namespace))
-        LOGGER.info("Number of assets is %d", poc.assets.count(attrs=namespace))
-        LOGGER.info("Number of locations is %d", poc.locations.count(attrs=namespace))
+        LOGGER.info("Number of events is %d", poc.events.count())
+        LOGGER.info("Number of assets is %d", poc.assets.count())
+        LOGGER.info("Number of locations is %d", poc.locations.count())
         sys_exit(0)
 
     if args.double_check:
         # for around 550 events and 250 assets this can take about a 90s...
         LOGGER.info("Performing double-check... START")
 
-        event_ids = Counter(e["identity"] for e in poc.events.list(attrs=namespace))
+        event_ids = Counter(e["identity"] for e in poc.events.list())
         duplicate_event_ids = {k: v for k, v in event_ids.items() if v > 1}
         for k, v in duplicate_event_ids.items():
             LOGGER.info("!! Event id %s DUPLICATED %d times!", k, v)
 
         event_ids_from_asset = Counter(
             e["identity"]
-            for a in poc.assets.list(attrs=namespace)
+            for a in poc.assets.list()
             for e in poc.events.list(asset_id=a["identity"])
         )
 
@@ -75,16 +68,15 @@ def run(poc, args):
         for o in set(event_ids_from_asset).difference(event_ids):
             LOGGER.info("!! Event id %s is in an asset but not in main list", o)
 
-        num_events = poc.events.count(attrs=namespace)
-        num_assets = poc.assets.count(attrs=namespace)
-        num_locations = poc.locations.count(attrs=namespace)
+        num_events = poc.events.count()
+        num_assets = poc.assets.count()
+        num_locations = poc.locations.count()
 
         LOGGER.info(
             (
-                "%s: There are %s events registered against %s assets"
+                "There are %s events registered against %s assets"
                 " in the system spread over %s locations."
             ),
-            poc.namespace,
             num_events,
             num_assets,
             num_locations,
@@ -96,16 +88,6 @@ def run(poc, args):
 
 def main():
     parser, _ = common_parser("Get basic information about your RKVST estate")
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos)",
-    )
-
-    # per example options here
 
     # per example exclusive options here
     operations = parser.add_mutually_exclusive_group(required=True)
@@ -133,23 +115,7 @@ def main():
     else:
         set_logger("INFO")
 
-    # Initialise connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error.  Aborting.")
-        sys_exit(1)
-
-    poc.namespace = None  # ignore namespacing for the time being
-    poc.storage_integrity = args.storage_integrity
+    poc = common_endpoint("estate_info", args)
 
     run(poc, args)
 

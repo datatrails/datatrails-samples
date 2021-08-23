@@ -23,6 +23,7 @@ except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     import importlib_resources as pkg_resources
 
+from copy import deepcopy
 import logging
 from sys import exit as sys_exit
 import uuid
@@ -33,23 +34,12 @@ from archivist.errors import ArchivistNotFoundError
 from .images import assets as images_assets
 from .images import events as images_events
 
-from ..testing.namespace import (
-    assets_create,
-    assets_count,
-    assets_list,
-    assets_read_by_signature,
-    assets_wait_for_confirmed,
-    events_create,
+from ..testing.locations import (
     locations_create_if_not_exists,
 )
 
 DOOR_TERMINAL = "Door access terminal"
 DOOR_CARD = "Door entry card"
-
-BEHAVIOURS = [
-    "Attachments",
-    "RecordEvidence",
-]
 
 LOGGER = logging.getLogger(__name__)
 
@@ -59,7 +49,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def doors_create(
-    arch,
+    doors,
     ws_id,
     displayname,
     serial,
@@ -83,130 +73,64 @@ def doors_create(
         "arc_display_name": displayname,
         "arc_description": description,
         "arc_home_location_identity": location["identity"],
-        "arc_display_type": DOOR_TERMINAL,
         "wavestone_asset_id": ws_id,
     }
     return doors_create_if_not_exists(
-        arch,
-        BEHAVIOURS,
+        doors,
         attrs,
         confirm=False,  # confirmed elsewhere
     )
 
 
-def doors_create_if_not_exists(arch, behaviours, attrs, *, confirm=None):
+def doors_create_if_not_exists(doors, attrs, *, confirm=None):
     door = None
     try:
-        door = assets_read_by_signature(
-            arch,
-            {
+        door = doors.assets.read_by_signature(
+            attrs={
                 "arc_display_name": attrs["arc_display_name"],
-                "arc_display_type": DOOR_TERMINAL,
             },
         )
     except ArchivistNotFoundError:
-        door = assets_create(arch, behaviours, attrs, confirm=confirm)
+        door = doors.assets.create(attrs=attrs, confirm=confirm)
 
     return door
-
-
-def doors_count(arch):
-    return assets_count(arch, attrs={"arc_display_type": DOOR_TERMINAL})
-
-
-def doors_list(arch):
-    return assets_list(arch, attrs={"arc_display_type": DOOR_TERMINAL})
-
-
-def doors_wait_for_confirmed(arch):
-    LOGGER.info("Wait for doors creation to confirm")
-    assets_wait_for_confirmed(
-        arch,
-        attrs={
-            "arc_display_type": DOOR_TERMINAL,
-        },
-    )
-
-
-def doors_read_by_name(arch, name):
-    """get door by display name"""
-    return assets_read_by_signature(
-        arch,
-        attrs={
-            "arc_display_name": name,
-            "arc_display_type": DOOR_TERMINAL,
-        },
-    )
 
 
 # Card asset
 ############
 
 
-def cards_create(arch, idx):
+def cards_create(cards, idx):
     return cards_create_if_not_exists(
-        arch,
-        BEHAVIOURS,
+        cards,
         {
             "arc_serial_number": f"sc-x5-{idx}",
             "arc_display_name": f"access_card_{idx}",
             "arc_description": f"Electronic door access card #{idx}",
-            "arc_display_type": DOOR_CARD,
         },
         confirm=False,  # confirmed elsewhere
     )
 
 
-def cards_create_if_not_exists(arch, behaviours, attrs, *, confirm=None):
+def cards_create_if_not_exists(cards, attrs, *, confirm=None):
     card = None
     try:
-        card = assets_read_by_signature(
-            arch,
-            {
+        card = cards.assets.read_by_signature(
+            attrs={
                 "arc_display_name": attrs["arc_display_name"],
-                "arc_display_type": DOOR_CARD,
             },
         )
     except ArchivistNotFoundError:
-        card = assets_create(arch, behaviours, attrs, confirm=confirm)
+        card = cards.assets.create(attrs=attrs, confirm=confirm)
 
     return card
-
-
-def cards_count(arch):
-    return assets_count(arch, attrs={"arc_display_type": DOOR_CARD})
-
-
-def cards_list(arch):
-    return assets_list(arch, attrs={"arc_display_type": DOOR_CARD})
-
-
-def cards_wait_for_confirmed(arch):
-    LOGGER.info("Wait for cards creation to confirm")
-    assets_wait_for_confirmed(
-        arch,
-        attrs={
-            "arc_display_type": DOOR_CARD,
-        },
-    )
-
-
-def cards_read_by_name(arch, name):
-    """get card by display name"""
-    return assets_read_by_signature(
-        arch,
-        attrs={
-            "arc_display_name": name,
-            "arc_display_type": DOOR_CARD,
-        },
-    )
 
 
 # Create actual door and card assets
 ####################################
 
 
-def create_jitsuin_paris_site(arch):
+def create_jitsuin_paris_site(doors):
     props = {
         "display_name": "Jitsuin Paris",
         "description": "Sales and sales support for the French region",
@@ -217,20 +141,20 @@ def create_jitsuin_paris_site(arch):
         "address": "5 Parvis Alan Turing, 75013 Paris, France",
         "wavestone_ext": "managed",
     }
-    return locations_create_if_not_exists(arch, props, attrs=attrs)
+    return locations_create_if_not_exists(doors, props, attrs=attrs)
 
 
-def create_jitsuin_paris_image(arch):
+def create_jitsuin_paris_image(doors):
     with pkg_resources.open_binary(images_assets, "entry_terminal.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_jitsuin_paris(arch, location, attachments):
+def create_jitsuin_paris(doors, location, attachments):
 
     # Unlike the others, which feature images of the whole building,
     # this one is actually a close-up of the connected door terminal
     doors_create(
-        arch,
+        doors,
         "paris.france.jitsuin.das",
         "Jitsuin front door",
         "das-j1-01",
@@ -243,7 +167,7 @@ def create_jitsuin_paris(arch, location, attachments):
     )
 
 
-def create_cityhall_site(arch):
+def create_cityhall_site(doors):
     props = {
         "display_name": "Paris City Hall",
         "description": "Seat of Paris local city adminstration",
@@ -254,18 +178,18 @@ def create_cityhall_site(arch):
         "address": "Place de l'Hôtel de Ville, 75004 Paris, France",
         "wavestone_ext": "managed",
     }
-    return locations_create_if_not_exists(arch, props, attrs=attrs)
+    return locations_create_if_not_exists(doors, props, attrs=attrs)
 
 
-def create_cityhall_image(arch):
+def create_cityhall_image(doors):
     with pkg_resources.open_binary(images_assets, "cityhall.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_cityhall(arch, location, attachments):
+def create_cityhall(doors, location, attachments):
 
     doors_create(
-        arch,
+        doors,
         "cityhall.paris.wavestonedas",
         "City Hall front door",
         "das-x4-01",
@@ -278,7 +202,7 @@ def create_cityhall(arch, location, attachments):
     )
 
 
-def create_courts_site(arch):
+def create_courts_site(doors):
     props = {
         "display_name": "Paris Courts of Justice",
         "description": ("Public museum in the former Palais de Justice"),
@@ -289,17 +213,17 @@ def create_courts_site(arch):
         "address": "10 Boulevard du Palais, 75001 Paris, France",
         "wavestone_ext": "managed",
     }
-    return locations_create_if_not_exists(arch, props, attrs=attrs)
+    return locations_create_if_not_exists(doors, props, attrs=attrs)
 
 
-def create_courts_image(arch):
+def create_courts_image(doors):
     with pkg_resources.open_binary(images_assets, "courts.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_courts(arch, location, attachments):
+def create_courts(doors, location, attachments):
     doors_create(
-        arch,
+        doors,
         "courts.paris.wavestonedas",
         "Courts of Justice front door",
         "das-x4-02",
@@ -312,7 +236,7 @@ def create_courts(arch, location, attachments):
     )
 
 
-def create_bastille_site(arch):
+def create_bastille_site(doors):
     props = {
         "display_name": "Bastille",
         "description": ("Medieval fortress, made famous by the " "French Revolution"),
@@ -323,18 +247,18 @@ def create_bastille_site(arch):
         "address": "Place de la Bastille, 75011 Paris, France",
         "wavestone_ext": "managed",
     }
-    return locations_create_if_not_exists(arch, props, attrs=attrs)
+    return locations_create_if_not_exists(doors, props, attrs=attrs)
 
 
-def create_bastille_image(arch):
+def create_bastille_image(doors):
     with pkg_resources.open_binary(images_assets, "bastille.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_bastille(arch, location, attachments):
+def create_bastille(doors, location, attachments):
 
     doors_create(
-        arch,
+        doors,
         "bastille.paris.wavestonedas",
         "Bastille front door",
         "das-x4-03",
@@ -347,7 +271,7 @@ def create_bastille(arch, location, attachments):
     )
 
 
-def create_gdn_site(arch):
+def create_gdn_site(doors):
     props = {
         "display_name": "Apartements du Gare du Nord",
         "description": (
@@ -360,18 +284,18 @@ def create_gdn_site(arch):
         "address": "18 Rue de Dunkerque, 75010 Paris, France",
         "wavestone_ext": "managed",
     }
-    return locations_create_if_not_exists(arch, props, attrs=attrs)
+    return locations_create_if_not_exists(doors, props, attrs=attrs)
 
 
-def create_gdn_front_image(arch):
+def create_gdn_front_image(doors):
     with pkg_resources.open_binary(images_assets, "gdn_front.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_gdn_front(arch, location, attachments):
+def create_gdn_front(doors, location, attachments):
 
     doors_create(
-        arch,
+        doors,
         "front.gdn.paris.wavestonedas",
         "Gare du Nord apartments front door",
         "das-x4-04",
@@ -384,15 +308,15 @@ def create_gdn_front(arch, location, attachments):
     )
 
 
-def create_gdn_side_image(arch):
+def create_gdn_side_image(doors):
     with pkg_resources.open_binary(images_assets, "gdn_side.jpg") as fd:
-        return arch.attachments.upload(fd)
+        return doors.attachments.upload(fd)
 
 
-def create_gdn_side(arch, location, attachments):
+def create_gdn_side(doors, location, attachments):
 
     doors_create(
-        arch,
+        doors,
         "side.gdn.paris.wavestonedas",
         "Gare du Nord apartments side door",
         "das-x4-05",
@@ -405,46 +329,46 @@ def create_gdn_side(arch, location, attachments):
     )
 
 
-def create_doors(arch):
+def create_doors(doors):
     LOGGER.info("Creating all doors...")
     # For each chosen building we create a location
     # first and then create the door asset to go in it.
     create_jitsuin_paris(
-        arch,
-        create_jitsuin_paris_site(arch),
-        [create_jitsuin_paris_image(arch)],
+        doors,
+        create_jitsuin_paris_site(doors),
+        [create_jitsuin_paris_image(doors)],
     )
     create_cityhall(
-        arch,
-        create_cityhall_site(arch),
-        [create_cityhall_image(arch)],
+        doors,
+        create_cityhall_site(doors),
+        [create_cityhall_image(doors)],
     )
     create_courts(
-        arch,
-        create_courts_site(arch),
-        [create_courts_image(arch)],
+        doors,
+        create_courts_site(doors),
+        [create_courts_image(doors)],
     )
     create_bastille(
-        arch,
-        create_bastille_site(arch),
-        [create_bastille_image(arch)],
+        doors,
+        create_bastille_site(doors),
+        [create_bastille_image(doors)],
     )
 
-    gdn_site = create_gdn_site(arch)
+    gdn_site = create_gdn_site(doors)
     create_gdn_front(
-        arch,
+        doors,
         gdn_site,
-        [create_gdn_front_image(arch)],
+        [create_gdn_front_image(doors)],
     )
     create_gdn_side(
-        arch,
+        doors,
         gdn_site,
-        [create_gdn_side_image(arch)],
+        [create_gdn_side_image(doors)],
     )
     LOGGER.info("All doors created")
 
 
-def create_cards(arch):
+def create_cards(cards):
     LOGGER.info("Creating all cards...")
     # We don't create locations for cards - they float free.
     # If there's a natural affinity between cards and home
@@ -453,7 +377,7 @@ def create_cards(arch):
     # Similarly there's no real benefit to creating a
     # Primary_image for them so leave that empty too
     for i in range(5):
-        cards_create(arch, i)
+        cards_create(cards, i)
 
     LOGGER.info("All cards created")
 
@@ -462,11 +386,11 @@ def create_cards(arch):
 ####################
 
 
-def list_doors(arch):
+def list_doors(doors):
     LOGGER.info("Listing all doors tracked by the system:")
-    for door in doors_list(arch):
+    for door in doors.assets.list():
         attrs = door["attributes"]
-        location = arch.locations.read(attrs["arc_home_location_identity"])
+        location = doors.locations.read(attrs["arc_home_location_identity"])
         attachments = attrs["arc_attachments"] or []
 
         print(f"\tAsset name:\t{attrs['arc_display_name']}")
@@ -478,15 +402,14 @@ def list_doors(arch):
             print(f"\tAttachment identity: \t{a['arc_attachment_identity']}")
             print(f"\tAttachment name: \t{a['arc_display_name']}")
             with open("/tmp/xxx", "wb") as fd:
-                attachment = arch.attachments.download(a["arc_attachment_identity"], fd)
-                print(f"\tAttachment: \t{attachment}")
+                doors.attachments.download(a["arc_attachment_identity"], fd)
 
         print("-----")
 
 
-def list_cards(arch):
+def list_cards(cards):
     LOGGER.info("Listing all cards tracked by the system:")
-    for card in cards_list(arch):
+    for card in cards.assets.list():
         attrs = card["attributes"]
         print(f"\tAsset name:\t{attrs['arc_display_name']}")
         print(f"\tAsset type:\t{attrs['arc_display_type']}")
@@ -529,19 +452,30 @@ def print_card_event(event):
     print("-----")
 
 
-def list_usage(arch, assetspec):
-    LOGGER.info("Listing usage of '%s': ", assetspec)
+def list_usage(doors, cards, assetname):
+    LOGGER.info("Listing usage of '%s': ", assetname)
 
     # If it's not already an Archivist identity, try loading it by name
     try:
-        asset = doors_read_by_name(arch, assetspec)
+        asset = doors.assets.read_by_signature(
+            attrs={
+                "arc_display_name": assetname,
+            },
+        )
 
     except ArchivistNotFoundError:
-        asset = cards_read_by_name(arch, assetspec)
+        asset = cards.assets.read_by_signature(
+            attrs={
+                "arc_display_name": assetname,
+            },
+        )
         print_fn = print_card_event
+        endpoint = cards
+
     else:
         LOGGER.info("Door found '%s'", asset["identity"])
         print_fn = print_door_event
+        endpoint = doors
 
     # Now get the events
     # Note that using the REST API we could pre-filter this list,
@@ -552,14 +486,13 @@ def list_usage(arch, assetspec):
     # events. We'll deal with those in a separate example.
     # Be careful of doing this in production: the lists could get
     # very long and client-side processing could be slow.
-    props = {"asset_identity": asset["identity"]}
-    for event in arch.events.list(props=props):
+    for event in endpoint.events.list(asset_id=asset["identity"]):
         attrs = event["event_attributes"]
         if "wavestone_evt_type" in attrs:
             print_fn(event)
 
 
-def open_door(arch, doorid, cardid):
+def open_door(doors, doorid, cards, cardid):
     # Note: We will not be checking any kind of access control
     # on the cards<->doors permissions in this example - that's
     # a different test. All door accesses will work, and will
@@ -575,9 +508,18 @@ def open_door(arch, doorid, cardid):
     # the read method will try getting by name if doorid is not
     # an identity
     LOGGER.info("doorid %s", doorid)
-    door = doors_read_by_name(arch, doorid)
+    door = doors.assets.read_by_signature(
+        attrs={
+            "arc_display_name": doorid,
+        },
+    )
+
     LOGGER.info("cardid %s", cardid)
-    card = cards_read_by_name(arch, cardid)
+    card = cards.assets.read_by_signature(
+        attrs={
+            "arc_display_name": cardid,
+        },
+    )
     if not door or not card:
         LOGGER.error("One or more required assets is missing")
         return
@@ -589,7 +531,7 @@ def open_door(arch, doorid, cardid):
     corval = str(uuid.uuid4())
 
     # Work out where we are
-    location = arch.locations.read(door["attributes"]["arc_home_location_identity"])
+    location = doors.locations.read(door["attributes"]["arc_home_location_identity"])
     if not location:
         LOGGER.error("Door location is missing")
         return
@@ -613,11 +555,10 @@ def open_door(arch, doorid, cardid):
     # attach the same attachment ID to multiple assets/events rather
     # than duplicating them
     with pkg_resources.open_binary(images_events, "dooropen.png") as fd:
-        image = arch.attachments.upload(fd)
+        image = doors.attachments.upload(fd)
 
     # Issue RecordEvidence logs on each.
-    unused_door_record_evidence = events_create(
-        arch,
+    unused_door_record_evidence = doors.events.create(
         door["identity"],
         {
             # Simple evidence event - not interpreted by the
@@ -665,8 +606,7 @@ def open_door(arch, doorid, cardid):
         confirm=True,
     )
 
-    unused_card_record_evidence = events_create(
-        arch,
+    unused_card_record_evidence = cards.events.create(
         card["identity"],
         {
             "operation": "Record",
@@ -712,23 +652,39 @@ def open_door(arch, doorid, cardid):
 def run(poc, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    LOGGER.info("Fetching use case test assets namespace %s", poc.namespace)
 
-    number_of_doors = doors_count(poc)
+    doors = deepcopy(poc)
+    doors.fixtures = {
+        "assets": {
+            "attributes": {
+                "arc_display_type": DOOR_TERMINAL,
+            },
+        }
+    }
+    cards = deepcopy(poc)
+    cards.fixtures = {
+        "assets": {
+            "attributes": {
+                "arc_display_type": DOOR_CARD,
+            },
+        }
+    }
+
+    number_of_doors = doors.assets.count()
     LOGGER.info("number of doors %d", number_of_doors)
-    number_of_cards = cards_count(poc)
+    number_of_cards = cards.assets.count()
     LOGGER.info("number of cards %d", number_of_cards)
 
     if args.create_assets:
         if number_of_doors == 0:
-            create_doors(poc)
+            create_doors(doors)
             if args.wait_for_confirmation:
-                doors_wait_for_confirmed(poc)
+                doors.assets.wait_for_confirmed()
 
         if number_of_cards == 0:
-            create_cards(poc)
+            create_cards(cards)
             if args.wait_for_confirmation:
-                cards_wait_for_confirmed(poc)
+                cards.assets.wait_for_confirmed()
 
         sys_exit(0)
 
@@ -745,15 +701,15 @@ def run(poc, args):
         spec = args.listspec
         LOGGER.info("List %s START", spec)
         if spec == "all":
-            list_doors(poc)
-            list_cards(poc)
+            list_doors(doors)
+            list_cards(cards)
         elif spec == "doors":
-            list_doors(poc)
+            list_doors(doors)
         elif spec == "cards":
-            list_cards(poc)
+            list_cards(cards)
         else:
             # Try to interpret it as an asset ID and list the usage
-            list_usage(poc, spec)
+            list_usage(doors, cards, spec)
 
         LOGGER.info("List %s FINISH", spec)
         sys_exit(0)
@@ -761,5 +717,5 @@ def run(poc, args):
     # Open a door using a specified card ?
     if args.doorid_cardid:
         doorid, cardid = args.doorid_cardid
-        open_door(poc, doorid, cardid)
+        open_door(doors, doorid, cards, cardid)
         sys_exit(0)

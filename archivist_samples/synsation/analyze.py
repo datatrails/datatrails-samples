@@ -24,7 +24,6 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
-from archivist.archivist import Archivist
 from archivist.timestamp import parse_timestamp
 
 from ..testing.asset import (
@@ -35,12 +34,7 @@ from ..testing.asset import (
 )
 
 from ..testing.logger import set_logger, LOGGER
-from ..testing.namespace import (
-    assets_list,
-    events_count,
-    events_list,
-)
-from ..testing.parser import common_parser
+from ..testing.parser import common_parser, common_endpoint
 
 
 def analyze_matched_pairs(label, p1, p2, events):
@@ -94,13 +88,13 @@ def analyze_asset(conn, asset):
     LOGGER.info(f"Current Firmware Version: {aversion}")
 
     # Get all the events for this device
-    number_of_events = events_count(conn, asset_id=aid)
+    number_of_events = conn.events.count(asset_id=aid)
     if number_of_events == 0:
         LOGGER.debug("No events found for asset")
         LOGGER.info("No events to analyse.")
         return
 
-    allevents = events_list(conn, asset_id=aid)
+    allevents = conn.events.list(asset_id=aid)
     # Sort the events into paired buckets that we care about, keyed on
     # the events' "correlation_value". Only works for unique pairs of
     # correlation values, which is the suggested convention but not
@@ -140,8 +134,7 @@ def analyze_asset(conn, asset):
 def run(archivist):
     """logic goes here"""
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    LOGGER.info("Analyzing devices for namespace %s", archivist.namespace)
-    for asset in assets_list(archivist):
+    for asset in archivist.assets.list():
         analyze_asset(archivist, asset)
 
     LOGGER.info("Done.")
@@ -168,25 +161,7 @@ def entry():
     else:
         set_logger("INFO")
 
-    # Initialise connection to Archivist
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r") as tokenfile:
-            authtoken = tokenfile.read().strip()
-
-        poc = Archivist(args.url, auth=authtoken, verify=False)
-
-    elif args.client_cert_name:
-        poc = Archivist(args.url, cert=args.client_cert_name, verify=False)
-
-    if poc is None:
-        LOGGER.error("Critical error.  Aborting.")
-        sys_exit(1)
-
-    poc.namespace = (
-        "_".join(["synsation", args.namespace]) if args.namespace is not None else None
-    )
-    poc.storage_integrity = args.storage_integrity
+    poc = common_endpoint("synsation", args)
 
     run(poc)
 
