@@ -18,19 +18,22 @@
 
 # pylint:  disable=missing-docstring
 
-
+import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
+from archivist.parser import common_parser
 
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser, common_endpoint
+from ..testing.parser import common_endpoint
 
 from . import synsation_corporation
 from . import synsation_industries
 from . import synsation_manufacturing
 from . import synsation_smartcity
+
+LOGGER = logging.getLogger(__name__)
+
 
 # Main app
 ##########
@@ -131,11 +134,6 @@ def entry():
     )
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("synsation", args)
 

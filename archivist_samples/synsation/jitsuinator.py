@@ -22,6 +22,7 @@
 
 
 import datetime
+import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 import time
@@ -29,13 +30,15 @@ import uuid
 
 from archivist import about
 from archivist.errors import ArchivistNotFoundError
+from archivist.parser import common_parser
 
 from ..testing.asset import MyAsset
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser, common_endpoint
+from ..testing.parser import common_endpoint
 from ..testing.time_warp import TimeWarp
 
 from .util import attachment_upload_from_file
+
+LOGGER = logging.getLogger(__name__)
 
 
 def demo_flow(ac, asset_id, asset_type, tw, wait):
@@ -234,11 +237,6 @@ def entry():
     )
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("synsation", args)
     run(poc, args)

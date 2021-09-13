@@ -2,7 +2,7 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
-from copy import deepcopy
+from copy import copy
 from typing import Optional
 
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
@@ -17,7 +17,7 @@ class Wipp:
         arch: "type_helper.Archivist",
         display_type: str,
     ):
-        arch_ = deepcopy(arch)
+        arch_ = copy(arch)
         arch_.fixtures = {
             "assets": {
                 "attributes": {

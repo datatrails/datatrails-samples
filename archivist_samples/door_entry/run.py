@@ -23,7 +23,7 @@ except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     import importlib_resources as pkg_resources
 
-from copy import deepcopy
+from copy import copy
 import logging
 from sys import exit as sys_exit
 import uuid
@@ -653,7 +653,7 @@ def run(poc, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
 
-    doors = deepcopy(poc)
+    doors = copy(poc)
     doors.fixtures = {
         "assets": {
             "attributes": {
@@ -661,7 +661,7 @@ def run(poc, args):
             },
         }
     }
-    cards = deepcopy(poc)
+    cards = copy(poc)
     cards.fixtures = {
         "assets": {
             "attributes": {

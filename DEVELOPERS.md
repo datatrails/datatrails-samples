@@ -39,7 +39,7 @@ export TEST_ARCHIVIST="https://rkvst.poc.jitsuin.io"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
-export TEST_STORAGE_INTEGRITY="--storage-integrity TENANT_STORAGE"
+export TEST_STORAGE_INTEGRITY="-i TENANT_STORAGE"
 ```
 
 If TEST_VERBOSE is "-v" debugging output will appear when running the tests.

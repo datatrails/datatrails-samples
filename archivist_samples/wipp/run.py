@@ -56,7 +56,6 @@ def run(arch, args):
     # Wipp class encapsulates wipp object in RKVST
     LOGGER.info("Creating Drum Asset...")
     drum = Wipp(arch, "55 gallon drum")
-    cask = Wipp(arch, "TRU RH 72B Cask")
     serial_num = "".join(
         random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
     )
@@ -81,6 +80,7 @@ def run(arch, args):
     )
     caskname = "Cask-" + serial_num
 
+    cask = Wipp(arch, "TRU RH 72B Cask")
     cask.create(
         caskname,
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",

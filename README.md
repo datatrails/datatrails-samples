@@ -13,7 +13,7 @@ Use the standard python pip utility:
 python3 -m pip install --user jitsuin-archivist-samples
 ```
 
-and this will create 5 entry points:
+and this will create 6 entry points:
 
       - archivist_samples_door_entry
       - archivist_samples_estate_info

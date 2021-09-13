@@ -20,10 +20,12 @@
 
 
 from datetime import datetime, timezone
+import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
+from archivist.parser import common_parser
 from archivist.timestamp import parse_timestamp
 
 from ..testing.asset import (
@@ -33,8 +35,9 @@ from ..testing.asset import (
     VULNERABILITY_REPORT,
 )
 
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser, common_endpoint
+from ..testing.parser import common_endpoint
+
+LOGGER = logging.getLogger(__name__)
 
 
 def analyze_matched_pairs(label, p1, p2, events):
@@ -155,11 +158,6 @@ def entry():
     # per example options here ....
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("synsation", args)
 
