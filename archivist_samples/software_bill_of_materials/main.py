@@ -16,14 +16,17 @@
 
 # pylint:  disable=missing-docstring
 
-
+import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
-from ..testing.logger import set_logger
-from ..testing.parser import common_parser, common_endpoint
+from archivist.parser import common_parser
+
+from ..testing.parser import common_endpoint
 
 from .run import run
+
+LOGGER = logging.getLogger(__name__)
 
 
 def main():
@@ -40,11 +43,6 @@ def main():
     )
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("sbom", args)
 

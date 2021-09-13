@@ -20,13 +20,16 @@
 
 
 from collections import Counter
+import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
+from archivist.parser import common_parser
 
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser, common_endpoint
+from ..testing.parser import common_endpoint
+
+LOGGER = logging.getLogger(__name__)
 
 # Main app
 ##########
@@ -109,11 +112,6 @@ def main():
     )
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("estate_info", args)
 

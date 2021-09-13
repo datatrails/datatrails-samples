@@ -139,7 +139,7 @@ In order to control data sharing to restrict general customers to see only the r
       "access_permissions": [
         {
           "subjects": [ "subjects/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" ],
-          "behaviours": [ "RecordEvidence" ],
+          "behaviours": [ "Attachments", "RecordEvidence" ],
           "include_attributes": [],
           "user_attributes": [],
           "asset_attributes_read": [

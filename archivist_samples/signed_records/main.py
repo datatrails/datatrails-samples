@@ -21,6 +21,7 @@
 
 
 import base64
+import logging
 import os
 
 from sys import exit as sys_exit
@@ -38,10 +39,12 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat import backends
 
 from archivist import about
+from archivist.parser import common_parser
 from archivist.errors import ArchivistNotFoundError
 
-from ..testing.logger import set_logger, LOGGER
-from ..testing.parser import common_parser, common_endpoint
+from ..testing.parser import common_endpoint
+
+LOGGER = logging.getLogger(__name__)
 
 # Key management functions
 #
@@ -432,11 +435,6 @@ def main():
     parser.add_argument("asset_name")
 
     args = parser.parse_args()
-
-    if args.verbose:
-        set_logger("DEBUG")
-    else:
-        set_logger("INFO")
 
     poc = common_endpoint("signed_records", args)
 

@@ -27,10 +27,10 @@ then
     echo "    TEST_SELECTOR=estate_info ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=signed_records ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_initialise ${SAMPLESCMD}"
-    echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_charger ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_jitsuinator ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_wanderer ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=sbom ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=wipp ${SAMPLESCMD}"
     echo ""
@@ -41,6 +41,11 @@ then
     echo "To run all tests:"
     echo ""
     echo "    TEST_SELECTOR=all ${SAMPLESCMD}"
+    echo ""
+    echo "Additionally:"
+    echo ""
+    echo "    TEST_NAMESPACE=$TEST_NAMESPACE"
+    echo "    TEST_VERBOSE=$TEST_VERBOSE"
     echo ""
     exit 0
 fi
@@ -122,9 +127,6 @@ ${SIGNED_RECORDS} --check 'samples'
 SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_samples.synsation initialise ${ARGS} ${NAMESPACE}"
 ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 
-SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}"
-${SYNSATION_ANALYZE}
-
 SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
 ${SYNSATION_CHARGER} -s 20190909 -S 20190923 -f 9876
 
@@ -133,6 +135,9 @@ ${SYNSATION_JITSUINATOR} -n tcl.ccj.001 --wait 1.0
 
 SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}"
 ${SYNSATION_WANDERER}
+
+SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}"
+${SYNSATION_ANALYZE}
 
 SBOM="${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${ARGS} ${NAMESPACE}"
 ${SBOM}
