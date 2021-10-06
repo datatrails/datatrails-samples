@@ -13,9 +13,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def common_endpoint(label, args):
-    LOGGER.info(
-        "Initialising connectStorageIntegrityStorageIntegrityion to Jitsuin Archivist..."
-    )
+    LOGGER.info("Initialising connection to Jitsuin Archivist...")
     arch = endpoint(args)
 
     try:

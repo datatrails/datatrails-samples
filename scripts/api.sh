@@ -17,7 +17,7 @@ docker run \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \
     -e TEST_VERBOSE \
-    -e TEST_STORAGE_INTEGRITY \
+    -e TEST_PROOF_MECHANISM \
     -e TWINE_USERNAME \
     -e TWINE_PASSWORD \
     jitsuin-samples-api \

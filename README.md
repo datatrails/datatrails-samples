@@ -33,12 +33,12 @@ export ARCHIVIST="https://rkvst.poc.jitsuin.io"
 export AUTHTOKEN_FILENAME=credentials/.auth_token
 export NAMESPACE="unique label"
 export VERBOSE=-v
-export STORAGE_INTEGRITY="--storage-integrity=TENANT_STORAGE"
+export PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
 ```
 
 If VERBOSE is "-v" debugging output will appear when running the examples. Otherwise leave blank or undefined.
 
-STORAGE_INTEGRITY should be "LEDGER" or "TENANT_STORAGE". If unspecified the default is "TENANT_STORAGE"
+PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
 
 ## NAMESPACE
 
@@ -59,7 +59,7 @@ Events are created every execution of an example - currently no check is done if
 All examples use a common set of arguments:
 
 ```bash
-export AUTH="-u $ARCHIVIST -t $AUTHTOKEN_FILENAME $VERBOSE $STORAGE_INTEGRITY"
+export AUTH="-u $ARCHIVIST -t $AUTHTOKEN_FILENAME $VERBOSE $PROOF_MECHANISM"
 export ARGS="$AUTH --namespace $NAMESPACE"
 ```
 
