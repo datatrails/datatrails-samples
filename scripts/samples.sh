@@ -78,7 +78,7 @@ do
 done
 
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
-ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_STORAGE_INTEGRITY"
+ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_PROOF_MECHANISM"
 
 # namespacing ensures that each run  of the tests is independent.
 if [ -n "$TEST_NAMESPACE" ]

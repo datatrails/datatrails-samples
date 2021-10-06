@@ -39,12 +39,12 @@ export TEST_ARCHIVIST="https://rkvst.poc.jitsuin.io"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
-export TEST_STORAGE_INTEGRITY="-i TENANT_STORAGE"
+export TEST_PROOF_MECHANISM="-i SIMPLE_HASH"
 ```
 
 If TEST_VERBOSE is "-v" debugging output will appear when running the tests.
 
-TEST_STORAGE_INTEGRITY must be either "LEDGER" or "TENANT_STORAGE"
+TEST_PROOF_MECHANISM must be either "KHIPU" or "SIMPLE_HASH"
 
 ## TEST_NAMESPACE
 
