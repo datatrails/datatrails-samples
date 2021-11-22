@@ -29,7 +29,7 @@ Add a token to the file credentials/.auth_token and set some environment vars to
 specify the archivist endpoint:
 
 ```bash
-export ARCHIVIST="https://rkvst.poc.jitsuin.io"
+export ARCHIVIST="https://app.rkvst.io"
 export AUTHTOKEN_FILENAME=credentials/.auth_token
 export NAMESPACE="unique label"
 export VERBOSE=-v
