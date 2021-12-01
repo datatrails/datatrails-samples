@@ -4,7 +4,7 @@ Tracking the Nuclear Waste Management lifecycle is an important aspect to ensure
 
 RKVST Continuous Assurance Hub offers a solution to fragmented communication and manual checks. Parties have near real-time access to data increasing seamless and effective communication in addition stakeholders can control the sharing of data ensuring one can view information that is relevant.  Policies, procedures and images can be included/attached thus reducing multiple checks and providing persons with the most recent documentation.
  
-This sample uses publicly-available information about WIPP (the Waste Isolation Pilot Plant) and how to quickly get started with integrating Nuclear Waste Management lifecycle with RKVST Continuous Assurance Hub.
+This sample uses publicly-available information about WIPP (Waste Isolation Pilot Plant) and how to quickly get started with integrating Nuclear Waste Management lifecycle with RKVST Continuous Assurance Hub.
 
 
 ## Pre-requisites
