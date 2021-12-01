@@ -170,7 +170,7 @@ In order to control data sharing one can restrict access allowing certain partie
       "access_permissions": [
         {
           "subjects": [ "subjects/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" ],
-          "sehaviours": [ "RecordEvidence" ],
+          "behaviours": [ "RecordEvidence" ],
           "include_attributes": [],
           "user_attributes": [],
           "asset_attributes_read": [
