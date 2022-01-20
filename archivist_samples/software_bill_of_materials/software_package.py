@@ -1,19 +1,49 @@
 # pylint:disable=missing-function-docstring      # docstrings
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
-
-from typing import Optional
-
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
+import logging
+from sys import exit as sys_exit
+from typing import Optional
+
 from archivist import archivist as type_helper
+
+from ..testing.assets import make_assets_create
+
+from . import sbom_files
+
+
+LOGGER = logging.getLogger(__name__)
+
+
+def attachment_create(sboms, unused_idx, name):
+    with pkg_resources.open_binary(sbom_files, name[0]) as fd:
+        attachment = sboms.attachments.upload(fd)
+        result = {
+            "arc_attachment_identity": attachment["identity"],
+            "arc_hash_alg": attachment["hash"]["alg"],
+            "arc_hash_value": attachment["hash"]["value"],
+            "arc_display_name": name[1],
+        }
+        return result
+
+
+sboms_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
 
 
 class SoftwarePackage:
     def __init__(self, arch: "type_helper.Archivist"):
         self._arch = arch
         self._asset = None
+        self._existed = False
 
     @property
     def arch(self):
@@ -22,6 +52,10 @@ class SoftwarePackage:
     @property
     def asset(self):
         return self._asset
+
+    @property
+    def existed(self):
+        return self._existed
 
     # Asset Creation
     def create(
@@ -34,15 +68,18 @@ class SoftwarePackage:
     ):
 
         attrs = {
-            "arc_display_name": sbom_name,
             "arc_description": sbom_description,
             "arc_display_type": "Software Package",
-            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
+        self._asset, self._existed = sboms_creator(
+            self._arch,
+            sbom_name,
+            attrs,
+            attachments=attachments,
+        )
         return self._asset
 
     # Asset load by unique identity
@@ -92,6 +129,7 @@ class SoftwarePackage:
 
         if latest_sbom is None:
             latest_sbom = sbom
+
         attrs = {
             "arc_description": sbom["description"],
             "arc_evidence": "Release",
@@ -102,8 +140,13 @@ class SoftwarePackage:
             "sbom_author": sbom["author"],
             "sbom_supplier": sbom["supplier"],
             "sbom_uuid": sbom["uuid"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -148,8 +191,13 @@ class SoftwarePackage:
             "sbom_planned_component": sbom_planned["name"],
             "sbom_planned_version": sbom_planned["version"],
             "sbom_planned_reference": sbom_planned["reference"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -179,8 +227,13 @@ class SoftwarePackage:
             "sbom_accepted_version": sbom_accepted["version"],
             "sbom_accepted_approver": sbom_accepted["approver"],
             "sbom_accepted_vuln_reference": sbom_accepted["reference"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -211,8 +264,13 @@ class SoftwarePackage:
             "sbom_patch_author": sbom_patch["author"],
             "sbom_patch_supplier": sbom_patch["supplier"],
             "sbom_patch_uuid": sbom_patch["uuid"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -243,8 +301,12 @@ class SoftwarePackage:
             "sbom_patch_supplier": sbom_patch["supplier"],
             "sbom_patch_uuid": sbom_patch["uuid"],
             "sbom_patch_vuln_reference": sbom_patch["reference"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -279,8 +341,12 @@ class SoftwarePackage:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -313,8 +379,13 @@ class SoftwarePackage:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -344,8 +415,13 @@ class SoftwarePackage:
             "sbom_eol_target_version": sbom_eol["target_version"],
             "sbom_eol_target_uuid": sbom_eol["target_uuid"],
             "sbom_eol_target_date": sbom_eol["target_date"],
-            "arc_attachments": attachments or [],
         }
+        if attachments:
+            attrs["arc_attachments"] = [
+                attachment_create(self.arch, 0, attachment)
+                for attachment in attachments
+            ]
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 

@@ -7,7 +7,7 @@
 
 import logging
 
-from archivist.parser import endpoint
+from ..testing.archivist_parser import endpoint
 
 LOGGER = logging.getLogger(__name__)
 

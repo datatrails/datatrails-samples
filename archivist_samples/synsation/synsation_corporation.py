@@ -1,4 +1,4 @@
-#   Copyright 2019 Jitsuin, inc
+#   Copyright 2019,2020,2021,2022 Jitsuin, inc
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,78 +21,75 @@ import random
 import time
 
 from ..testing.assets import (
-    assets_create_if_not_exists,
+    make_assets_create,
 )
 
 from .util import (
     asset_attachment_upload_from_file,
-    locations_create_from_yaml_file,
+    locations_from_yaml_file,
 )
 
 LOGGER = logging.getLogger(__name__)
 
 
-def initialise_asset_types(ac, timedelay):
+def attachment_create(arch, idx, name):
+    attachment = asset_attachment_upload_from_file(arch, name, "image/jpg")
+    result = {
+        "arc_attachment_identity": attachment["identity"],
+        "arc_hash_alg": attachment["hash"]["alg"],
+        "arc_hash_value": attachment["hash"]["value"],
+    }
+    if idx == 0:
+        result["arc_display_name"] = "arc_primary_image"
+
+    return result
+
+
+machines_creator = make_assets_create(
+    attachment_creator=attachment_create, confirm=False
+)
+
+
+def initialise_asset_types():
     type_map = {}
 
-    newattachment = asset_attachment_upload_from_file(
-        ac, "multifunction_printer.jpg", "image/jpg"
-    )
-    type_map["Multifunction Printer"] = newattachment
-    time.sleep(timedelay)
-
-    newattachment = asset_attachment_upload_from_file(
-        ac, "coffee_machine.jpg", "image/jpg"
-    )
-    type_map["Connected Coffee Machine"] = newattachment
-    time.sleep(timedelay)
-
-    newattachment = asset_attachment_upload_from_file(
-        ac,
-        "black_cctv.jpg",
-        "image/jpg",
-    )
-    type_map["Security Camera"] = newattachment
-    time.sleep(timedelay)
+    type_map["Multifunction Printer"] = "multifunction_printer.jpg"
+    type_map["Connected Coffee Machine"] = "coffee_machine.jpg"
+    type_map["Security Camera"] = "black_cctv.jpg"
 
     LOGGER.debug(type_map)
 
     return type_map
 
 
-def create_locations(ac, timedelay):
+def create_locations():
     corporation_locations = {}
 
-    newlocation = locations_create_from_yaml_file(ac, "grayslake.yaml")
-    corporation_locations[newlocation["display_name"]] = newlocation["identity"]
-    time.sleep(timedelay)
+    newlocation = locations_from_yaml_file("grayslake.yaml")
+    corporation_locations[newlocation["props"]["display_name"]] = newlocation
 
-    newlocation = locations_create_from_yaml_file(ac, "baltimore.yaml")
-    corporation_locations[newlocation["display_name"]] = newlocation["identity"]
-    time.sleep(timedelay)
+    newlocation = locations_from_yaml_file("baltimore.yaml")
+    corporation_locations[newlocation["props"]["display_name"]] = newlocation
 
-    newlocation = locations_create_from_yaml_file(ac, "european.yaml")
-    corporation_locations[newlocation["display_name"]] = newlocation["identity"]
-    time.sleep(timedelay)
+    newlocation = locations_from_yaml_file("european.yaml")
+    corporation_locations[newlocation["props"]["display_name"]] = newlocation
 
-    newlocation = locations_create_from_yaml_file(ac, "asia.yaml")
-    corporation_locations[newlocation["display_name"]] = newlocation["identity"]
-    time.sleep(timedelay)
+    newlocation = locations_from_yaml_file("asia.yaml")
+    corporation_locations[newlocation["props"]["display_name"]] = newlocation
 
-    newlocation = locations_create_from_yaml_file(ac, "za.yaml")
-    corporation_locations[newlocation["display_name"]] = newlocation["identity"]
-    time.sleep(timedelay)
+    newlocation = locations_from_yaml_file("za.yaml")
+    corporation_locations[newlocation["props"]["display_name"]] = newlocation
 
     LOGGER.debug(corporation_locations)
 
     return corporation_locations
 
 
-def create_assets(ac, asset_types, locations, num_assets, timedelay):
+def create_assets(arch, asset_types, locations, num_assets, timedelay):
     corporation_assets = {}
 
     for i in range(num_assets):
-        displaytype = random.choice(list(asset_types.keys()))
+        displaytype = random.choice(list(asset_types))
         safetype = displaytype.replace(" ", "").lower()
         displayname = f"synsation.assets.{safetype}_{i}"
         description = (
@@ -102,26 +99,23 @@ def create_assets(ac, asset_types, locations, num_assets, timedelay):
 
         location = "Cape Town"  # reserved location
         while location == "Cape Town":
-            location = random.choice(list(locations.keys()))
-        location_id = locations[location]
+            location = random.choice(list(locations))
+        location = locations[location]
 
-        attrs = {
-            "arc_firmware_version": "1.0",
-            "arc_serial_number": "f867662g.1",
-            "arc_display_name": displayname,
-            "arc_description": description,
-            "arc_home_location_identity": location_id,
-            "arc_display_type": displaytype,
-            "arc_attachments": [
-                {
-                    "arc_display_name": "arc_primary_image",
-                    "arc_attachment_identity": asset_types[displaytype]["identity"],
-                    "arc_hash_value": asset_types[displaytype]["hash"]["value"],
-                    "arc_hash_alg": asset_types[displaytype]["hash"]["alg"],
-                }
-            ],
-        }
-        newasset = assets_create_if_not_exists(ac, attrs)
+        newasset, _ = machines_creator(
+            arch,
+            displayname,
+            {
+                "arc_description": description,
+                "arc_firmware_version": "1.0",
+                "arc_serial_number": "f867662g.1",
+                "arc_display_type": displaytype,
+            },
+            location=location,
+            attachments={
+                asset_types[displaytype],
+            },
+        )
         corporation_assets[displayname] = newasset["identity"]
 
         time.sleep(timedelay)
@@ -133,8 +127,8 @@ def create_assets(ac, asset_types, locations, num_assets, timedelay):
 
 def initialise_all(ac, num_assets, timedelay):
     LOGGER.info("Creating data for Synsation Corporation...")
-    asset_types = initialise_asset_types(ac, timedelay)
-    locations = create_locations(ac, timedelay)
+    asset_types = initialise_asset_types()
+    locations = create_locations()
     assets = create_assets(ac, asset_types, locations, num_assets, timedelay)
     LOGGER.info(
         "%d assets of %d different types " "created across %d locations.",

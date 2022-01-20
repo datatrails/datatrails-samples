@@ -30,8 +30,8 @@ import uuid
 
 from archivist import about
 from archivist.errors import ArchivistNotFoundError
-from archivist.parser import common_parser
 
+from ..testing.archivist_parser import common_parser
 from ..testing.asset import MyAsset
 from ..testing.parser import common_endpoint
 from ..testing.time_warp import TimeWarp
@@ -162,13 +162,20 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
 ##########
 
 
-def run(ac, args):
+def run(arch, args):
     """logic goes here"""
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
+
+    asset_name = "tcl.ccj.001"
+    fast_forward = 3600
+    start_date = datetime.date.today() - datetime.timedelta(days=1)
+    wait = 1.0
+
     LOGGER.info("Looking for asset...")
     try:
-        asset = ac.assets.read_by_signature(
-            attrs={"arc_display_name": args.asset_name},
+        asset = arch.assets.read_by_signature(
+            attrs={"arc_display_name": asset_name},
         )
     except ArchivistNotFoundError:
         LOGGER.info("Asset not found.  Aborting.")
@@ -179,17 +186,17 @@ def run(ac, args):
     asset_type = attrs["arc_display_type"] if "arc_display_type" in attrs else "Device"
 
     LOGGER.info("Creating time warp...")
-    tw = TimeWarp(args.start_date, args.fast_forward)
+    tw = TimeWarp(start_date, fast_forward)
 
     LOGGER.info("Beginning simulation...")
-    demo_flow(ac, asset_id, asset_type, tw, args.wait)
+    demo_flow(arch, asset_id, asset_type, tw, wait)
 
     LOGGER.info("Done.")
     sys_exit(0)
 
 
 def entry():
-    parser, _ = common_parser("Runs the Jitsuinator demo script manually")
+    parser = common_parser("Runs the Jitsuinator demo script manually")
     parser.add_argument(
         "--namespace",
         type=str,
@@ -199,47 +206,10 @@ def entry():
         help="namespace of item population (to enable parallel demos",
     )
 
-    parser.add_argument(
-        "-n",
-        "--asset_name",
-        type=str,
-        dest="asset_name",
-        action="store",
-        default="tcl.ccj.01",
-        help="Name of the asset to ship",
-    )
-    parser.add_argument(
-        "-s",
-        "--start-date",
-        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
-        dest="start_date",
-        action="store",
-        default=datetime.date.today() - datetime.timedelta(days=1),
-        help="Start date for event series (format: yyyymmdd)",
-    )
-    parser.add_argument(
-        "-f",
-        "--fast-forward",
-        type=float,
-        dest="fast_forward",
-        action="store",
-        default=3600,
-        help="Fast forward time in event series (default: 1 second = 1 hour)",
-    )
-    parser.add_argument(
-        "-w",
-        "--wait",
-        type=float,
-        dest="wait",
-        action="store",
-        default=0.0,
-        help="auto-advance after WAIT seconds",
-    )
-
     args = parser.parse_args()
 
-    poc = common_endpoint("synsation", args)
-    run(poc, args)
+    arch = common_endpoint("synsation", args)
+    run(arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

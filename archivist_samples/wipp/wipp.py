@@ -2,6 +2,14 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 'importlib_resources'.
+    import importlib_resources as pkg_resources
+
+import logging
+
 from copy import copy
 from typing import Optional
 
@@ -9,6 +17,40 @@ from typing import Optional
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
 from archivist import archivist as type_helper
+
+from ..testing.assets import make_assets_create
+
+from . import wipp_files
+
+LOGGER = logging.getLogger(__name__)
+
+
+def upload_attachment(arch, path, name):
+    with pkg_resources.open_binary(wipp_files, path) as fd:
+        blob = arch.attachments.upload(fd)
+        attachment = {
+            "arc_display_name": name,
+            "arc_attachment_identity": blob["identity"],
+            "arc_hash_value": blob["hash"]["value"],
+            "arc_hash_alg": blob["hash"]["alg"],
+        }
+        return attachment
+
+
+def attachment_create(arch, unused_idx, name):
+    with pkg_resources.open_binary(wipp_files, name[0]) as fd:
+        attachment = arch.attachments.upload(fd)
+        result = {
+            "arc_attachment_identity": attachment["identity"],
+            "arc_hash_alg": attachment["hash"]["alg"],
+            "arc_hash_value": attachment["hash"]["value"],
+            "arc_display_name": name[1],
+        }
+
+        return result
+
+
+wipp_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
 
 
 class Wipp:
@@ -28,6 +70,7 @@ class Wipp:
 
         self._arch = arch_
         self._asset = None
+        self._existed = False
 
     @property
     def arch(self):
@@ -36,6 +79,10 @@ class Wipp:
     @property
     def asset(self):
         return self._asset
+
+    @property
+    def existed(self):
+        return self._existed
 
     def create(
         self,
@@ -48,15 +95,18 @@ class Wipp:
     ):
 
         attrs = {
-            "arc_display_name": name,
             "arc_description": description,
             "arc_serial_number": serial,
-            "arc_attachments": attachments or [],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
+        self._asset, self._existed = wipp_creator(
+            self.arch,
+            name,
+            attrs,
+            attachments=attachments,
+        )
 
         return self._asset
 

@@ -95,52 +95,18 @@ else
     echo "No NAMESPACE specified - may share assets etc with someone else on same URL"
 fi
 
-DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} python3 -m archivist_samples.door_entry ${ARGS} ${NAMESPACE}"
-${DOOR_ENTRY} --create
-${DOOR_ENTRY} --list all
-${DOOR_ENTRY} --list doors
-${DOOR_ENTRY} --list cards
-${DOOR_ENTRY} --list 'Courts of Justice front door'
-${DOOR_ENTRY} --list 'access_card_1'
-
-OPEN="${DOOR_ENTRY} --open"
-${OPEN} "Courts of Justice front door,access_card_1"
-${OPEN} "Courts of Justice front door,access_card_3"
-${OPEN} "Courts of Justice front door,access_card_4"
-${OPEN} "Courts of Justice front door,access_card_0"
-${OPEN} "Courts of Justice front door,access_card_2"
-${OPEN} "Bastille front door,access_card_2"
-${OPEN} "City Hall front door,access_card_2"
-${OPEN} "Gare du Nord apartments side door,access_card_2"
+${TEST_NO_DOOR_ENTRY} python3 -m archivist_samples.door_entry ${ARGS} ${NAMESPACE}
 
 # namespacing not required here
 ESTATE_INFO="${TEST_NO_ESTATE_INFO} python3 -m archivist_samples.estate_info ${ARGS}"
 ${ESTATE_INFO} --quick-count
 ${ESTATE_INFO} --double-check
 
-SIGNED_RECORDS="${TEST_NO_SIGNED_RECORDS} python3 -m archivist_samples.signed_records ${ARGS} ${NAMESPACE}"
-${SIGNED_RECORDS} --create 'samples'
-${SIGNED_RECORDS} --sign-message 'signature' 'samples'
-${SIGNED_RECORDS} --bad-sign-message 'signature' 'samples'
-${SIGNED_RECORDS} --check 'samples'
-
-SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_samples.synsation initialise ${ARGS} ${NAMESPACE}"
-${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
-
-SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
-${SYNSATION_CHARGER} -s 20190909 -S 20190923 -f 9876
-
-SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
-${SYNSATION_JITSUINATOR} -n tcl.ccj.001 --wait 1.0
-
-SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}"
-${SYNSATION_WANDERER}
-
-SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}"
-${SYNSATION_ANALYZE}
-
-SBOM="${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${ARGS} ${NAMESPACE}"
-${SBOM}
-
-WIPP="${TEST_NO_WIPP} python3 -m archivist_samples.wipp ${ARGS} ${NAMESPACE}"
-${WIPP}
+${TEST_NO_SIGNED_RECORDS} python3 -m archivist_samples.signed_records ${ARGS} ${NAMESPACE}
+${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_samples.synsation initialise ${ARGS} ${NAMESPACE}
+${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}
+${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}
+${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}
+${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}
+${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${ARGS} ${NAMESPACE}
+${TEST_NO_WIPP} python3 -m archivist_samples.wipp ${ARGS} ${NAMESPACE}

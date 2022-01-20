@@ -20,8 +20,7 @@ import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
-from archivist.parser import common_parser
-
+from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
 
 from .run import run
@@ -30,7 +29,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def main():
-    parser, _ = common_parser("Sample Waste Isolation Pilot Plant (WIPP) Integration")
+    parser = common_parser("Sample Waste Isolation Pilot Plant (WIPP) Integration")
     parser.add_argument(
         "--namespace",
         type=str,

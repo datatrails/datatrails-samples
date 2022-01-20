@@ -26,8 +26,8 @@ import time
 
 from archivist import about
 from archivist.errors import ArchivistNotFoundError
-from archivist.parser import common_parser
 
+from ..testing.archivist_parser import common_parser
 from ..testing.asset import MyAsset
 from ..testing.parser import common_endpoint
 from ..testing.time_warp import TimeWarp
@@ -83,16 +83,23 @@ def shipit(ac, crate_id, delay, tw):
     )
 
 
-def run(ac, args):
+def run(arch, args):
     """logic goes here"""
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
+
+    asset_name = ""
+    start_date = datetime.date.today() - datetime.timedelta(days=1)
+    fast_forward = 3600
+    wait = 0.5
+
     # Find the asset record
     crate_id = None
-    if args.asset_name:
-        LOGGER.info(f"Looking for smart shipping crate '{args.asset_name}'...")
+    if asset_name:
+        LOGGER.info(f"Looking for smart shipping crate '{asset_name}'...")
         try:
-            crate = ac.assets.read_by_signature(
-                attrs={"arc_display_name": args.asset_name}
+            crate = arch.assets.read_by_signature(
+                attrs={"arc_display_name": asset_name}
             )
         except ArchivistNotFoundError:
             pass
@@ -101,7 +108,7 @@ def run(ac, args):
     else:
         LOGGER.info("No crate specified...searching for one...")
         crates = list(
-            ac.assets.list(
+            arch.assets.list(
                 attrs={"arc_display_type": "Widget shipping crate"},
             )
         )
@@ -114,17 +121,17 @@ def run(ac, args):
         sys_exit(1)
 
     LOGGER.info("Creating time warp...")
-    tw = TimeWarp(args.start_date, args.fast_forward)
+    tw = TimeWarp(start_date, fast_forward)
 
     LOGGER.info("Beginning journey simulation...")
-    shipit(ac, crate_id, args.wait, tw)
+    shipit(arch, crate_id, wait, tw)
 
     LOGGER.info("Done.")
     sys_exit(0)
 
 
 def entry():
-    parser, _ = common_parser(
+    parser = common_parser(
         "Populates an Archivist install with devices from an Azure IoT Hub"
     )
     parser.add_argument(
@@ -136,48 +143,10 @@ def entry():
         help="namespace of item population (to enable parallel demos",
     )
 
-    # per example options here ....
-    parser.add_argument(
-        "-w",
-        "--wait",
-        type=float,
-        dest="wait",
-        action="store",
-        default=0.5,
-        help="add a delay between API calls",
-    )
-    parser.add_argument(
-        "-n",
-        "--asset_name",
-        type=str,
-        dest="asset_name",
-        action="store",
-        help="Name of the asset to ship",
-    )
-
-    parser.add_argument(
-        "-s",
-        "--start-date",
-        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
-        dest="start_date",
-        action="store",
-        default=datetime.date.today() - datetime.timedelta(days=1),
-        help="Start date for event series (format: yyyymmdd)",
-    )
-    parser.add_argument(
-        "-f",
-        "--fast-forward",
-        type=float,
-        dest="fast_forward",
-        action="store",
-        default=3600,
-        help="Fast forward time in event series (default: 1 second = 1 hour)",
-    )
-
     args = parser.parse_args()
 
-    poc = common_endpoint("synsation", args)
-    run(poc, args)
+    arch = common_endpoint("synsation", args)
+    run(arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

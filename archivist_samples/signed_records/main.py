@@ -39,9 +39,9 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat import backends
 
 from archivist import about
-from archivist.parser import common_parser
 from archivist.errors import ArchivistNotFoundError
 
+from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
 
 LOGGER = logging.getLogger(__name__)
@@ -130,7 +130,7 @@ def load_asset(asset_name):
         return None
 
     fname = f'{asset_name.replace(" ", "_")}.aid'
-    with open(fname, mode="r") as aidfile:
+    with open(fname, mode="r", encoding="utf-8") as aidfile:
         a_id = aidfile.read().strip()
 
     return priv, pub, a_id
@@ -182,7 +182,7 @@ def generate_crypto_asset(archivist, asset_name):
 
     fname = f'{asset_name.replace(" ", "_")}-pub.pem'
     LOGGER.debug("Writing public key file...")
-    with open(fname, mode="wb+") as pubkeyfile:
+    with open(fname, mode="wb+", encoding="utf-8") as pubkeyfile:
         pubkeyfile.write(pubkey_pem)
 
     privkey_pem = private_key.private_bytes(
@@ -203,7 +203,7 @@ def generate_crypto_asset(archivist, asset_name):
     # real device
     fname = f'{asset_name.replace(" ", "_")}.aid'
     LOGGER.debug("Writing asset config file...")
-    with open(fname, mode="w+") as assetconfigfile:
+    with open(fname, mode="w+", encoding="utf-8") as assetconfigfile:
         assetconfigfile.write(newasset["identity"])
 
     return newasset
@@ -321,72 +321,41 @@ def print_history(archivist, asset_name):
 
 # Main app loop
 ###############
-def run(archivist, args):
+def run(arch, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    asset_name = " ".join([args.asset_name, args.namespace])
+    asset_name = "-".join(["samples", args.namespace])
     # Check which operation we're doing, and ensure we have the info
     # we need to do it
 
-    if args.create_asset:
-        # Don't create if there's already an asset record with this name.
-        # This is not strictly necessary - the Jitsuin Archivist system
-        # does not require arc_display_name to be unique - but to keep
-        # things simple we'll avoid duplicates here.
-        if asset_exists(archivist, asset_name):
-            LOGGER.error(
-                "Asset '%s' already exists."
-                " Please choose a different name to create.",
-                asset_name,
-            )
-            sys_exit(1)
+    # Don't create if there's already an asset record with this name.
+    # This is not strictly necessary - the Jitsuin Archivist system
+    # does not require arc_display_name to be unique - but to keep
+    # things simple we'll avoid duplicates here.
+    if asset_exists(arch, asset_name):
+        LOGGER.error(
+            "Asset '%s' already exists."
+            " Please choose a different namespace to create.",
+            asset_name,
+        )
+        sys_exit(1)
 
-        LOGGER.info("Generate crypto asset '%s'", asset_name)
-        generate_crypto_asset(archivist, asset_name)
-        sys_exit(0)
+    LOGGER.info("Generate crypto asset '%s'", asset_name)
+    generate_crypto_asset(arch, asset_name)
 
-    if args.sign_message:
-        if not asset_exists(archivist, asset_name):
-            LOGGER.error(
-                "Asset '%s' does not exist."
-                " Please choose a different name to create.",
-                asset_name,
-            )
-            sys_exit(1)
+    LOGGER.info("Submit signed evidence '%s'", asset_name)
+    submit_signed_evidence(arch, asset_name, "signature", False)
 
-        LOGGER.info("Submit signed evidence '%s'", asset_name)
-        submit_signed_evidence(archivist, asset_name, args.sign_message, False)
-        sys_exit(0)
+    LOGGER.info("Submit badly signed evidence %s", asset_name)
+    submit_signed_evidence(arch, asset_name, "bad signature", True)
 
-    if args.bad_sign_message:
-        if not asset_exists(archivist, asset_name):
-            LOGGER.error(
-                "Asset '%s' does not exist."
-                "Please choose the correct name or create it first.",
-                asset_name,
-            )
-            sys_exit(1)
-
-        LOGGER.info("Submit badly signed evidence %s", asset_name)
-        submit_signed_evidence(archivist, asset_name, args.bad_sign_message, True)
-        sys_exit(0)
-
-    if args.check_sigs:
-        if not asset_exists(archivist, asset_name):
-            LOGGER.error(
-                "Asset '%s' does not exist."
-                "Please choose the correct name or create it first.",
-                asset_name,
-            )
-            sys_exit(1)
-
-        LOGGER.info("Check %s", asset_name)
-        print_history(archivist, asset_name)
-        sys_exit(0)
+    LOGGER.info("Check %s", asset_name)
+    print_history(arch, asset_name)
+    sys_exit(0)
 
 
 def main():
-    parser, _ = common_parser(
+    parser = common_parser(
         "Shows simple integration of a device private signing key with Archivist records"
     )
     parser.add_argument(
@@ -397,42 +366,6 @@ def main():
         default=None,
         help="namespace of item population (to enable parallel demos",
     )
-
-    # Operations
-    operations = parser.add_mutually_exclusive_group(required=True)
-    operations.add_argument(
-        "--create",
-        dest="create_asset",
-        action="store_true",
-        default=False,
-        help="create a new asset record",
-    )
-    operations.add_argument(
-        "--sign-message",
-        type=str,
-        dest="sign_message",
-        action="store",
-        default=None,
-        help=("Sign this string and add record to Archivist"),
-    )
-    operations.add_argument(
-        "--bad-sign-message",
-        type=str,
-        dest="bad_sign_message",
-        action="store",
-        default=None,
-        help="Add an evidence record to Archivist with a bad signature (for testing)",
-    )
-    operations.add_argument(
-        "--check",
-        dest="check_sigs",
-        action="store_true",
-        default=False,
-        help="Check the signatures on all evidence records of ASSET_NAME",
-    )
-
-    # Required args
-    parser.add_argument("asset_name")
 
     args = parser.parse_args()
 

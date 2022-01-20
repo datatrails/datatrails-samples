@@ -25,16 +25,15 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
-from archivist.parser import common_parser
 from archivist.timestamp import parse_timestamp
 
+from ..testing.archivist_parser import common_parser
 from ..testing.asset import (
     MAINTENANCE_PERFORMED,
     MAINTENANCE_REQUEST,
     VULNERABILITY_ADDRESSED,
     VULNERABILITY_REPORT,
 )
-
 from ..testing.parser import common_endpoint
 
 LOGGER = logging.getLogger(__name__)
@@ -134,18 +133,18 @@ def analyze_asset(conn, asset):
     LOGGER.info("---")
 
 
-def run(archivist):
-    """logic goes here"""
+def run(arch, args):
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    for asset in archivist.assets.list():
-        analyze_asset(archivist, asset)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
+    for asset in arch.assets.list():
+        analyze_asset(arch, asset)
 
     LOGGER.info("Done.")
     sys_exit(0)
 
 
 def entry():
-    parser, _ = common_parser("Checks maintenance and update performance for assets")
+    parser = common_parser("Checks maintenance and update performance for assets")
     parser.add_argument(
         "--namespace",
         type=str,
@@ -155,13 +154,11 @@ def entry():
         help="namespace of item population (to enable parallel demos",
     )
 
-    # per example options here ....
-
     args = parser.parse_args()
 
-    poc = common_endpoint("synsation", args)
+    arch = common_endpoint("synsation", args)
 
-    run(poc)
+    run(arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

@@ -8,6 +8,8 @@ from typing import Optional
 
 from archivist import archivist as type_helper
 
+from .software_package import sboms_creator
+
 
 class SoftwareDeployment:
     def __init__(
@@ -52,27 +54,20 @@ class SoftwareDeployment:
         else:
             sbom_environment = self._environment
 
-        self._add_attachments(attachments)
-
         attrs = {
-            "arc_display_name": sbom_name,
             "arc_description": sbom_description,
             "arc_display_type": "Software Deployment",
             "sbom_environment": sbom_environment,
-            "arc_attachments": [
-                {
-                    "arc_display_name": "arc_primary_image",
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
-        self._asset = self.arch.assets.create(attrs=attrs, confirm=True)
+        self._asset = sboms_creator(
+            self.arch,
+            sbom_name,
+            attrs,
+            attachments=attachments,
+        )
         return self._asset
 
     # Installation Event

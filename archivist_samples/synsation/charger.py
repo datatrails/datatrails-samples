@@ -28,8 +28,8 @@ import threading
 import time
 
 from archivist import about
-from archivist.parser import common_parser
 
+from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
 from ..testing.time_warp import TimeWarp
 
@@ -40,10 +40,10 @@ from . import recall_worker
 LOGGER = logging.getLogger(__name__)
 
 
-def initialize_devices(conn, airport):
+def initialize_devices(arch, airport):
     ev_chargers = []
 
-    number_of_chargers = conn.assets.count(
+    number_of_chargers = arch.assets.count(
         attrs={"arc_display_type": "EV charging station"},
     )
 
@@ -53,7 +53,7 @@ def initialize_devices(conn, airport):
     )
     LOGGER.debug(debugstr)
 
-    chargers_list = conn.assets.list(
+    chargers_list = arch.assets.list(
         attrs={"arc_display_type": "EV charging station"},
     )
     # Whittle it down to just San Jose
@@ -63,7 +63,7 @@ def initialize_devices(conn, airport):
             LOGGER.debug("Checking '%s'", candidate)
             if candidate.startswith(airport):
                 evc = ev_charger_device.EVDevice(candidate, charger["identity"])
-                evc.init_archivist_client(conn)
+                evc.init_archivist_client(arch)
                 ev_chargers.append(evc)
         except KeyError:
             # Some devices won't have these properties.  Just ignore failures.
@@ -96,18 +96,27 @@ def interrupt_listener_run_until(tw, stop):
         LOGGER.info("Jitsuin EV Charger example stopped")
 
 
-def run(ac, args):
+def run(arch, args):
     """logic goes here"""
     # Stretch the timestamps in logs
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
+
     LOGGER.info("Creating time warp...")
-    tw = TimeWarp(args.start_date, args.fast_forward)
+
+    start_date = datetime.datetime.strptime("20190909", "%Y%m%d")
+    stop_date = datetime.datetime.strptime("20190923", "%Y%m%d")
+    fast_forward = float(9876)
+    # wait = float(0)
+    airport = "SJC"
+
+    tw = TimeWarp(start_date, fast_forward)
 
     # Find all hte devices we're interested in
     LOGGER.info("Initializing chargers...")
-    chargers = initialize_devices(ac, args.airport)
+    chargers = initialize_devices(arch, airport)
     if not chargers:
-        LOGGER.info("No chargers found at airport %s.  Aborting.", args.airport)
+        LOGGER.info("No chargers found at airport %s.  Aborting.", airport)
         sys_exit(1)
 
     # Create worker threads:
@@ -125,18 +134,17 @@ def run(ac, args):
     x.start()
 
     LOGGER.info("Beginning telemetry run")
-    if args.stop_date:
-        LOGGER.info(
-            "Press Ctrl-C to exit, or will stop automatically at %s", args.stop_date
-        )
+    if stop_date:
+        LOGGER.info("Press Ctrl-C to exit, or will stop automatically at %s", stop_date)
     else:
         LOGGER.info("Press Ctrl-C to exit")
-    interrupt_listener_run_until(tw, args.stop_date)
+
+    interrupt_listener_run_until(tw, stop_date)
     sys_exit(0)
 
 
 def entry():
-    parser, _ = common_parser(
+    parser = common_parser(
         "Simulates usage and maintenance of electric vehicle chargers"
     )
     parser.add_argument(
@@ -148,57 +156,11 @@ def entry():
         help="namespace of item population (to enable parallel demos",
     )
 
-    # per example options here ....
-    parser.add_argument(
-        "-w",
-        "--wait",
-        type=float,
-        dest="wait",
-        action="store",
-        default=0.0,
-        help="add a delay between API calls",
-    )
-    parser.add_argument(
-        "-p",
-        "--airport",
-        type=str,
-        dest="airport",
-        action="store",
-        default="SJC",
-        help="Airport site to use",
-    )
-    parser.add_argument(
-        "-s",
-        "--start-date",
-        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
-        dest="start_date",
-        action="store",
-        default=datetime.date.today() - datetime.timedelta(days=1),
-        help="Start date for event series (format: yyyymmdd)",
-    )
-    parser.add_argument(
-        "-S",
-        "--stop-date",
-        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
-        dest="stop_date",
-        action="store",
-        help="Stop when timewarp reaches this date (format: yyyymmdd)",
-    )
-    parser.add_argument(
-        "-f",
-        "--fast-forward",
-        type=float,
-        dest="fast_forward",
-        action="store",
-        default=3600,
-        help="Fast forward time in event series (default: 1 second = 1 hour)",
-    )
-
     args = parser.parse_args()
 
-    poc = common_endpoint("synsation", args)
+    arch = common_endpoint("synsation", args)
 
-    run(poc, args)
+    run(arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)
