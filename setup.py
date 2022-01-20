@@ -37,15 +37,6 @@ setup(
         'Topic :: Utilities' # https://pypi.org/classifiers/ # check another option client-sdk
     ],
     install_requires=requirements,
-    version_config={
-        "template": "{tag}",
-        "dev_template": "{tag}.post{ccount}+git.{sha}",
-        "dirty_template": "{tag}.post{ccount}+git.{sha}.dirty",
-        "version_callback": None,
-        "version_file": None,
-        "count_commits_from_version_file": False,
-    },
-    setup_requires=['setuptools-git-versioning'],
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [

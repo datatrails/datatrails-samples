@@ -20,8 +20,7 @@ import logging
 from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
-from archivist.parser import common_parser
-
+from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
 
 from .run import run
@@ -30,7 +29,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def main():
-    parser, _ = common_parser(
+    parser = common_parser(
         "Simple SBOM implementation that conforms with NTIA recommendations"
     )
     parser.add_argument(
@@ -46,7 +45,7 @@ def main():
 
     poc = common_endpoint("sbom", args)
 
-    run(poc)
+    run(poc, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

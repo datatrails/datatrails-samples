@@ -34,9 +34,8 @@ from archivist.errors import ArchivistNotFoundError
 from .images import assets as images_assets
 from .images import events as images_events
 
-from ..testing.locations import (
-    locations_create_if_not_exists,
-)
+from ..testing.assets import make_assets_create
+
 
 DOOR_TERMINAL = "Door access terminal"
 DOOR_CARD = "Door entry card"
@@ -48,324 +47,246 @@ LOGGER = logging.getLogger(__name__)
 ############
 
 
-def doors_create(
-    doors,
-    ws_id,
-    displayname,
-    serial,
-    description,
-    location,
-    attachments,
-):
+def attachment_create(doors, idx, name):
+    with pkg_resources.open_binary(images_assets, name) as fd:
+        attachment = doors.attachments.upload(fd)
+        result = {
+            "arc_attachment_identity": attachment["identity"],
+            "arc_hash_alg": attachment["hash"]["alg"],
+            "arc_hash_value": attachment["hash"]["value"],
+        }
+        if idx == 0:
+            result["arc_display_name"] = "arc_primary_image"
 
-    attrs = {
-        "arc_attachments": [
-            {
-                "arc_display_name": "arc_primary_image",
-                "arc_attachment_identity": attachment["identity"],
-                "arc_hash_value": attachment["hash"]["value"],
-                "arc_hash_alg": attachment["hash"]["alg"],
-            }
-            for attachment in attachments
-        ],
-        "arc_firmware_version": "1.0",
-        "arc_serial_number": serial,
-        "arc_display_name": displayname,
-        "arc_description": description,
-        "arc_home_location_identity": location["identity"],
-        "wavestone_asset_id": ws_id,
-    }
-    return doors_create_if_not_exists(
+        return result
+
+
+doors_creator = make_assets_create(attachment_creator=attachment_create, confirm=False)
+
+
+# Create actual door assets
+####################################
+
+
+def create_jitsuin_paris(doors):
+
+    # Unlike the others, which feature images of the whole building,
+    # this one is actually a close-up of the connected door terminal
+    return doors_creator(
         doors,
-        attrs,
-        confirm=False,  # confirmed elsewhere
+        "Jitsuin front door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-j1-01",
+            "arc_description": (
+                "Electronic door entry system controlling the main "
+                "staff entrance to Jitsuin France"
+            ),
+            "wavestone_asset_id": "paris.france.jitsuin.das",
+        },
+        location={
+            "props": {
+                "display_name": "Jitsuin Paris",
+                "description": "Sales and sales support for the French region",
+                "latitude": 48.8339211,
+                "longitude": 2.371345,
+            },
+            "attrs": {
+                "address": "5 Parvis Alan Turing, 75013 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "entry_terminal.jpg",
+        ],
     )
 
 
-def doors_create_if_not_exists(doors, attrs, *, confirm=None):
-    door = None
-    try:
-        door = doors.assets.read_by_signature(
-            attrs={
-                "arc_display_name": attrs["arc_display_name"],
-            },
-        )
-    except ArchivistNotFoundError:
-        door = doors.assets.create(attrs=attrs, confirm=confirm)
+def create_cityhall(doors):
 
-    return door
+    return doors_creator(
+        doors,
+        "City Hall front door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-x4-01",
+            "arc_description": (
+                "Electronic door entry system controlling the main "
+                "staff entrance to Paris City Hall"
+            ),
+            "wavestone_asset_id": "cityhall.paris.wavestonedas",
+        },
+        location={
+            "props": {
+                "display_name": "Paris City Hall",
+                "description": "Seat of Paris local city adminstration",
+                "latitude": 48.856389,
+                "longitude": 2.352222,
+            },
+            "attrs": {
+                "address": "Place de l'Hôtel de Ville, 75004 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "cityhall.jpg",
+        ],
+    )
+
+
+def create_courts(doors):
+    return doors_creator(
+        doors,
+        "Courts of Justice front door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-x4-02",
+            "arc_description": (
+                "Electronic door entry system controlling the main "
+                "staff entrance to Paris Courts of Justice"
+            ),
+            "wavestone_asset_id": "courts.paris.wavestonedas",
+        },
+        location={
+            "props": {
+                "display_name": "Paris Courts of Justice",
+                "description": ("Public museum in the former Palais de Justice"),
+                "latitude": 48.855722,
+                "longitude": 2.345051,
+            },
+            "attrs": {
+                "address": "10 Boulevard du Palais, 75001 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "courts.jpg",
+        ],
+    )
+
+
+def create_bastille(doors):
+
+    return doors_creator(
+        doors,
+        "Bastille front door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-x4-03",
+            "arc_description": (
+                "Electronic door entry system controlling the main "
+                "staff entrance to Bastille"
+            ),
+            "wavestone_asset_id": "bastille.paris.wavestonedas",
+        },
+        location={
+            "props": {
+                "display_name": "Bastille",
+                "description": (
+                    "Medieval fortress, made famous by the " "French Revolution"
+                ),
+                "latitude": 48.85333,
+                "longitude": 2.36917,
+            },
+            "attrs": {
+                "address": "Place de la Bastille, 75011 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "bastille.jpg",
+        ],
+    )
+
+
+def create_gdn_front(doors):
+
+    return doors_creator(
+        doors,
+        "Gare du Nord apartments front door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-x4-04",
+            "arc_description": (
+                "Electronic door entry system controlling the front "
+                "residential entrance to Apartements du Gare du Nord"
+            ),
+            "wavestone_asset_id": "front.gdn.paris.wavestonedas",
+        },
+        location={
+            "props": {
+                "display_name": "Apartements du Gare du Nord",
+                "description": (
+                    "Residential apartment building in new complex " "above GdN station"
+                ),
+                "latitude": 48.8809,
+                "longitude": 2.3553,
+            },
+            "attrs": {
+                "address": "18 Rue de Dunkerque, 75010 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "gdn_front.jpg",
+        ],
+    )
+
+
+def create_gdn_side(doors):
+
+    return doors_creator(
+        doors,
+        "Gare du Nord apartments side door",
+        {
+            "arc_firmware_version": "1.0",
+            "arc_serial_number": "das-x4-05",
+            "arc_description": (
+                "Electronic door entry system controlling the side "
+                "residential entrance to Apartements du Gare du Nord"
+            ),
+            "wavestone_asset_id": "side.gdn.paris.wavestonedas",
+        },
+        location={
+            "props": {
+                "display_name": "Apartements du Gare du Nord",
+                "description": (
+                    "Residential apartment building in new complex " "above GdN station"
+                ),
+                "latitude": 48.8809,
+                "longitude": 2.3553,
+            },
+            "attrs": {
+                "address": "18 Rue de Dunkerque, 75010 Paris, France",
+                "wavestone_ext": "managed",
+            },
+        },
+        attachments=[
+            "gdn_side.jpg",
+        ],
+    )
+
+
+def create_doors(doors):
+    LOGGER.info("Creating all doors...")
+    doors_map = {
+        "jitsuin_paris": create_jitsuin_paris(doors),
+        "cityhall": create_cityhall(doors),
+        "courts": create_courts(doors),
+        "bastille": create_bastille(doors),
+        "gdn_front": create_gdn_front(doors),
+        "gdn_side": create_gdn_side(doors),
+    }
+
+    LOGGER.info("All doors created")
+    return doors_map
 
 
 # Card asset
 ############
 
 
-def cards_create(cards, idx):
-    return cards_create_if_not_exists(
-        cards,
-        {
-            "arc_serial_number": f"sc-x5-{idx}",
-            "arc_display_name": f"access_card_{idx}",
-            "arc_description": f"Electronic door access card #{idx}",
-        },
-        confirm=False,  # confirmed elsewhere
-    )
-
-
-def cards_create_if_not_exists(cards, attrs, *, confirm=None):
-    card = None
-    try:
-        card = cards.assets.read_by_signature(
-            attrs={
-                "arc_display_name": attrs["arc_display_name"],
-            },
-        )
-    except ArchivistNotFoundError:
-        card = cards.assets.create(attrs=attrs, confirm=confirm)
-
-    return card
-
-
-# Create actual door and card assets
-####################################
-
-
-def create_jitsuin_paris_site(doors):
-    props = {
-        "display_name": "Jitsuin Paris",
-        "description": "Sales and sales support for the French region",
-        "latitude": 48.8339211,
-        "longitude": 2.371345,
-    }
-    attrs = {
-        "address": "5 Parvis Alan Turing, 75013 Paris, France",
-        "wavestone_ext": "managed",
-    }
-    return locations_create_if_not_exists(doors, props, attrs=attrs)
-
-
-def create_jitsuin_paris_image(doors):
-    with pkg_resources.open_binary(images_assets, "entry_terminal.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_jitsuin_paris(doors, location, attachments):
-
-    # Unlike the others, which feature images of the whole building,
-    # this one is actually a close-up of the connected door terminal
-    doors_create(
-        doors,
-        "paris.france.jitsuin.das",
-        "Jitsuin front door",
-        "das-j1-01",
-        (
-            "Electronic door entry system controlling the main "
-            "staff entrance to Jitsuin France"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_cityhall_site(doors):
-    props = {
-        "display_name": "Paris City Hall",
-        "description": "Seat of Paris local city adminstration",
-        "latitude": 48.856389,
-        "longitude": 2.352222,
-    }
-    attrs = {
-        "address": "Place de l'Hôtel de Ville, 75004 Paris, France",
-        "wavestone_ext": "managed",
-    }
-    return locations_create_if_not_exists(doors, props, attrs=attrs)
-
-
-def create_cityhall_image(doors):
-    with pkg_resources.open_binary(images_assets, "cityhall.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_cityhall(doors, location, attachments):
-
-    doors_create(
-        doors,
-        "cityhall.paris.wavestonedas",
-        "City Hall front door",
-        "das-x4-01",
-        (
-            "Electronic door entry system controlling the main "
-            "staff entrance to Paris City Hall"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_courts_site(doors):
-    props = {
-        "display_name": "Paris Courts of Justice",
-        "description": ("Public museum in the former Palais de Justice"),
-        "latitude": 48.855722,
-        "longitude": 2.345051,
-    }
-    attrs = {
-        "address": "10 Boulevard du Palais, 75001 Paris, France",
-        "wavestone_ext": "managed",
-    }
-    return locations_create_if_not_exists(doors, props, attrs=attrs)
-
-
-def create_courts_image(doors):
-    with pkg_resources.open_binary(images_assets, "courts.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_courts(doors, location, attachments):
-    doors_create(
-        doors,
-        "courts.paris.wavestonedas",
-        "Courts of Justice front door",
-        "das-x4-02",
-        (
-            "Electronic door entry system controlling the main "
-            "staff entrance to Paris Courts of Justice"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_bastille_site(doors):
-    props = {
-        "display_name": "Bastille",
-        "description": ("Medieval fortress, made famous by the " "French Revolution"),
-        "latitude": 48.85333,
-        "longitude": 2.36917,
-    }
-    attrs = {
-        "address": "Place de la Bastille, 75011 Paris, France",
-        "wavestone_ext": "managed",
-    }
-    return locations_create_if_not_exists(doors, props, attrs=attrs)
-
-
-def create_bastille_image(doors):
-    with pkg_resources.open_binary(images_assets, "bastille.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_bastille(doors, location, attachments):
-
-    doors_create(
-        doors,
-        "bastille.paris.wavestonedas",
-        "Bastille front door",
-        "das-x4-03",
-        (
-            "Electronic door entry system controlling the main "
-            "staff entrance to Bastille"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_gdn_site(doors):
-    props = {
-        "display_name": "Apartements du Gare du Nord",
-        "description": (
-            "Residential apartment building in new complex " "above GdN station"
-        ),
-        "latitude": 48.8809,
-        "longitude": 2.3553,
-    }
-    attrs = {
-        "address": "18 Rue de Dunkerque, 75010 Paris, France",
-        "wavestone_ext": "managed",
-    }
-    return locations_create_if_not_exists(doors, props, attrs=attrs)
-
-
-def create_gdn_front_image(doors):
-    with pkg_resources.open_binary(images_assets, "gdn_front.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_gdn_front(doors, location, attachments):
-
-    doors_create(
-        doors,
-        "front.gdn.paris.wavestonedas",
-        "Gare du Nord apartments front door",
-        "das-x4-04",
-        (
-            "Electronic door entry system controlling the front "
-            "residential entrance to Apartements du Gare du Nord"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_gdn_side_image(doors):
-    with pkg_resources.open_binary(images_assets, "gdn_side.jpg") as fd:
-        return doors.attachments.upload(fd)
-
-
-def create_gdn_side(doors, location, attachments):
-
-    doors_create(
-        doors,
-        "side.gdn.paris.wavestonedas",
-        "Gare du Nord apartments side door",
-        "das-x4-05",
-        (
-            "Electronic door entry system controlling the side "
-            "residential entrance to Apartements du Gare du Nord"
-        ),
-        location,
-        attachments,
-    )
-
-
-def create_doors(doors):
-    LOGGER.info("Creating all doors...")
-    # For each chosen building we create a location
-    # first and then create the door asset to go in it.
-    create_jitsuin_paris(
-        doors,
-        create_jitsuin_paris_site(doors),
-        [create_jitsuin_paris_image(doors)],
-    )
-    create_cityhall(
-        doors,
-        create_cityhall_site(doors),
-        [create_cityhall_image(doors)],
-    )
-    create_courts(
-        doors,
-        create_courts_site(doors),
-        [create_courts_image(doors)],
-    )
-    create_bastille(
-        doors,
-        create_bastille_site(doors),
-        [create_bastille_image(doors)],
-    )
-
-    gdn_site = create_gdn_site(doors)
-    create_gdn_front(
-        doors,
-        gdn_site,
-        [create_gdn_front_image(doors)],
-    )
-    create_gdn_side(
-        doors,
-        gdn_site,
-        [create_gdn_side_image(doors)],
-    )
-    LOGGER.info("All doors created")
+cards_creator = make_assets_create(confirm=False)
 
 
 def create_cards(cards):
@@ -376,10 +297,19 @@ def create_cards(cards):
     # can add this.
     # Similarly there's no real benefit to creating a
     # Primary_image for them so leave that empty too
+    cards_map = {}
     for i in range(5):
-        cards_create(cards, i)
+        cards_map[f"access_card_{i}"] = cards_creator(
+            cards,
+            f"access_card_{i}",
+            {
+                "arc_serial_number": f"sc-x5-{i}",
+                "arc_description": f"Electronic door access card #{i}",
+            },
+        )
 
     LOGGER.info("All cards created")
+    return cards_map
 
 
 # Use case functions
@@ -649,11 +579,12 @@ def open_door(doors, doorid, cards, cardid):
 ##########
 
 
-def run(poc, args):
+def run(arch, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
-    doors = copy(poc)
+    doors = copy(arch)
     doors.fixtures = {
         "assets": {
             "attributes": {
@@ -661,7 +592,7 @@ def run(poc, args):
             },
         }
     }
-    cards = copy(poc)
+    cards = copy(arch)
     cards.fixtures = {
         "assets": {
             "attributes": {
@@ -672,50 +603,60 @@ def run(poc, args):
 
     number_of_doors = doors.assets.count()
     LOGGER.info("number of doors %d", number_of_doors)
+    if number_of_doors > 0:
+        LOGGER.info("doors already processed")
+        sys_exit(1)
+
     number_of_cards = cards.assets.count()
     LOGGER.info("number of cards %d", number_of_cards)
-
-    if args.create_assets:
-        if number_of_doors == 0:
-            create_doors(doors)
-            if args.wait_for_confirmation:
-                doors.assets.wait_for_confirmed()
-
-        if number_of_cards == 0:
-            create_cards(cards)
-            if args.wait_for_confirmation:
-                cards.assets.wait_for_confirmed()
-
-        sys_exit(0)
-
-    if number_of_doors == 0:
-        LOGGER.error("Could not find door entry assets. Please create them first.")
+    if number_of_cards > 0:
+        LOGGER.info("cards already processed")
         sys_exit(1)
 
-    if number_of_cards == 0:
-        LOGGER.error("Could not find card assets. Please create them first.")
-        sys_exit(1)
+    create_doors(doors)
+    doors.assets.wait_for_confirmed()
 
-    # Show info about the system ?
-    if args.listspec:
-        spec = args.listspec
-        LOGGER.info("List %s START", spec)
-        if spec == "all":
-            list_doors(doors)
-            list_cards(cards)
-        elif spec == "doors":
-            list_doors(doors)
-        elif spec == "cards":
-            list_cards(cards)
-        else:
-            # Try to interpret it as an asset ID and list the usage
-            list_usage(doors, cards, spec)
+    create_cards(cards)
+    cards.assets.wait_for_confirmed()
 
-        LOGGER.info("List %s FINISH", spec)
-        sys_exit(0)
+    # list everything
+    list_doors(doors)
+    list_cards(cards)
+
+    # list one asset
+    list_usage(doors, cards, "Courts of Justice front door")
+    list_usage(doors, cards, "access_card_1")
 
     # Open a door using a specified card ?
-    if args.doorid_cardid:
-        doorid, cardid = args.doorid_cardid
-        open_door(doors, doorid, cards, cardid)
-        sys_exit(0)
+    for card in (
+        "access_card_1",
+        "access_card_3",
+        "access_card_4",
+        "access_card_0",
+    ):
+        open_door(
+            doors,
+            "Courts of Justice front door",
+            cards,
+            card,
+        )
+
+    open_door(
+        doors,
+        "Bastille front door",
+        cards,
+        "access_card_2",
+    )
+    open_door(
+        doors,
+        "City Hall front door",
+        cards,
+        "access_card_2",
+    )
+    open_door(
+        doors,
+        "Gare du Nord apartments side door",
+        cards,
+        "access_card_2",
+    )
+    sys_exit(0)

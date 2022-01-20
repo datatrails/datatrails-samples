@@ -34,8 +34,6 @@ from ..testing.locations import (
 )
 
 
-# NB: this is not namespaced and cannot be namespaced until we get GRP2.0
-#     and a proto definition with suitable attributes
 def asset_attachment_upload_from_file(arch, name, mtype):
     with pkg_resources.open_binary(images_assets, name) as fd:
         attachment = arch.attachments.upload(fd, mtype=mtype)
@@ -60,3 +58,18 @@ def locations_create_from_yaml_file(arch, name):
         attrs = data["attributes"]
         del data["attributes"]
         return locations_create_if_not_exists(arch, data, attrs=attrs)
+
+
+def locations_from_yaml_file(name):
+    """Load location from yaml file
+
+    assumes there is only one document in the file.
+    """
+    with pkg_resources.open_binary(locations, name) as fd:
+        data = full_load(fd)
+        attrs = data["attributes"]
+        del data["attributes"]
+        return {
+            "props": data,
+            "attrs": attrs,
+        }

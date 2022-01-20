@@ -1,0 +1,7 @@
+
+[build-system]
+requires = [ "setuptools>=41", "wheel", "setuptools-git-versioning==1.7.4", ]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true

@@ -15,37 +15,16 @@
 #   This is API SAMPLE CODE, not for production use.
 
 # pylint:  disable=missing-docstring
-
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 'importlib_resources'.
-    import importlib_resources as pkg_resources
+# pylint:  disable=too-many-statements
 
 import logging
-import random
-import string
 
 from sys import exit as sys_exit
 from archivist import about
 
-from . import wipp_files
-
-from .wipp import Wipp
+from .wipp import Wipp, upload_attachment
 
 LOGGER = logging.getLogger(__name__)
-
-
-def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(wipp_files, path) as fd:
-        blob = arch.attachments.upload(fd)
-        attachment = {
-            "arc_display_name": name,
-            "arc_attachment_identity": blob["identity"],
-            "arc_hash_value": blob["hash"]["value"],
-            "arc_hash_alg": blob["hash"]["alg"],
-        }
-        return attachment
 
 
 def run(arch, args):
@@ -56,40 +35,42 @@ def run(arch, args):
     # Wipp class encapsulates wipp object in RKVST
     LOGGER.info("Creating Drum Asset...")
     drum = Wipp(arch, "55 gallon drum")
-    serial_num = "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
-    )
-    drumname = "Drum-" + serial_num
+    drumname = "Drum"
 
     drum.create(
         drumname,
         "Standard non-POC 55 gallon drum",
-        serial_num,
-        attachments=[upload_attachment(arch, "55gallon.jpg", "arc_primary_image")],
+        args.namespace,
+        attachments=[("55gallon.jpg", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "55",
-            "wipp_package_id": serial_num,
+            "wipp_package_id": args.namespace,
         },
     )
+    if drum.existed:
+        LOGGER.info("Drum Asset %s already exists", drumname)
+        sys_exit(0)
+
     LOGGER.info("Drum Asset Created (Identity=%s)", drum.asset["identity"])
 
     # Cask Asset
     LOGGER.info("Creating Cask Asset...")
-    serial_num = "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
-    )
-    caskname = "Cask-" + serial_num
+    caskname = "Cask"
 
     cask = Wipp(arch, "TRU RH 72B Cask")
     cask.create(
         caskname,
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
-        serial_num,
-        attachments=[upload_attachment(arch, "rh72b.png", "arc_primary_image")],
+        args.namespace,
+        attachments=[("rh72b.png", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "3",
         },
     )
+    if cask.existed:
+        LOGGER.info("Cask Asset %s already exists", caskname)
+        sys_exit(1)
+
     LOGGER.info("Cask Asset Created (Identity=%s)", cask.asset["identity"])
 
     # Drum Characterization

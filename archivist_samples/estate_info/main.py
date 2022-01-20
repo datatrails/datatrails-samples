@@ -25,8 +25,8 @@ from sys import exit as sys_exit
 from sys import stdout as sys_stdout
 
 from archivist import about
-from archivist.parser import common_parser
 
+from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
 
 LOGGER = logging.getLogger(__name__)
@@ -90,7 +90,7 @@ def run(poc, args):
 
 
 def main():
-    parser, _ = common_parser("Get basic information about your RKVST estate")
+    parser = common_parser("Get basic information about your RKVST estate")
 
     # per example exclusive options here
     operations = parser.add_mutually_exclusive_group(required=True)

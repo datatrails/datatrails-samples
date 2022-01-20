@@ -16,59 +16,45 @@
 
 # pylint:  disable=missing-docstring
 
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
-    import importlib_resources as pkg_resources
-
 import logging
 from sys import exit as sys_exit
 
 from archivist import about
-
-from . import sbom_files
 
 from .software_package import SoftwarePackage
 
 LOGGER = logging.getLogger(__name__)
 
 
-def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(sbom_files, path) as fd:
-        blob = arch.attachments.upload(fd)
-        attachment = {
-            "arc_display_name": name,
-            "arc_attachment_identity": blob["identity"],
-            "arc_hash_value": blob["hash"]["value"],
-            "arc_hash_alg": blob["hash"]["alg"],
-        }
-        return attachment
-
-
-def run(arch):
+def run(arch, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     # SoftwarePackage class encapsulates SBOM object in RKVST
-    LOGGER.info("Creating Software Package Asset...")
+    package_name = "ACME Detector Coyote SP1"
+    LOGGER.info("Creating Software Package Asset...: %s", package_name)
     package = SoftwarePackage(arch)
 
     package.create(
-        "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+        package_name,
         "Different box, same great taste!",
-        attachments=[upload_attachment(arch, "Comp_2.jpeg", "arc_primary_image")],
         custom_attrs={
             "sbom_license": "www.gnu.org/licenses/gpl.txt",
             "proprietary_secret": "For your eyes only",
         },
+        attachments=[("Comp_2.jpeg", "arc_primary_image")],
     )
+    if package.existed:
+        LOGGER.info("Software Package already Created: %s", package_name)
+        sys_exit(0)
+
     LOGGER.info("Software Package Created (Identity=%s)", package.asset["identity"])
 
     LOGGER.info("1 Making a release...")
     package.release(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v4.1.5 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
             "version": "v4.1.5",
@@ -76,14 +62,14 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
         },
-        attachments=[upload_attachment(arch, "v4_1_5_sbom.xml", "SWID SBOM")],
+        attachments=[("v4_1_5_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
     LOGGER.info("2 Making a release...")
     package.release(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v4.1.6 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
             "version": "v4.1.6",
@@ -91,17 +77,17 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-0",
         },
-        attachments=[upload_attachment(arch, "v4_1_6_sbom.xml", "SWID SBOM")],
+        attachments=[("v4_1_6_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
     LOGGER.info("3 Making a private patch...")
     package.private_patch(
         {
+            "name": package_name,
             "private_id": "special_customer",
             "target_component": "rrdetector",
             "target_version": "v1.4.6",
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "description": "Private patch to v4.1.6 for limited customer set",
             "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
             "author": "The ACME Corporation",
@@ -109,14 +95,14 @@ def run(arch):
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-6-1",
             "reference": "CVE-20210613-1",
         },
-        attachments=[upload_attachment(arch, "v4_1_6_1_sbom.xml", "SWID SBOM")],
+        attachments=[("v4_1_6_1_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Private patch registered.")
 
     LOGGER.info("4 Making a release...")
     package.release(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v4.1.7 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
             "version": "v4.1.7",
@@ -124,14 +110,14 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v4-1-7-0",
         },
-        attachments=[upload_attachment(arch, "v4_1_7_sbom.xml", "SWID SBOM")],
+        attachments=[("v4_1_7_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
 
     LOGGER.info("5 Plan major upgrade...")
     package.release_plan(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v5.0.0 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "version": "v5.0.0",
             "author": "The ACME Corporation",
@@ -139,13 +125,13 @@ def run(arch):
             "reference": "BIG_V_5",
             "captain": "Deputy Dawg",
         },
-        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[("v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     LOGGER.info("6 Approve major upgrade...")
     package.release_accepted(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v5.0.0 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "version": "v5.0.0",
             "author": "The ACME Corporation",
@@ -154,13 +140,13 @@ def run(arch):
             "captain": "Deputy Dawg",
             "approver": "Yosemite Sam",
         },
-        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[("v5_0_0_sbom.xml", "SWID SBOM")],
     )
 
     LOGGER.info("7 Release major upgrade...")
     package.release(
         {
-            "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "name": package_name,
             "description": "v5.0.0 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
             "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
             "version": "v5.0.0",
@@ -168,7 +154,7 @@ def run(arch):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v5-0-0-0",
         },
-        attachments=[upload_attachment(arch, "v5_0_0_sbom.xml", "SWID SBOM")],
+        attachments=[("v5_0_0_sbom.xml", "SWID SBOM")],
     )
     LOGGER.info("Release registered.")
     sys_exit(0)
