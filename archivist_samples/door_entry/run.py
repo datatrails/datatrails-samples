@@ -603,60 +603,49 @@ def run(arch, args):
 
     number_of_doors = doors.assets.count()
     LOGGER.info("number of doors %d", number_of_doors)
-    if number_of_doors > 0:
-        LOGGER.info("doors already processed")
-        sys_exit(1)
-
     number_of_cards = cards.assets.count()
     LOGGER.info("number of cards %d", number_of_cards)
-    if number_of_cards > 0:
-        LOGGER.info("cards already processed")
+    if args.create_assets:
+        if number_of_doors == 0:
+            create_doors(doors)
+            if args.wait_for_confirmation:
+                doors.assets.wait_for_confirmed()
+
+        if number_of_cards == 0:
+            create_cards(cards)
+            if args.wait_for_confirmation:
+                cards.assets.wait_for_confirmed()
+
+        sys_exit(0)
+
+    if number_of_doors == 0:
+        LOGGER.error("Could not find door entry assets. Please create them first.")
         sys_exit(1)
 
-    create_doors(doors)
-    doors.assets.wait_for_confirmed()
+    if number_of_cards == 0:
+        LOGGER.error("Could not find card assets. Please create them first.")
+        sys_exit(1)
 
-    create_cards(cards)
-    cards.assets.wait_for_confirmed()
+    # Show info about the system ?
+    if args.listspec:
+        spec = args.listspec
+        LOGGER.info("List %s START", spec)
+        if spec == "all":
+            list_doors(doors)
+            list_cards(cards)
+        elif spec == "doors":
+            list_doors(doors)
+        elif spec == "cards":
+            list_cards(cards)
+        else:
+            # Try to interpret it as an asset ID and list the usage
+            list_usage(doors, cards, spec)
 
-    # list everything
-    list_doors(doors)
-    list_cards(cards)
-
-    # list one asset
-    list_usage(doors, cards, "Courts of Justice front door")
-    list_usage(doors, cards, "access_card_1")
+        LOGGER.info("List %s FINISH", spec)
+        sys_exit(0)
 
     # Open a door using a specified card ?
-    for card in (
-        "access_card_1",
-        "access_card_3",
-        "access_card_4",
-        "access_card_0",
-    ):
-        open_door(
-            doors,
-            "Courts of Justice front door",
-            cards,
-            card,
-        )
-
-    open_door(
-        doors,
-        "Bastille front door",
-        cards,
-        "access_card_2",
-    )
-    open_door(
-        doors,
-        "City Hall front door",
-        cards,
-        "access_card_2",
-    )
-    open_door(
-        doors,
-        "Gare du Nord apartments side door",
-        cards,
-        "access_card_2",
-    )
-    sys_exit(0)
+    if args.doorid_cardid:
+        doorid, cardid = args.doorid_cardid
+        open_door(doors, doorid, cards, cardid)
+        sys_exit(0)

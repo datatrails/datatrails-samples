@@ -167,15 +167,10 @@ def run(arch, args):
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
-    asset_name = "tcl.ccj.001"
-    fast_forward = 3600
-    start_date = datetime.date.today() - datetime.timedelta(days=1)
-    wait = 1.0
-
     LOGGER.info("Looking for asset...")
     try:
         asset = arch.assets.read_by_signature(
-            attrs={"arc_display_name": asset_name},
+            attrs={"arc_display_name": args.asset_name},
         )
     except ArchivistNotFoundError:
         LOGGER.info("Asset not found.  Aborting.")
@@ -186,10 +181,10 @@ def run(arch, args):
     asset_type = attrs["arc_display_type"] if "arc_display_type" in attrs else "Device"
 
     LOGGER.info("Creating time warp...")
-    tw = TimeWarp(start_date, fast_forward)
+    tw = TimeWarp(args.start_date, args.fast_forward)
 
     LOGGER.info("Beginning simulation...")
-    demo_flow(arch, asset_id, asset_type, tw, wait)
+    demo_flow(arch, asset_id, asset_type, tw, args.wait)
 
     LOGGER.info("Done.")
     sys_exit(0)
@@ -204,6 +199,42 @@ def entry():
         action="store",
         default=None,
         help="namespace of item population (to enable parallel demos",
+    )
+    parser.add_argument(
+        "-n",
+        "--asset-name",
+        type=str,
+        dest="asset_name",
+        action="store",
+        default="tcl.ccj.01",
+        help="Name of the asset to ship",
+    )
+    parser.add_argument(
+        "-s",
+        "--start-date",
+        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
+        dest="start_date",
+        action="store",
+        default=datetime.date.today() - datetime.timedelta(days=1),
+        help="Start date for event series (format: yyyymmdd)",
+    )
+    parser.add_argument(
+        "-f",
+        "--fast-forward",
+        type=float,
+        dest="fast_forward",
+        action="store",
+        default=3600,
+        help="Fast forward time in event series (default: 1 second = 1 hour)",
+    )
+    parser.add_argument(
+        "-w",
+        "--wait",
+        type=float,
+        dest="wait",
+        action="store",
+        default=0.0,
+        help="auto-advance after WAIT seconds",
     )
 
     args = parser.parse_args()

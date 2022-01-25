@@ -69,8 +69,8 @@ def common_parser(description):
         type=str,
         dest="url",
         action="store",
-        default="https://rkvst.poc.jitsuin.io",
-        help="location of Archivist service",
+        default="https://app.rkvst-poc.io",
+        help="url of Archivist service",
     )
     parser.add_argument(
         "-p",
