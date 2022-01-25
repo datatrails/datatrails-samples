@@ -88,18 +88,13 @@ def run(arch, args):
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
-    asset_name = ""
-    start_date = datetime.date.today() - datetime.timedelta(days=1)
-    fast_forward = 3600
-    wait = 0.5
-
     # Find the asset record
     crate_id = None
-    if asset_name:
-        LOGGER.info(f"Looking for smart shipping crate '{asset_name}'...")
+    if args.asset_name:
+        LOGGER.info(f"Looking for smart shipping crate {args.asset_name!r}...")
         try:
             crate = arch.assets.read_by_signature(
-                attrs={"arc_display_name": asset_name}
+                attrs={"arc_display_name": args.asset_name}
             )
         except ArchivistNotFoundError:
             pass
@@ -121,10 +116,10 @@ def run(arch, args):
         sys_exit(1)
 
     LOGGER.info("Creating time warp...")
-    tw = TimeWarp(start_date, fast_forward)
+    tw = TimeWarp(args.start_date, args.fast_forward)
 
     LOGGER.info("Beginning journey simulation...")
-    shipit(arch, crate_id, wait, tw)
+    shipit(arch, crate_id, args.wait, tw)
 
     LOGGER.info("Done.")
     sys_exit(0)
@@ -141,6 +136,42 @@ def entry():
         action="store",
         default=None,
         help="namespace of item population (to enable parallel demos",
+    )
+    # per example options here ....
+    parser.add_argument(
+        "-w",
+        "--wait",
+        type=float,
+        dest="wait",
+        action="store",
+        default=0.5,
+        help="add a delay between API calls",
+    )
+    parser.add_argument(
+        "-n",
+        "--asset-name",
+        type=str,
+        dest="asset_name",
+        action="store",
+        help="Name of the asset to ship",
+    )
+    parser.add_argument(
+        "-s",
+        "--start-date",
+        type=lambda d: datetime.datetime.strptime(d, "%Y%m%d"),
+        dest="start_date",
+        action="store",
+        default=datetime.date.today() - datetime.timedelta(days=1),
+        help="Start date for event series (format: yyyymmdd)",
+    )
+    parser.add_argument(
+        "-f",
+        "--fast-forward",
+        type=float,
+        dest="fast_forward",
+        action="store",
+        default=3600,
+        help="Fast forward time in event series (default: 1 second = 1 hour)",
     )
 
     args = parser.parse_args()

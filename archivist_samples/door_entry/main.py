@@ -39,6 +39,46 @@ def main():
         help="namespace of item population (to enable parallel demos",
     )
 
+    parser.add_argument(
+        "-W",
+        "--no-wait",
+        dest="wait_for_confirmation",
+        action="store_false",
+        default=True,
+        help="do not wait for assets to confirm before exiting (-z only)",
+    )
+
+    operations = parser.add_mutually_exclusive_group(required=True)
+    operations.add_argument(
+        "-z",
+        "--create",
+        dest="create_assets",
+        action="store_true",
+        default=False,
+        help="create the locations and assets. DO THIS ONLY ONCE.",
+    )
+    operations.add_argument(
+        "-l",
+        "--list",
+        type=str,
+        dest="listspec",
+        action="store",
+        help=(
+            "List assets and usage of assets. "
+            "Use 'all', 'doors', 'cards' or asset_id. "
+            "Case-sensitive."
+        ),
+    )
+    operations.add_argument(
+        "-o",
+        "--open-door",
+        type=lambda d: d.split(","),
+        dest="doorid_cardid",
+        action="store",
+        default="",
+        help='open "door_id" with "card_id"',
+    )
+
     args = parser.parse_args()
 
     arch = common_endpoint("door_entry", args)

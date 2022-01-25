@@ -43,9 +43,9 @@ def main():
 
     args = parser.parse_args()
 
-    poc = common_endpoint("sbom", args)
+    arch = common_endpoint("sbom", args)
 
-    run(poc, args)
+    run(arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)
