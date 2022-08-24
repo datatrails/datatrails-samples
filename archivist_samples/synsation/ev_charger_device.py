@@ -93,7 +93,7 @@ class EVDevice:
 
             # Log our request
             LOGGER.info(
-                "!! %s Service interval reached " "(%s)", self.name, self._total_charge
+                "!! %s Service interval reached (%s)", self.name, self._total_charge
             )
             corval = str(uuid.uuid4())
             MyAsset(

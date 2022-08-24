@@ -131,7 +131,7 @@ def initialise_all(ac, num_assets, timedelay):
     locations = create_locations()
     assets = create_assets(ac, asset_types, locations, num_assets, timedelay)
     LOGGER.info(
-        "%d assets of %d different types " "created across %d locations.",
+        "%d assets of %d different types created across %d locations.",
         len(assets),
         len(asset_types),
         len(locations),

@@ -46,7 +46,7 @@ setup(
         "count_commits_from_version_file": False,
     },
     setup_requires=['setuptools-git-versioning==1.7.4'],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     entry_points={
         'console_scripts': [
             'archivist_samples_door_entry = archivist_samples.door_entry.main:main',
