@@ -1,4 +1,4 @@
-ARG VERSION=3.6
+ARG VERSION=3.7
 FROM python:${VERSION}-buster
 
 COPY requirements.txt requirements-dev.txt /tmp/

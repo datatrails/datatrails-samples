@@ -9,7 +9,7 @@ This sample simulates a set of smart connected door locks processing and reporti
 
 ## Pre-requisites
 
-* Python 3.6 and later versions are supported.
+* Python 3.7 and later versions are supported.
 
 * Install the RKVST samples package. If you are just trying out the pre-made samples you should get the official [RKVST samples Python package](https://pypi.org/project/jitsuin-archivist-samples/ "PyPi package page") from PyPi. If you are modifying this sample and want to try out your changes then you'll need to rebuild the wheel: please refer to the developer instructions in the top level of this repository to see how to do that.
 
