@@ -70,7 +70,7 @@ def initialize_devices(arch, airport):
             LOGGER.debug("This asset doesn't have valid attributes. Ignoring.")
 
     LOGGER.debug(
-        "Found %d devices in %s " "from %d total devices",
+        "Found %d devices in %s from %d total devices",
         len(ev_chargers),
         airport,
         number_of_chargers,
