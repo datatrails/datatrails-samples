@@ -9,7 +9,7 @@ This sample uses publicly-available information about WIPP (Waste Isolation Pilo
 
 ## Pre-requisites
 
-* Python 3.6 and later versions are supported.
+* Python 3.7 and later versions are supported.
 
 * Install the [RKVST samples Python package](https://pypi.org/project/jitsuin-archivist-samples/ "PyPi package page")
 
