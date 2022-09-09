@@ -250,7 +250,7 @@ def entry():
     print(f"Connection test complete: ${n_ev} : ${n_maint} : ${n_fw}")
     if n_ev != n_maint or n_ev != n_fw:
         print("Incorrect permissions. Aborting.")
-        exit()
+        sys_exit(1)
 
     run(ev_arch, maint_arch, fw_arch, args)
 

@@ -20,7 +20,6 @@
 
 import logging
 import threading
-import uuid
 
 from ..testing.asset import MyAsset
 
