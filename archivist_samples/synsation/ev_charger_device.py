@@ -84,7 +84,7 @@ class EVDevice:
         LOGGER.info(
             "!! %s Service interval reached (%s)", self.name, self._total_charge
         )
-        
+
         MyAsset(
             arch,
             self._archivist_asset_identity,

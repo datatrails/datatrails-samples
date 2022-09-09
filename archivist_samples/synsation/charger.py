@@ -118,7 +118,11 @@ def run(ev_arch, maint_arch, fw_arch, args):
     # Separate worker threads are kicked off for each maintenance
     # or firmware activity
     for c in chargers:
-        x = threading.Thread(target=device_worker.threadmain, args=(c, ev_arch, maint_arch, tw), daemon=True)
+        x = threading.Thread(
+            target=device_worker.threadmain,
+            args=(c, ev_arch, maint_arch, tw),
+            daemon=True,
+        )
         x.start()
 
     x = threading.Thread(
@@ -243,7 +247,7 @@ def entry():
     n_fw = fw_arch.assets.count(
         attrs={"arc_display_type": "EV charging station"},
     )
-    print(f'Connection test complete: ${n_ev} : ${n_maint} : ${n_fw}')
+    print(f"Connection test complete: ${n_ev} : ${n_maint} : ${n_fw}")
     if n_ev != n_maint or n_ev != n_fw:
         print("Incorrect permissions. Aborting.")
         exit()

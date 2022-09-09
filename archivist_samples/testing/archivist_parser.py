@@ -133,6 +133,7 @@ def common_parser(description: str):
 
     return parser
 
+
 def get_auth(
     *,
     auth_token_filename=None,
@@ -164,6 +165,7 @@ def get_auth(
             return (client_id, client_secret)
 
     return None
+
 
 def endpoint(args):
 
