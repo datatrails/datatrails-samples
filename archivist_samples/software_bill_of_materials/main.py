@@ -32,14 +32,6 @@ def main():
     parser = common_parser(
         "Simple SBOM implementation that conforms with NTIA recommendations"
     )
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
 
     args = parser.parse_args()
 

@@ -193,14 +193,6 @@ def run(arch, args):
 def entry():
     parser = common_parser("Runs the Jitsuinator demo script manually")
     parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
-    parser.add_argument(
         "-n",
         "--asset-name",
         type=str,

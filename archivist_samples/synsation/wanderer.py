@@ -129,14 +129,6 @@ def entry():
     parser = common_parser(
         "Populates an Archivist install with devices from an Azure IoT Hub"
     )
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
     # per example options here ....
     parser.add_argument(
         "-w",

@@ -16,6 +16,7 @@ from sys import exit as sys_exit
 from archivist.archivist import Archivist
 from archivist.logger import set_logger
 from archivist.proof_mechanism import ProofMechanism
+from .dictmerge import _deepmerge
 
 LOGGER = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ class EnumAction(argparse.Action):
         setattr(namespace, self.dest, value)
 
 
-def common_parser(description):
+def common_parser(description: str):
     """Construct parser with security option for token/auth authentication"""
     parser = argparse.ArgumentParser(
         description=description,
@@ -69,7 +70,7 @@ def common_parser(description):
         type=str,
         dest="url",
         action="store",
-        default="https://app.rkvst-poc.io",
+        default="https://app.rkvst.io",
         help="url of Archivist service",
     )
     parser.add_argument(
@@ -78,23 +79,91 @@ def common_parser(description):
         type=ProofMechanism,
         action=EnumAction,
         dest="proof_mechanism",
-        default=ProofMechanism.SIMPLE_HASH,
+        default=None,
         help="mechanism for proving the evidence for events on the Asset",
     )
-
     parser.add_argument(
-        "-t",
         "--auth-token",
         type=str,
-        dest="auth_token_file",
+        dest="auth_token",
         action="store",
-        default=".auth_token",
-        required=True,
+        default=None,
+        help="API token value",
+    )
+    parser.add_argument(
+        "--auth-token-filename",
+        type=str,
+        dest="auth_token_filename",
+        action="store",
+        default=None,
         help="FILE containing API authentication token",
+    )
+    parser.add_argument(
+        "--client-id",
+        type=str,
+        dest="client_id",
+        action="store",
+        default=None,
+        help="Client ID from appregistrations",
+    )
+    parser.add_argument(
+        "--client-secret",
+        type=str,
+        dest="client_secret",
+        action="store",
+        default=None,
+        help="Client secret from appregistrations",
+    )
+    parser.add_argument(
+        "--client-secret-filename",
+        type=str,
+        dest="client_secret_filename",
+        action="store",
+        default=None,
+        help="FILE containing client secret from appregistrations",
+    )
+    parser.add_argument(
+        "--namespace",
+        type=str,
+        dest="namespace",
+        action="store",
+        default=None,
+        help="namespace of item population",
     )
 
     return parser
 
+def get_auth(
+    *,
+    auth_token_filename=None,
+    auth_token=None,
+    client_id=None,
+    client_secret_filename=None,
+    client_secret=None,
+):  # pragma no cover
+    """
+    Return auth as either token or client_id,client_secret tuple
+    """
+
+    if auth_token:
+        return auth_token
+
+    if auth_token_filename:
+        with open(auth_token_filename, mode="r", encoding="utf-8") as tokenfile:
+            auth_token = tokenfile.read().strip()
+
+        return auth_token
+
+    if client_id is not None:
+        if client_secret_filename is not None:
+            with open(client_secret_filename, mode="r", encoding="utf-8") as tokenfile:
+                client_secret = tokenfile.read().strip()
+            return (client_id, client_secret)
+
+        if client_secret is not None:
+            return (client_id, client_secret)
+
+    return None
 
 def endpoint(args):
 
@@ -104,19 +173,47 @@ def endpoint(args):
         set_logger("INFO")
 
     arch = None
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
-    fixtures = {
-        "assets": {
-            "proof_mechanism": args.proof_mechanism.name,
-        },
-    }
+    LOGGER.info("Initialising connection to RKVST...")
+    fixtures = {}
+    if args.proof_mechanism is not None:
+        fixtures = {
+            "assets": {
+                "proof_mechanism": args.proof_mechanism.name,
+            },
+        }
 
-    if args.auth_token_file:
-        with open(args.auth_token_file, mode="r", encoding="utf-8") as tokenfile:
-            authtoken = tokenfile.read().strip()
+    if args.namespace is not None:
+        fixtures = _deepmerge(
+            fixtures,
+            {
+                "assets": {
+                    "attributes": {
+                        "arc_namespace": args.namespace,
+                    },
+                },
+                "locations": {
+                    "attributes": {
+                        "namespace": args.namespace,
+                    },
+                },
+            },
+        )
 
-        arch = Archivist(args.url, authtoken, verify=False, fixtures=fixtures)
+    auth = get_auth(
+        auth_token=args.auth_token,
+        auth_token_filename=args.auth_token_filename,
+        client_id=args.client_id,
+        client_secret=args.client_secret,
+        client_secret_filename=args.client_secret_filename,
+    )
 
+    if auth is None:
+        LOGGER.error("Critical error.  Aborting.")
+        sys_exit(1)
+    else:
+        print(auth)
+
+    arch = Archivist(args.url, auth, verify=False, fixtures=fixtures)
     if arch is None:
         LOGGER.error("Critical error.  Aborting.")
         sys_exit(1)

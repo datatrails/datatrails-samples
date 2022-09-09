@@ -63,7 +63,6 @@ def initialize_devices(arch, airport):
             LOGGER.debug("Checking '%s'", candidate)
             if candidate.startswith(airport):
                 evc = ev_charger_device.EVDevice(candidate, charger["identity"])
-                evc.init_archivist_client(arch)
                 ev_chargers.append(evc)
         except KeyError:
             # Some devices won't have these properties.  Just ignore failures.
@@ -96,7 +95,7 @@ def interrupt_listener_run_until(tw, stop):
         LOGGER.info("Jitsuin EV Charger example stopped")
 
 
-def run(arch, args):
+def run(ev_arch, maint_arch, fw_arch, args):
     """logic goes here"""
     # Stretch the timestamps in logs
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
@@ -108,7 +107,7 @@ def run(arch, args):
 
     # Find all hte devices we're interested in
     LOGGER.info("Initializing chargers...")
-    chargers = initialize_devices(arch, args.airport)
+    chargers = initialize_devices(ev_arch, args.airport)
     if not chargers:
         LOGGER.info("No chargers found at airport %s.  Aborting.", args.airport)
         sys_exit(1)
@@ -119,11 +118,11 @@ def run(arch, args):
     # Separate worker threads are kicked off for each maintenance
     # or firmware activity
     for c in chargers:
-        x = threading.Thread(target=device_worker.threadmain, args=(c, tw), daemon=True)
+        x = threading.Thread(target=device_worker.threadmain, args=(c, ev_arch, maint_arch, tw), daemon=True)
         x.start()
 
     x = threading.Thread(
-        target=recall_worker.threadmain, args=(chargers, tw), daemon=True
+        target=recall_worker.threadmain, args=(chargers, fw_arch, tw), daemon=True
     )
     x.start()
 
@@ -142,14 +141,6 @@ def run(arch, args):
 def entry():
     parser = common_parser(
         "Simulates usage and maintenance of electric vehicle chargers"
-    )
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
     )
 
     # per example options here ....
@@ -197,12 +188,67 @@ def entry():
         default=3600,
         help="Fast forward time in event series (default: 1 second = 1 hour)",
     )
+    parser.add_argument(
+        "--maint-client-id",
+        type=str,
+        dest="maint_client_id",
+        action="store",
+        default=None,
+        help="Client ID from appregistrations for maintenance worker",
+    )
+    parser.add_argument(
+        "--maint-client-secret",
+        type=str,
+        dest="maint_client_secret",
+        action="store",
+        default=None,
+        help="Client secret from appregistrations for maintenance worker",
+    )
+    parser.add_argument(
+        "--fw-client-id",
+        type=str,
+        dest="fw_client_id",
+        action="store",
+        default=None,
+        help="Client ID from appregistrations for firmware worker",
+    )
+    parser.add_argument(
+        "--fw-client-secret",
+        type=str,
+        dest="fw_client_secret",
+        action="store",
+        default=None,
+        help="Client secret from appregistrations for firmware worker",
+    )
 
     args = parser.parse_args()
 
-    arch = common_endpoint("synsation", args)
+    ev_arch = common_endpoint("synsation", args)
+    if args.maint_client_id:
+        args.client_id = args.maint_client_id
+        args.client_secret = args.maint_client_secret
+    maint_arch = common_endpoint("synsation", args)
+    if args.fw_client_id:
+        args.client_id = args.fw_client_id
+        args.client_secret = args.fw_client_secret
+    fw_arch = common_endpoint("synsation", args)
 
-    run(arch, args)
+    print("Testing connections...")
+    n_ev = ev_arch.assets.count(
+        attrs={"arc_display_type": "EV charging station"},
+    )
+    n_maint = maint_arch.assets.count(
+        attrs={"arc_display_type": "EV charging station"},
+    )
+    n_fw = fw_arch.assets.count(
+        attrs={"arc_display_type": "EV charging station"},
+    )
+    print(f'Connection test complete: ${n_ev} : ${n_maint} : ${n_fw}')
+    if n_ev != n_maint or n_ev != n_fw:
+        print("Incorrect permissions. Aborting.")
+        exit()
+
+    run(ev_arch, maint_arch, fw_arch, args)
 
     parser.print_help(sys_stdout)
     sys_exit(1)

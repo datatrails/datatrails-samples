@@ -145,14 +145,6 @@ def run(arch, args):
 
 def entry():
     parser = common_parser("Checks maintenance and update performance for assets")
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
 
     args = parser.parse_args()
 

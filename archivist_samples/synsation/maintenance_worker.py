@@ -26,7 +26,7 @@ from ..testing.asset import MyAsset
 LOGGER = logging.getLogger(__name__)
 
 
-def service_device(charger, job_id, timewarp):
+def service_device(charger, arch, job_id, timewarp):
     # !!! WARNING !!! There is no thread-safety here, make sure you
     # always treat the device as read-only.
     # The main device thread takes care of updating the variables
@@ -34,7 +34,7 @@ def service_device(charger, job_id, timewarp):
 
     # The maintenance is done...inform Archivist
     MyAsset(
-        charger.archivist_client,
+        arch,
         charger.archivist_asset_identity,
         timewarp,
         "Phil@evcservicing.com",
@@ -48,9 +48,9 @@ def service_device(charger, job_id, timewarp):
     )
 
 
-def threadmain(charger, job_id, timewarp):
+def threadmain(charger, arch, job_id, timewarp):
     # Wait a random time to simulate delays, travel etc
     time.sleep(random.randint(5, 20))
 
     # Do the service
-    service_device(charger, job_id, timewarp)
+    service_device(charger, arch, job_id, timewarp)

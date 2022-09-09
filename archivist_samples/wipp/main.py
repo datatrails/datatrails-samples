@@ -30,14 +30,6 @@ LOGGER = logging.getLogger(__name__)
 
 def main():
     parser = common_parser("Sample Waste Isolation Pilot Plant (WIPP) Integration")
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos)",
-    )
 
     args = parser.parse_args()
 

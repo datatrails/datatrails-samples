@@ -389,14 +389,6 @@ def main():
     parser = common_parser(
         "Shows simple integration of a device private signing key with Archivist records"
     )
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
 
     # Operations
     operations = parser.add_mutually_exclusive_group(required=True)

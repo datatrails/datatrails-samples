@@ -13,6 +13,12 @@ docker run \
     -v $(pwd):/home/api \
     -u $(id -u):$(id -g) \
     -e TEST_ARCHIVIST \
+    -e TEST_CLIENT_ID \
+    -e TEST_CLIENT_SECRET \
+    -e TEST_CLIENT_ID2 \
+    -e TEST_CLIENT_SECRET2 \
+    -e TEST_CLIENT_ID3 \
+    -e TEST_CLIENT_SECRET3 \
     -e TEST_AUTHTOKEN_FILENAME \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \

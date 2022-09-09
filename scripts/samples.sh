@@ -8,16 +8,16 @@ then
     echo "TEST_ARCHIVIST is undefined"
     exit 1
 fi
-if [ -z "${TEST_AUTHTOKEN_FILENAME}" ]
-then
-    echo "TEST_AUTHTOKEN_FILENAME is undefined"
-    exit 1
-fi
-if [ ! -s "${TEST_AUTHTOKEN_FILENAME}" ]
-then
-    echo "${TEST_AUTHTOKEN_FILENAME} does not exist"
-    exit 1
-fi
+# if [ -z "${TEST_AUTHTOKEN_FILENAME}" ]
+# then
+#     echo "TEST_AUTHTOKEN_FILENAME is undefined"
+#     exit 1
+# fi
+# if [ ! -s "${TEST_AUTHTOKEN_FILENAME}" ]
+# then
+#     echo "${TEST_AUTHTOKEN_FILENAME} does not exist"
+#     exit 1
+# fi
 
 if [ -z "${TEST_SELECTOR}" -o "$TEST_SELECTOR" = 'help' ]
 then
@@ -28,6 +28,7 @@ then
     echo "    TEST_SELECTOR=signed_records ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_initialise ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_charger ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_charger_multitenant ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_jitsuinator ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_wanderer ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
@@ -65,6 +66,7 @@ TEST_NO_SIGNED_RECORDS=${TEST_NO}
 TEST_NO_SYNSATION_INITIALISE=${TEST_NO}
 TEST_NO_SYNSATION_ANALYZE=${TEST_NO}
 TEST_NO_SYNSATION_CHARGER=${TEST_NO}
+TEST_NO_SYNSATION_CHARGER_MULTITENANT=${TEST_NO}
 TEST_NO_SYNSATION_JITSUINATOR=${TEST_NO}
 TEST_NO_SYNSATION_WANDERER=${TEST_NO}
 TEST_NO_SBOM=${TEST_NO}
@@ -77,8 +79,30 @@ do
     eval "TEST_NO_$sel="
 done
 
+set | grep TEST
+
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
-ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_PROOF_MECHANISM"
+AUTH=""
+if [ -n "$TEST_CLIENT_ID" ]
+then
+    AUTH="${AUTH} --client-id ${TEST_CLIENT_ID}"
+fi
+if [ -n "$TEST_CLIENT_SECRET" ]
+then
+    AUTH="${AUTH} --client-secret ${TEST_CLIENT_SECRET}"
+fi
+if [ -n "$TEST_CLIENT_SECRET_FILENAME" ]
+then
+    AUTH="${AUTH} --client-secret-filename ${TEST_CLIENT_SECRET_FILENAME}"
+fi
+if [ -n "$TEST_AUTHTOKEN_FILENAME" ]
+then
+    AUTH="${AUTH} --auth-token-filename ${TEST_AUTHTOKEN_FILENAME}"
+fi
+
+ARGS="-u $TEST_ARCHIVIST $AUTH $TEST_VERBOSE $TEST_PROOF_MECHANISM"
+
+echo $ARGS
 
 # namespacing ensures that each run  of the tests is independent.
 if [ -n "$TEST_NAMESPACE" ]
@@ -129,6 +153,9 @@ ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 
 SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
 ${SYNSATION_CHARGER} --start-date 20190909 --stop-date 20190923 --fast-forward 9876
+
+SYNSATION_CHARGER_MULTITENANT="${TEST_NO_SYNSATION_CHARGER_MULTITENANT} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
+${SYNSATION_CHARGER_MULTITENANT} -a MDW --maint-client-id ${TEST_CLIENT_ID2} --maint-client-secret ${TEST_CLIENT_SECRET2} --fw-client-id ${TEST_CLIENT_ID3} --fw-client-secret ${TEST_CLIENT_SECRET3}
 
 SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
 ${SYNSATION_JITSUINATOR} --asset-name tcl.ccj.001 --wait 1.0

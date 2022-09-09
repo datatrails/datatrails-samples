@@ -19,17 +19,29 @@
 
 
 import random
+import threading
 import time
+import uuid
+
+from . import maintenance_worker
 
 
-def threadmain(charger, timewarp):
+def threadmain(charger, ev_arch, maint_arch, timewarp):
     while True:
         # Wait for a customer to show up
         time.sleep(random.randint(1, 10))
 
         # Charge up
-        charger.charge_job(random.randint(25, 99), timewarp)
+        charger.charge_job(ev_arch, random.randint(25, 99), timewarp)
 
         # Check if it needs servicing, and kick off a maintenance worker
         # thread to attend to it if so
-        charger.service(timewarp)
+        corval = str(uuid.uuid4())
+        if charger.service_required(ev_arch, corval, timewarp):
+            # Call the maintenance crew
+            x = threading.Thread(
+                target=maintenance_worker.threadmain,
+                args=(charger, maint_arch, corval, timewarp),
+                daemon=True,
+            )
+            x.start()

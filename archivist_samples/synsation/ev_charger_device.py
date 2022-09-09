@@ -24,8 +24,6 @@ import uuid
 
 from ..testing.asset import MyAsset
 
-from . import maintenance_worker
-
 LOGGER = logging.getLogger(__name__)
 
 
@@ -39,13 +37,6 @@ class EVDevice:
         self._total_charge = 0
 
         self._writelock = threading.RLock()
-
-        # Initialise this after creation
-        self._archivist_client = None
-
-    def init_archivist_client(self, client):
-        if self._archivist_client is None:
-            self._archivist_client = client
 
     @property
     def name(self):
@@ -67,17 +58,13 @@ class EVDevice:
     def archivist_asset_identity(self):
         return self._archivist_asset_identity
 
-    @property
-    def archivist_client(self):
-        return self._archivist_client
-
-    def charge_job(self, units, timewarp):
+    def charge_job(self, arch, units, timewarp):
         # Simulate charging: simply keep a record of how many units charged
         LOGGER.info("Device %s charging %s units", self._name, units)
         self._total_charge += units
 
         MyAsset(
-            self._archivist_client,
+            arch,
             self._archivist_asset_identity,
             timewarp,
             f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
@@ -86,38 +73,34 @@ class EVDevice:
             "Attestation receipt: 0xa765dd854b57334ab1f7322d2",
         )
 
-    def service(self, timewarp):
-        if self._total_charge > self._next_service:
-            # Clear the flag and update the service interval
-            self._next_service += 1000
+    def service_required(self, arch, corval, timewarp):
+        if self._total_charge < self._next_service:
+            return False
 
-            # Log our request
-            LOGGER.info(
-                "!! %s Service interval reached (%s)", self.name, self._total_charge
-            )
-            corval = str(uuid.uuid4())
-            MyAsset(
-                self._archivist_client,
-                self._archivist_asset_identity,
-                timewarp,
-                f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
-            ).service_required(
-                (
-                    f"Service interval reached after {self._total_charge} "
-                    f"units charged. Please service."
-                ),
-                corval,
-            )
+        # Clear the flag and update the service interval
+        self._next_service += 1000
 
-            # Call the maintenance crew
-            x = threading.Thread(
-                target=maintenance_worker.threadmain,
-                args=(self, corval, timewarp),
-                daemon=True,
-            )
-            x.start()
+        # Log our request
+        LOGGER.info(
+            "!! %s Service interval reached (%s)", self.name, self._total_charge
+        )
+        
+        MyAsset(
+            arch,
+            self._archivist_asset_identity,
+            timewarp,
+            f"{self._archivist_asset_identity[7:]}@evc.m2m.synsation.io",
+        ).service_required(
+            (
+                f"Service interval reached after {self._total_charge} "
+                f"units charged. Please service."
+            ),
+            corval,
+        )
 
-    def update_firmware(self, cve_str, cve_corval, timewarp):
+        return True
+
+    def update_firmware(self, arch, cve_str, cve_corval, timewarp):
         LOGGER.info("!! %s patching vulnerable firmware", self.name)
 
         with self._writelock:
@@ -130,7 +113,7 @@ class EVDevice:
 
             version = f"v{self._fw_version[0]}.{self._fw_version[1]}"
             MyAsset(
-                self._archivist_client,
+                arch,
                 self._archivist_asset_identity,
                 timewarp,
                 "otaService@evcservicing.com",

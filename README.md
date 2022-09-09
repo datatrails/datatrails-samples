@@ -59,7 +59,7 @@ Events are created every execution of an example - currently no check is done if
 All examples use a common set of arguments:
 
 ```bash
-export AUTH="-u $ARCHIVIST -t $AUTHTOKEN_FILENAME $VERBOSE $PROOF_MECHANISM"
+export AUTH="-u $ARCHIVIST --auth-token-filename $AUTHTOKEN_FILENAME $VERBOSE $PROOF_MECHANISM"
 export ARGS="$AUTH --namespace $NAMESPACE"
 ```
 

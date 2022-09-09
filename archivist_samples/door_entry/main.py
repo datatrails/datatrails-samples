@@ -30,14 +30,6 @@ LOGGER = logging.getLogger(__name__)
 
 def main():
     parser = common_parser("Exercises the various Wavestone door entry use cases")
-    parser.add_argument(
-        "--namespace",
-        type=str,
-        dest="namespace",
-        action="store",
-        default=None,
-        help="namespace of item population (to enable parallel demos",
-    )
 
     parser.add_argument(
         "-W",

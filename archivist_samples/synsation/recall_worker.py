@@ -31,7 +31,7 @@ from . import patch_worker
 LOGGER = logging.getLogger(__name__)
 
 
-def issue_recall(charger_list, cve_id, timewarp):
+def issue_recall(charger_list, arch, cve_id, timewarp):
     # !!! WARNING !!! There is no thread-safety here, make sure you
     # always treat the devices as read-only.
     # The main device thread takes care of updating the variables
@@ -41,7 +41,7 @@ def issue_recall(charger_list, cve_id, timewarp):
     for charger in charger_list:
         cve_corval = cve_id + str(uuid.uuid4())
         MyAsset(
-            charger.archivist_client,
+            arch,
             charger.archivist_asset_identity,
             timewarp,
             "VulnBot@synsation-industries.com",
@@ -56,13 +56,13 @@ def issue_recall(charger_list, cve_id, timewarp):
         # Schedule the patch
         x = threading.Thread(
             target=patch_worker.threadmain,
-            args=(charger, cve_id, cve_corval, timewarp),
+            args=(charger, arch, cve_id, cve_corval, timewarp),
             daemon=True,
         )
         x.start()
 
 
-def threadmain(chargers, timewarp):
+def threadmain(chargers, arch, timewarp):
     while True:
         time.sleep(60)
 
@@ -70,4 +70,4 @@ def threadmain(chargers, timewarp):
         secure = random.randint(0, 3)
         if not secure:
             cve = f"CVE-{str(datetime.datetime.now())}"
-            issue_recall(chargers, cve, timewarp)
+            issue_recall(chargers, arch, cve, timewarp)
