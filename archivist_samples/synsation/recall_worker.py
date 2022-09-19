@@ -31,7 +31,7 @@ from . import patch_worker
 LOGGER = logging.getLogger(__name__)
 
 
-def issue_recall(charger_list, arch, cve_id, timewarp):
+def issue_recall(charger_list, arch, cve_id, emp_id, timewarp):
     # !!! WARNING !!! There is no thread-safety here, make sure you
     # always treat the devices as read-only.
     # The main device thread takes care of updating the variables
@@ -53,21 +53,21 @@ def issue_recall(charger_list, arch, cve_id, timewarp):
             cve_id,
             cve_corval,
         )
-        # Schedule the patch
+        # Schedule the patch for the specified employee to do
         x = threading.Thread(
             target=patch_worker.threadmain,
-            args=(charger, arch, cve_id, cve_corval, timewarp),
+            args=(charger, arch, cve_id, cve_corval, emp_id, timewarp),
             daemon=True,
         )
         x.start()
 
 
-def threadmain(chargers, arch, timewarp):
+def threadmain(chargers, arch, emp_id, timewarp):
     while True:
-        time.sleep(60)
+        time.sleep(10)
 
         # 1-in-4 chance of finding a vulnerability
         secure = random.randint(0, 3)
         if not secure:
             cve = f"CVE-{str(datetime.datetime.now())}"
-            issue_recall(chargers, arch, cve, timewarp)
+            issue_recall(chargers, arch, cve, emp_id, timewarp)

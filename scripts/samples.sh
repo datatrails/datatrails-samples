@@ -155,7 +155,7 @@ SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.syn
 ${SYNSATION_CHARGER} --start-date 20190909 --stop-date 20190923 --fast-forward 9876
 
 SYNSATION_CHARGER_MULTITENANT="${TEST_NO_SYNSATION_CHARGER_MULTITENANT} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
-${SYNSATION_CHARGER_MULTITENANT} -a MDW --maint-client-id ${TEST_CLIENT_ID2} --maint-client-secret ${TEST_CLIENT_SECRET2} --fw-client-id ${TEST_CLIENT_ID3} --fw-client-secret ${TEST_CLIENT_SECRET3}
+${SYNSATION_CHARGER_MULTITENANT} -a MDW --maint-emp-id ${TEST_EMP_ID_MAINT} --maint-client-id ${TEST_CLIENT_ID2} --maint-client-secret ${TEST_CLIENT_SECRET2} --fw-emp-id ${TEST_EMP_ID_FW} --fw-client-id ${TEST_CLIENT_ID3} --fw-client-secret ${TEST_CLIENT_SECRET3}
 
 SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
 ${SYNSATION_JITSUINATOR} --asset-name tcl.ccj.001 --wait 1.0

@@ -21,6 +21,8 @@
 import logging
 import threading
 
+from .qualifications import check_qualification
+
 from ..testing.asset import MyAsset
 
 LOGGER = logging.getLogger(__name__)
@@ -99,10 +101,16 @@ class EVDevice:
 
         return True
 
-    def update_firmware(self, arch, cve_str, cve_corval, timewarp):
+    def update_firmware(self, arch, cve_str, cve_corval, emp_id, timewarp):
         LOGGER.info("!! %s patching vulnerable firmware", self.name)
 
         with self._writelock:
+            # First check that this employee is qualified
+            if not check_qualification(arch, emp_id, "firmware qualification", self._archivist_asset_identity):
+                LOGGER.info("!! %s is NOT qualified! Not proceeding.", emp_id)
+                return
+
+            # The resource is qualified. Do the job.
             # Simple Red-Hat style versioning
             if self._fw_version[1] == 3:
                 self._fw_version[0] += 1

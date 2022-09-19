@@ -15,8 +15,10 @@ docker run \
     -e TEST_ARCHIVIST \
     -e TEST_CLIENT_ID \
     -e TEST_CLIENT_SECRET \
+    -e TEST_EMP_ID_MAINT \
     -e TEST_CLIENT_ID2 \
     -e TEST_CLIENT_SECRET2 \
+    -e TEST_EMP_ID_FW \
     -e TEST_CLIENT_ID3 \
     -e TEST_CLIENT_SECRET3 \
     -e TEST_AUTHTOKEN_FILENAME \

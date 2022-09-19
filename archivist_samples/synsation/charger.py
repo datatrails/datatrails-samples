@@ -120,13 +120,13 @@ def run(ev_arch, maint_arch, fw_arch, args):
     for c in chargers:
         x = threading.Thread(
             target=device_worker.threadmain,
-            args=(c, ev_arch, maint_arch, tw),
+            args=(c, ev_arch, maint_arch, args.maint_emp_id, tw),
             daemon=True,
         )
         x.start()
 
     x = threading.Thread(
-        target=recall_worker.threadmain, args=(chargers, fw_arch, tw), daemon=True
+        target=recall_worker.threadmain, args=(chargers, fw_arch, args.fw_emp_id, tw), daemon=True
     )
     x.start()
 
@@ -193,6 +193,14 @@ def entry():
         help="Fast forward time in event series (default: 1 second = 1 hour)",
     )
     parser.add_argument(
+        "--maint-emp-id",
+        type=str,
+        dest="maint_emp_id",
+        action="store",
+        default="1234-1",
+        help="Employee ID for maintenance worker to check credential record",
+    )
+    parser.add_argument(
         "--maint-client-id",
         type=str,
         dest="maint_client_id",
@@ -207,6 +215,14 @@ def entry():
         action="store",
         default=None,
         help="Client secret from appregistrations for maintenance worker",
+    )
+    parser.add_argument(
+        "--fw-emp-id",
+        type=str,
+        dest="fw_emp_id",
+        action="store",
+        default="1234-2",
+        help="Employee ID for maintenance worker to check credential record",
     )
     parser.add_argument(
         "--fw-client-id",
