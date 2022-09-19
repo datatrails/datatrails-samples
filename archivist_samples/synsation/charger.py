@@ -126,7 +126,9 @@ def run(ev_arch, maint_arch, fw_arch, args):
         x.start()
 
     x = threading.Thread(
-        target=recall_worker.threadmain, args=(chargers, fw_arch, args.fw_emp_id, tw), daemon=True
+        target=recall_worker.threadmain,
+        args=(chargers, fw_arch, args.fw_emp_id, tw),
+        daemon=True,
     )
     x.start()
 

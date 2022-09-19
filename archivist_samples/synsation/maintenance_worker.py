@@ -21,7 +21,7 @@ import logging
 import random
 import time
 
-from .qualifications import check_qualification
+from .qualifications import check_qualification, get_employee_record
 from ..testing.asset import MyAsset
 
 LOGGER = logging.getLogger(__name__)
@@ -34,16 +34,21 @@ def service_device(charger, arch, job_id, emp_id, timewarp):
     LOGGER.info("!! Agent %s responding to service request on %s", emp_id, charger.name)
 
     # First check that this employee is qualified
-    if not check_qualification(arch, emp_id, "maintenance qualification", charger.archivist_asset_identity):
+    if not check_qualification(
+        arch, emp_id, "maintenance", charger.archivist_asset_identity
+    ):
         LOGGER.info("!! %s is NOT qualified! Not proceeding.", emp_id)
         return
 
-    # The maintenance is done...inform Archivist
+    # The maintenance is done by a qualified person...inform Archivist
+    # Note we can assume the employee record exists because the
+    # Check above passed.
+    employee = get_employee_record(arch, emp_id)
     MyAsset(
         arch,
         charger.archivist_asset_identity,
         timewarp,
-        "Phil@evcservicing.com",
+        employee["name"],
     ).service(
         (
             f"Maintenance agent serviced device after "

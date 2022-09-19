@@ -23,13 +23,12 @@ from time import strptime
 from archivist.errors import ArchivistNotFoundError
 
 
-def get_employee_record(arch, emp_id, qualification):
+def get_employee_record(arch, emp_id):
     try:
         employee_asset = arch.assets.read_by_signature(
             attrs={
                 "arc_display_type": "Employee Verification",
                 "emp_id": emp_id,
-                "employee_type": qualification
             },
         )
 
@@ -38,39 +37,44 @@ def get_employee_record(arch, emp_id, qualification):
 
     if not employee_asset:
         return None
-    
+
     # Assume emp_id is unique - no safety net here
-    return employee_asset['attributes']
+    return employee_asset["attributes"]
 
 
 def check_qualification(arch, emp_id, qualification, target_asset):
     # See if we have an employee with this ID and qualification at all
     # Note that this just checks general qualifications, and is not
     # specific to the target device, but it could be restricted further
-    # if deemed useful
-    record = get_employee_record(arch, emp_id, qualification)
+    # if deemed useful
+    record = get_employee_record(arch, emp_id)
+
+    qualification_entries = {"firmware": "f_exp_date", "maintenance": "m_exp_date"}
 
     if not record:
         res = False
         result = "FAIL"
-        message = f'No employee record found for ID {emp_id} with qualification type \'{qualification}\''
+        message = f"No employee record found for ID {emp_id} with qualification type '{qualification}'"
     else:
         # If we do, check that they are qualified...
-        if record['resource_qualified'] != "True":
-            res = False
-            result = "FAIL"
-            message = f'Employee ID {emp_id} is not qualified for \'{qualification}\''
-        else:
+        try:
+            exp_string = record[qualification_entries[qualification]]
+
             # ...and the qualification is in date
-            expiry_date = datetime.datetime.strptime(record['expdate'], "%Y-%m-%d")
+            expiry_date = datetime.datetime.strptime(exp_string, "%Y-%m-%d")
             if expiry_date < datetime.datetime.now():
                 res = False
                 result = "FAIL"
-                message = f'Employee ID {emp_id} qualification for \'{qualification}\' has expired'
+                message = f"Employee ID {emp_id} qualification for '{qualification}' has expired"
             else:
                 res = True
                 result = "PASS"
                 message = "Credentials verified and current"
+
+        except KeyError:
+            res = False
+            result = "FAIL"
+            message = f"Employee ID {emp_id} is not qualified for '{qualification}'"
 
     # Record the facts and return to caller
     props = {
@@ -78,14 +82,12 @@ def check_qualification(arch, emp_id, qualification, target_asset):
         "behaviour": "RecordEvidence",
     }
     attrs = {
-        "arc_description": f'Verified Employee Qualifications: {result}. {message}.',
+        "arc_description": f"Verified Employee Qualifications: {result}. {message}.",
         "arc_evidence": message,
         "arc_display_type": "Qualification Check",
-        "qualification_result": f'{result}'
+        "qualification_result": f"{result}",
     }
 
-    arch.events.create(
-        target_asset, props=props, attrs=attrs, confirm=True
-    )
+    arch.events.create(target_asset, props=props, attrs=attrs, confirm=True)
 
     return res

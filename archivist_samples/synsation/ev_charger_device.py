@@ -21,7 +21,7 @@
 import logging
 import threading
 
-from .qualifications import check_qualification
+from .qualifications import check_qualification, get_employee_record
 
 from ..testing.asset import MyAsset
 
@@ -106,11 +106,17 @@ class EVDevice:
 
         with self._writelock:
             # First check that this employee is qualified
-            if not check_qualification(arch, emp_id, "firmware qualification", self._archivist_asset_identity):
+            if not check_qualification(
+                arch, emp_id, "firmware", self._archivist_asset_identity
+            ):
                 LOGGER.info("!! %s is NOT qualified! Not proceeding.", emp_id)
                 return
 
-            # The resource is qualified. Do the job.
+            # The resource is qualified. Do the job in their name.
+            # Note we can assume the employee record exists because the
+            # Check above passed.
+            employee = get_employee_record(arch, emp_id)
+
             # Simple Red-Hat style versioning
             if self._fw_version[1] == 3:
                 self._fw_version[0] += 1
@@ -123,7 +129,7 @@ class EVDevice:
                 arch,
                 self._archivist_asset_identity,
                 timewarp,
-                "otaService@evcservicing.com",
+                employee["name"],
             ).update_firmware(
                 f"Responding to vulnerability '{cve_str}' with patch '{version}'",
                 version,

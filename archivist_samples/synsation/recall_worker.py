@@ -64,7 +64,7 @@ def issue_recall(charger_list, arch, cve_id, emp_id, timewarp):
 
 def threadmain(chargers, arch, emp_id, timewarp):
     while True:
-        time.sleep(10)
+        time.sleep(60)
 
         # 1-in-4 chance of finding a vulnerability
         secure = random.randint(0, 3)
