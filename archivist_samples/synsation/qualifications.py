@@ -49,7 +49,7 @@ def check_qualification(arch, emp_id, qualification, target_asset):
     # if deemed useful
     record = get_employee_record(arch, emp_id)
 
-    qualification_entries = {"firmware": "f_exp_date", "maintenance": "m_exp_date"}
+    qualification_entries = {"firmware": "v_exp_date", "maintenance": "m_exp_date"}
 
     if not record:
         res = False
