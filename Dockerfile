@@ -1,5 +1,5 @@
 ARG VERSION=3.7
-FROM python:${VERSION}-buster
+FROM python:${VERSION}-bullseye
 
 COPY requirements.txt requirements-dev.txt /tmp/
 
