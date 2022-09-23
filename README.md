@@ -29,20 +29,20 @@ Add a token to the file credentials/.auth_token and set some environment vars to
 specify the archivist endpoint:
 
 ```bash
-export ARCHIVIST="https://app.rkvst.io"
-export AUTHTOKEN_FILENAME=credentials/.auth_token
-export NAMESPACE="unique label"
-export VERBOSE=-v
-export PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
+export TEST_ARCHIVIST="https://app.rkvst.io"
+export TEST_AUTHTOKEN_FILENAME=credentials/token
+export TEST_NAMESPACE="unique label"
+export TEST_VERBOSE=-v
+export TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
 ```
 
-If VERBOSE is "-v" debugging output will appear when running the examples. Otherwise leave blank or undefined.
+If TEST_VERBOSE is "-v" debugging output will appear when running the examples. Otherwise leave blank or undefined.
 
-PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
+TEST_PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
 
-## NAMESPACE
+## TEST_NAMESPACE
 
-If NAMESPACE is blank or unspecified, any assets events, locations will be visible to other users running the same examples
+If TEST_NAMESPACE is blank or unspecified, any assets events, locations will be visible to other users running the same examples
 on the same URL.
 
 Each example creates assets,events,locations that are not visible to other examples.
@@ -59,8 +59,8 @@ Events are created every execution of an example - currently no check is done if
 All examples use a common set of arguments:
 
 ```bash
-export AUTH="-u $ARCHIVIST -t $AUTHTOKEN_FILENAME $VERBOSE $PROOF_MECHANISM"
-export ARGS="$AUTH --namespace $NAMESPACE"
+export AUTH="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_PROOF_MECHANISM"
+export ARGS="$AUTH --namespace $TEST_NAMESPACE"
 ```
 
 ### Door Entry Control
