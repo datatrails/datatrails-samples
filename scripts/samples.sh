@@ -128,7 +128,7 @@ SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_sampl
 ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 
 SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
-${SYNSATION_CHARGER} --start-date 20190909 -stop-date 20190923 --fast-forward 9876
+${SYNSATION_CHARGER} --start-date 20190909 --stop-date 20190923 --fast-forward 9876
 
 SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
 ${SYNSATION_JITSUINATOR} --asset-name tcl.ccj.001 --wait 1.0
