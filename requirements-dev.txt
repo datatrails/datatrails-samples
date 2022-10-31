@@ -7,4 +7,5 @@ pycodestyle~=2.9
 pylint~=2.14
 
 # uploading to pypi
+build~=0.8
 twine~=4.0

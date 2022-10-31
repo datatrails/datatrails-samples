@@ -2,7 +2,7 @@
 #
 # inserts version into python package
 #
-version=$(python3 setup.py --version)
+version=$(git describe --tags --long --dirty)
 
 cat>archivist_samples/about.py <<EOF
 """Archivist Samples code
