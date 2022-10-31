@@ -1,17 +1,3 @@
-#   Copyright 2019 Jitsuin, inc
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
 # WARNING: Proof of concept code: Not for release
 
 """Key management
@@ -162,7 +148,7 @@ def generate_crypto_asset(archivist, asset_name):
     # samples for broader and richer use of asset attributes
     attrs = {
         "arc_display_name": asset_name,
-        "arc_description": "Sample cryptographic asset for Jitsuin Archivist",
+        "arc_description": "Sample cryptographic asset for RKVST",
         "arc_display_type": "Crypto endpoint",
         "arc_evidence_signing_pubkey": pubkey_pem.decode("utf-8"),
     }
@@ -330,7 +316,7 @@ def run(arch, args):
 
     if args.create_asset:
         # Don't create if there's already an asset record with this name.
-        # This is not strictly necessary - the Jitsuin Archivist system
+        # This is not strictly necessary - the RKVST system
         # does not require arc_display_name to be unique - but to keep
         # things simple we'll avoid duplicates here.
         if asset_exists(arch, asset_name):

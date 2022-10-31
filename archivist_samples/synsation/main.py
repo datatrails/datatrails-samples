@@ -5,7 +5,7 @@ import sys
 from . import analyze
 from . import charger
 from . import initialise
-from . import jitsuinator
+from . import simulator
 
 # from . import multitenant
 from . import wanderer
@@ -17,7 +17,7 @@ def main():
     except IndexError:
         print(
             "Missing subcommand: 'initialise', 'analyze',"
-            "'charge', 'jitsuinator' or 'wanderer' is required"
+            "'charge', 'simulator' or 'wanderer' is required"
         )
         sys.exit(1)
 
@@ -35,8 +35,8 @@ def main():
         charger.entry()
         sys.exit(0)
 
-    if key == "jitsuinator":
-        jitsuinator.entry()
+    if key == "simulator":
+        simulator.entry()
         sys.exit(0)
 
     if key == "wanderer":

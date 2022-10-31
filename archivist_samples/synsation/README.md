@@ -6,7 +6,7 @@ The suite includes a number of entry points / samples that illustrate different 
 
 * `archivist_samples_synsation initialise` Creates a range of Assets representing different types of equipment
 * `archivist_samples_synsation charger` Simulates cyber maintenance lifecycles of electric vehicle chargers
-* `archivist_samples_synsation jitsuinator` Simulates a software update cycle from finding a vulnerability through approvals, patch, and deployment
+* `archivist_samples_synsation simulator` Simulates a software update cycle from finding a vulnerability through approvals, patch, and deployment
 * `archivist_samples_synsation wanderer` Simulates a simple physical shipping use case with GIS tracking
 * `archivist_samples_synsation analyze` assesses SLAs and vulnerability windows in the Synsation asset set
 
@@ -16,7 +16,7 @@ The suite includes a number of entry points / samples that illustrate different 
 
 * Install the RKVST samples package. If you are just trying out the pre-made samples you should get the official [RKVST samples Python package](https://pypi.org/project/jitsuin-archivist-samples/ "PyPi package page") from PyPi. If you are modifying this sample and want to try out your changes then you'll need to rebuild the wheel: please refer to the developer instructions in the top level of this repository to see how to do that.
 
-* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.jitsuin.com/docs/setup-and-administration/getting-access-tokens-using-client-secret/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
+* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.rkvst.com/docs/rkvst-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
 
 ## Running the sample

@@ -104,7 +104,7 @@ def endpoint(args):
         set_logger("INFO")
 
     arch = None
-    LOGGER.info("Initialising connection to Jitsuin Archivist...")
+    LOGGER.info("Initialising connection to RKVST...")
     fixtures = {
         "assets": {
             "proof_mechanism": args.proof_mechanism.name,

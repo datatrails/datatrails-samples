@@ -35,7 +35,7 @@ Add a token to the file credentials/.auth_token and set some environment vars to
 specify the archivist endpoint:
 
 ```bash
-export TEST_ARCHIVIST="https://rkvst.poc.jitsuin.io"
+export TEST_ARCHIVIST="https://app.rkvst.io"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
@@ -85,7 +85,7 @@ Available functional tests are:
     TEST_SELECTOR=synsation_initialise task samples
     TEST_SELECTOR=synsation_analyze task samples
     TEST_SELECTOR=synsation_charger task samples
-    TEST_SELECTOR=synsation_jitsuinator task samples
+    TEST_SELECTOR=synsation_simulator task samples
     TEST_SELECTOR=synsation_wanderer task samples
 
 To run more than one test use a comma-separated list:
