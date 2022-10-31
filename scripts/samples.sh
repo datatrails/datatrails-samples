@@ -28,7 +28,7 @@ then
     echo "    TEST_SELECTOR=signed_records ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_initialise ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_charger ${SAMPLESCMD}"
-    echo "    TEST_SELECTOR=synsation_jitsuinator ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=synsation_simulator ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_wanderer ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=sbom ${SAMPLESCMD}"
@@ -65,7 +65,7 @@ TEST_NO_SIGNED_RECORDS=${TEST_NO}
 TEST_NO_SYNSATION_INITIALISE=${TEST_NO}
 TEST_NO_SYNSATION_ANALYZE=${TEST_NO}
 TEST_NO_SYNSATION_CHARGER=${TEST_NO}
-TEST_NO_SYNSATION_JITSUINATOR=${TEST_NO}
+TEST_NO_SYNSATION_SIMULATOR=${TEST_NO}
 TEST_NO_SYNSATION_WANDERER=${TEST_NO}
 TEST_NO_SBOM=${TEST_NO}
 TEST_NO_WIPP=${TEST_NO}
@@ -130,8 +130,8 @@ ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
 ${SYNSATION_CHARGER} --start-date 20190909 --stop-date 20190923 --fast-forward 9876
 
-SYNSATION_JITSUINATOR="${TEST_NO_SYNSATION_JITSUINATOR} python3 -m archivist_samples.synsation jitsuinator ${ARGS} ${NAMESPACE}"
-${SYNSATION_JITSUINATOR} --asset-name tcl.ccj.001 --wait 1.0
+SYNSATION_SIMULATOR="${TEST_NO_SYNSATION_SIMULATOR} python3 -m archivist_samples.synsation simulator ${ARGS} ${NAMESPACE}"
+${SYNSATION_SIMULATOR} --asset-name tcl.ccj.001 --wait 1.0
 
 SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}"
 ${SYNSATION_WANDERER}

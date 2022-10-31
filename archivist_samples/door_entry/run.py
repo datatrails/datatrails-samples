@@ -1,17 +1,3 @@
-#   Copyright 2020 Jitsuin, inc
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
 #   This is API SAMPLE CODE, not for production use.
 
 # pylint:  disable=missing-docstring
@@ -68,25 +54,25 @@ doors_creator = make_assets_create(attachment_creator=attachment_create, confirm
 ####################################
 
 
-def create_jitsuin_paris(doors):
+def create_rkvst_paris(doors):
 
     # Unlike the others, which feature images of the whole building,
     # this one is actually a close-up of the connected door terminal
     return doors_creator(
         doors,
-        "Jitsuin front door",
+        "RKVST front door",
         {
             "arc_firmware_version": "1.0",
             "arc_serial_number": "das-j1-01",
             "arc_description": (
                 "Electronic door entry system controlling the main "
-                "staff entrance to Jitsuin France"
+                "staff entrance to RKVST France"
             ),
-            "wavestone_asset_id": "paris.france.jitsuin.das",
+            "wavestone_asset_id": "paris.france.rkvst.das",
         },
         location={
             "props": {
-                "display_name": "Jitsuin Paris",
+                "display_name": "RKVST Paris",
                 "description": "Sales and sales support for the French region",
                 "latitude": 48.8339211,
                 "longitude": 2.371345,
@@ -270,7 +256,7 @@ def create_gdn_side(doors):
 def create_doors(doors):
     LOGGER.info("Creating all doors...")
     doors_map = {
-        "jitsuin_paris": create_jitsuin_paris(doors),
+        "rkvst_paris": create_rkvst_paris(doors),
         "cityhall": create_cityhall(doors),
         "courts": create_courts(doors),
         "bastille": create_bastille(doors),

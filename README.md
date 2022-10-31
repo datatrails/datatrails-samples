@@ -30,7 +30,7 @@ specify the archivist endpoint:
 
 ```bash
 export TEST_ARCHIVIST="https://app.rkvst.io"
-export TEST_AUTHTOKEN_FILENAME=credentials/token
+export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
 export TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
@@ -112,7 +112,7 @@ archivist_samples_signed_records $ARGS --check 'samples'
 ```bash
 archivist_samples_synsation initialise  $ARGS --num-assets 100 --wait 1 --await-confirmation
 archivist_samples_synsation charger     $ARGS --start-date 20190909 --stop-date 20200909 --fast-forward 9876
-archivist_samples_synsation jitsuinator $ARGS --asset-name tcl.ccj.001 --wait 1.0
+archivist_samples_synsation simulator   $ARGS --asset-name tcl.ccj.001 --wait 1.0
 archivist_samples_synsation wanderer    $ARGS
 archivist_samples_synsation analyze     $ARGS 
 ```
