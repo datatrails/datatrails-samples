@@ -23,7 +23,7 @@ def main():
         type=str,
         dest="namespace",
         action="store",
-        default=None,
+        default="sbom",
         help="namespace of item population (to enable parallel demos",
     )
 

@@ -2,11 +2,7 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 'importlib_resources'.
-    import importlib_resources as pkg_resources
+from importlib import resources
 
 import logging
 
@@ -26,7 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(wipp_files, path) as fd:
+    with resources.open_binary(wipp_files, path) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             "arc_display_name": name,
@@ -38,7 +34,7 @@ def upload_attachment(arch, path, name):
 
 
 def attachment_create(arch, unused_idx, name):
-    with pkg_resources.open_binary(wipp_files, name[0]) as fd:
+    with resources.open_binary(wipp_files, name[0]) as fd:
         attachment = arch.attachments.upload(fd)
         result = {
             "arc_attachment_identity": attachment["identity"],

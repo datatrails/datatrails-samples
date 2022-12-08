@@ -56,7 +56,7 @@ def entry():
         type=str,
         dest="namespace",
         action="store",
-        default=None,
+        default="synsation",
         help="namespace of item population (to enable parallel demos",
     )
 

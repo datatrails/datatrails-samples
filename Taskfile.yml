@@ -53,6 +53,11 @@ tasks:
     cmds: 
       - ./scripts/api.sh black archivist_samples
 
+  functests:
+    desc: Run samples tests in virtual env using local wheel package - local wheel must be present
+    cmds:
+      - ./scripts/functests.sh
+
   publish:
     desc: publish wheel package (will require username and password in TWINE_USERNAME,TWINE_PASSWORD)
     deps: [about]

@@ -21,7 +21,7 @@ def main():
         type=str,
         dest="namespace",
         action="store",
-        default=None,
+        default="door_entry",
         help="namespace of item population (to enable parallel demos",
     )
 
