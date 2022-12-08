@@ -310,7 +310,11 @@ def print_history(archivist, asset_name):
 def run(arch, args):
 
     LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
-    asset_name = "-".join(["signed-records", args.namespace])
+    if args.namespace:
+        asset_name = "-".join(["signed-records", args.namespace])
+    else:
+        asset_name = "signed-records"
+
     # Check which operation we're doing, and ensure we have the info
     # we need to do it
 
@@ -380,7 +384,7 @@ def main():
         type=str,
         dest="namespace",
         action="store",
-        default=None,
+        default="signed_records",
         help="namespace of item population (to enable parallel demos",
     )
 

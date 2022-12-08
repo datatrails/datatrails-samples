@@ -2,7 +2,8 @@
 #
 # run samples tests
 #
-SAMPLESCMD="task samples"
+TASK=${1:-samples}
+SAMPLESCMD="task ${TASK}"
 if [ -z "${TEST_ARCHIVIST}" ]
 then
     echo "TEST_ARCHIVIST is undefined"
@@ -95,7 +96,18 @@ else
     echo "No NAMESPACE specified - may share assets etc with someone else on same URL"
 fi
 
-DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} python3 -m archivist_samples.door_entry ${ARGS} ${NAMESPACE}"
+# emit command if executing tests against the docker image or the installed wheel
+command() {
+    if [ "${TASK}" == "samples" ]
+    then
+        echo "python3 -m archivist_samples.$1"
+    else
+        echo "archivist_samples_$1"
+    fi
+}
+
+# archivist_samples_door_entry
+DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} $(command door_entry) ${ARGS} ${NAMESPACE}"
 ${DOOR_ENTRY} --create
 ${DOOR_ENTRY} --list all
 ${DOOR_ENTRY} --list doors
@@ -113,35 +125,40 @@ ${OPEN} "Bastille front door,access_card_2"
 ${OPEN} "City Hall front door,access_card_2"
 ${OPEN} "Gare du Nord apartments side door,access_card_2"
 
-# namespacing not required here
-ESTATE_INFO="${TEST_NO_ESTATE_INFO} python3 -m archivist_samples.estate_info ${ARGS}"
+# archivist_samples_estate_info
+ESTATE_INFO="${TEST_NO_ESTATE_INFO} $(command estate_info) ${ARGS}"
 ${ESTATE_INFO} --quick-count
 ${ESTATE_INFO} --double-check
 
-SIGNED_RECORDS="${TEST_NO_SIGNED_RECORDS} python3 -m archivist_samples.signed_records ${ARGS} ${NAMESPACE}"
+# archivist_samples_signed_records
+SIGNED_RECORDS="${TEST_NO_SIGNED_RECORDS} $(command signed_records) ${ARGS} ${NAMESPACE}"
 ${SIGNED_RECORDS} --create 'samples'
 ${SIGNED_RECORDS} --sign-message 'signature' 'samples'
 ${SIGNED_RECORDS} --bad-sign-message 'signature' 'samples'
 ${SIGNED_RECORDS} --check 'samples'
 
-SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} python3 -m archivist_samples.synsation initialise ${ARGS} ${NAMESPACE}"
+# archivist_samples_synsation
+SYNSATION=$(command synsation)
+SYNSATION_INITIALISE="${TEST_NO_SYNSATION_INITIALISE} ${SYNSATION} initialise ${ARGS} ${NAMESPACE}"
 ${SYNSATION_INITIALISE} --num-assets 100 --wait 1 --await-confirmation
 
-SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} python3 -m archivist_samples.synsation charger ${ARGS} ${NAMESPACE}"
+SYNSATION_CHARGER="${TEST_NO_SYNSATION_CHARGER} ${SYNSATION} charger ${ARGS} ${NAMESPACE}"
 ${SYNSATION_CHARGER} --start-date 20190909 --stop-date 20190923 --fast-forward 9876
 
-SYNSATION_SIMULATOR="${TEST_NO_SYNSATION_SIMULATOR} python3 -m archivist_samples.synsation simulator ${ARGS} ${NAMESPACE}"
+SYNSATION_SIMULATOR="${TEST_NO_SYNSATION_SIMULATOR} ${SYNSATION} simulator ${ARGS} ${NAMESPACE}"
 ${SYNSATION_SIMULATOR} --asset-name tcl.ccj.001 --wait 1.0
 
-SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} python3 -m archivist_samples.synsation wanderer ${ARGS} ${NAMESPACE}"
+SYNSATION_WANDERER="${TEST_NO_SYNSATION_WANDERER} ${SYNSATION} wanderer ${ARGS} ${NAMESPACE}"
 ${SYNSATION_WANDERER}
 
-SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} python3 -m archivist_samples.synsation analyze ${ARGS} ${NAMESPACE}"
+SYNSATION_ANALYZE="${TEST_NO_SYNSATION_ANALYZE} ${SYNSATION} analyze ${ARGS} ${NAMESPACE}"
 ${SYNSATION_ANALYZE}
 
-SBOM="${TEST_NO_SBOM} python3 -m archivist_samples.software_bill_of_materials ${ARGS} ${NAMESPACE}"
+# archivist_samples_software_bill_of_materials
+SBOM="${TEST_NO_SBOM} $(command software_bill_of_materials) ${ARGS} ${NAMESPACE}"
 ${SBOM}
 
-WIPP="${TEST_NO_WIPP} python3 -m archivist_samples.wipp ${ARGS} ${NAMESPACE}"
+# archivist_samples_wipp
+WIPP="${TEST_NO_WIPP} $(command wipp) ${ARGS} ${NAMESPACE}"
 ${WIPP}
 

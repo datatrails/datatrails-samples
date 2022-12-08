@@ -39,7 +39,7 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
 ```python
     # Binaries such as images need to be uploaded to RKVST first
     def upload_attachment(arch, path, name):
-        with pkg_resources.open_binary(wipp_files, path) as fd:
+        with open(f"wipp_files/{path}", "rb") as fd:
             blob = arch.attachments.upload(fd)
             attachment = {
                 "arc_display_name": name,

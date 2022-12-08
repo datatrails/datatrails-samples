@@ -3,11 +3,7 @@
 
 # pylint:  disable=missing-docstring
 
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
-    import importlib_resources as pkg_resources
+from importlib import resources
 
 from yaml import full_load
 
@@ -20,14 +16,14 @@ from ..testing.locations import (
 
 
 def asset_attachment_upload_from_file(arch, name, mtype):
-    with pkg_resources.open_binary(images_assets, name) as fd:
+    with resources.open_binary(images_assets, name) as fd:
         attachment = arch.attachments.upload(fd, mtype=mtype)
 
     return attachment
 
 
 def attachment_upload_from_file(arch, name, mtype):
-    with pkg_resources.open_binary(images, name) as fd:
+    with resources.open_binary(images, name) as fd:
         attachment = arch.attachments.upload(fd, mtype=mtype)
 
     return attachment
@@ -38,7 +34,7 @@ def locations_create_from_yaml_file(arch, name):
 
     assumes there is only one document in the file.
     """
-    with pkg_resources.open_binary(locations, name) as fd:
+    with resources.open_binary(locations, name) as fd:
         data = full_load(fd)
         attrs = data["attributes"]
         del data["attributes"]
@@ -50,7 +46,7 @@ def locations_from_yaml_file(name):
 
     assumes there is only one document in the file.
     """
-    with pkg_resources.open_binary(locations, name) as fd:
+    with resources.open_binary(locations, name) as fd:
         data = full_load(fd)
         attrs = data["attributes"]
         del data["attributes"]

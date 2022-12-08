@@ -25,7 +25,7 @@ The sample creates a SoftwarePackage object and uploads a Software Bill of Mater
 To run it: 
 
 ```bash
-archivist_samples_sbom [-v]
+archivist_samples_software_bill_of_materials [-v]
 ```
 
 ## Using the SoftwarePackage class
@@ -42,7 +42,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
 ```python
     # Binaries such as images and SBOM XML need to be uploaded to RKVST first
     def upload_attachment(arch, path, name):
-        with pkg_resources.open_binary(sbom_files, path) as fd:
+        with open(f"sbom_files/{path}", "r") as fd:
             blob = arch.attachments.upload(fd)
             attachment = {
                 "arc_display_name": name,

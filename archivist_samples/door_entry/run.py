@@ -3,11 +3,7 @@
 # pylint:  disable=missing-docstring
 
 
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
-    import importlib_resources as pkg_resources
+from importlib import resources
 
 from copy import copy
 import logging
@@ -34,7 +30,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def attachment_create(doors, idx, name):
-    with pkg_resources.open_binary(images_assets, name) as fd:
+    with resources.open_binary(images_assets, name) as fd:
         attachment = doors.attachments.upload(fd)
         result = {
             "arc_attachment_identity": attachment["identity"],
@@ -470,7 +466,7 @@ def open_door(doors, doorid, cards, cardid):
     # time but if the use case demands it is perfectly possible to
     # attach the same attachment ID to multiple assets/events rather
     # than duplicating them
-    with pkg_resources.open_binary(images_events, "dooropen.png") as fd:
+    with resources.open_binary(images_events, "dooropen.png") as fd:
         image = doors.attachments.upload(fd)
 
     # Issue RecordEvidence logs on each.
@@ -592,15 +588,13 @@ def run(arch, args):
     number_of_cards = cards.assets.count()
     LOGGER.info("number of cards %d", number_of_cards)
     if args.create_assets:
-        if number_of_doors == 0:
-            create_doors(doors)
-            if args.wait_for_confirmation:
-                doors.assets.wait_for_confirmed()
+        create_doors(doors)
+        if args.wait_for_confirmation:
+            doors.assets.wait_for_confirmed()
 
-        if number_of_cards == 0:
-            create_cards(cards)
-            if args.wait_for_confirmation:
-                cards.assets.wait_for_confirmed()
+        create_cards(cards)
+        if args.wait_for_confirmation:
+            cards.assets.wait_for_confirmed()
 
         sys_exit(0)
 

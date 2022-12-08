@@ -19,7 +19,7 @@ and this will create 6 entry points:
       - archivist_samples_estate_info
       - archivist_samples_signed_records
       - archivist_samples_synsation
-      - archivist_samples_sbom
+      - archivist_samples_software_bill_of_materials
       - archivist_samples_wipp
 
 
@@ -120,7 +120,7 @@ archivist_samples_synsation analyze     $ARGS
 ### Software Bill of Materials
 
 ```bash
-archivist_samples_sbom $ARGS
+archivist_samples_software_bill_of_materials $ARGS
 ```
 
 ### WIPP
