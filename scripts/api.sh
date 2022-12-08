@@ -21,5 +21,5 @@ docker run \
     -e GITHUB_REF \
     -e TWINE_USERNAME \
     -e TWINE_PASSWORD \
-    jitsuin-samples-api \
+    rkvst-samples-api \
     "$@"

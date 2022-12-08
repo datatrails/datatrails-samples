@@ -12,27 +12,27 @@ tasks:
   api:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.7 -f Dockerfile -t jitsuin-samples-api .
+      - docker build --no-cache --build-arg VERSION=3.7 -f Dockerfile -t rkvst-samples-api .
 
   api-3.8:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.8 -f Dockerfile -t jitsuin-samples-api .
+      - docker build --no-cache --build-arg VERSION=3.8 -f Dockerfile -t rkvst-samples-api .
   
   api-3.9:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.9 -f Dockerfile -t jitsuin-samples-api .
+      - docker build --no-cache --build-arg VERSION=3.9 -f Dockerfile -t rkvst-samples-api .
   
   api-3.10:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.10 -f Dockerfile -t jitsuin-samples-api .
+      - docker build --no-cache --build-arg VERSION=3.10 -f Dockerfile -t rkvst-samples-api .
 
   api-3.11:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.11 -f Dockerfile -t jitsuin-samples-api .
+      - docker build --no-cache --build-arg VERSION=3.11 -f Dockerfile -t rkvst-samples-api .
 
   check:
     desc: Check the style, bug and quality of the code
