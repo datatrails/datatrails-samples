@@ -85,7 +85,7 @@ def interrupt_listener_run_until(tw, stop):
 def run(arch, args):
     """logic goes here"""
     # Stretch the timestamps in logs
-    LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     LOGGER.info("Creating time warp...")

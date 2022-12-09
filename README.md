@@ -1,6 +1,6 @@
-# archivist-samples
+# rkvst-samples
 
-Sample python code that uses the archivist python SDK to manage particular types of assets
+Sample python code that uses the rkvst python SDK to manage particular types of assets
 such as 'doors', 'cards', 'containers' etc.
 
 # Installing the samples code
@@ -10,7 +10,7 @@ Python 3.7 and later versions are supported.
 Use the standard python pip utility:
 
 ```bash
-python3 -m pip install --user jitsuin-archivist-samples
+python3 -m pip install --user rkvst-samples
 ```
 
 and this will create 6 entry points:

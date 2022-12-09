@@ -7,7 +7,7 @@ tasks:
     cmds:
       - ./scripts/api.sh ./scripts/version.sh
     status:
-      - test -s archivist/about.py
+      - test -s archivist_samples/about.py
 
   api:
     desc: Build a docker environment with the right dependencies and utilities

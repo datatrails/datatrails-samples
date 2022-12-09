@@ -309,7 +309,7 @@ def print_history(archivist, asset_name):
 ###############
 def run(arch, args):
 
-    LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     if args.namespace:
         asset_name = "-".join(["signed-records", args.namespace])
     else:

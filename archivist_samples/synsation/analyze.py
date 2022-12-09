@@ -120,7 +120,7 @@ def analyze_asset(conn, asset):
 
 
 def run(arch, args):
-    LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
     for asset in arch.assets.list():
         analyze_asset(arch, asset)

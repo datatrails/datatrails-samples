@@ -1,6 +1,6 @@
-# archivist-samples - developers
+# rkvst-samples - developers
 
-Sample python code that uses the archivist python SDK to manage particular types of assets
+Sample python code that uses the rkvst python SDK to manage particular types of assets
 such as 'doors', 'cards', 'containers' etc.
 
 This document describes how to test any modifications made to the codebase.
@@ -12,7 +12,7 @@ Required tools for modifying this repo are task-runner and docker-ce.
   - Install task runner: https://github.com/go-task/task
   - Install docker-ce: https://docs.docker.com/get-docker/
 
-A running archivist instance which allows creation of arbitrary assets etc. This is usually
+A running rkvst instance which allows creation of arbitrary assets etc. This is usually
 a test or demo system and **not** a production system.
 
 # Running the samples code
@@ -32,7 +32,7 @@ task api
 ## Authorization 
 
 Add a token to the file credentials/.auth_token and set some environment vars to
-specify the archivist endpoint:
+specify the rkvst endpoint:
 
 ```bash
 export TEST_ARCHIVIST="https://app.rkvst.io"

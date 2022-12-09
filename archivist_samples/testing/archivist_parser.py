@@ -1,7 +1,7 @@
 """common parser argument
 
-   This is copied from archivist-python repo. When acceptable this file will
-   be copied back to the archivist-python repo.
+   This is copied from rkvst-python repo. When acceptable this file will
+   be copied back to the rkvst-python repo.
 """
 
 # pylint:  disable=missing-docstring
