@@ -23,7 +23,7 @@ LOGGER = logging.getLogger(__name__)
 
 def run(poc, args):
     """logic goes here"""
-    LOGGER.info("Using version %s of jitsuin-archivist", about.__version__)
+    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     if args.quick_count:
         LOGGER.info("Number of events is %d", poc.events.count())
         LOGGER.info("Number of assets is %d", poc.assets.count())
