@@ -18,15 +18,15 @@ from .util import (
 LOGGER = logging.getLogger(__name__)
 
 
-def attachment_create(arch, idx, name):
+def attachment_create(arch, name):
     attachment = asset_attachment_upload_from_file(arch, name, "image/jpg")
     result = {
-        "arc_attachment_identity": attachment["identity"],
-        "arc_hash_alg": attachment["hash"]["alg"],
-        "arc_hash_value": attachment["hash"]["value"],
+        "arc_attribute_type": "arc_attachment",
+        "arc_blob_identity": attachment["identity"],
+        "arc_blob_hash_alg": attachment["hash"]["alg"],
+        "arc_blob_hash_value": attachment["hash"]["value"],
+        "arc_file_name": name,
     }
-    if idx == 0:
-        result["arc_display_name"] = "arc_primary_image"
 
     return result
 

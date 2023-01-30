@@ -29,16 +29,16 @@ LOGGER = logging.getLogger(__name__)
 ############
 
 
-def attachment_create(doors, idx, name):
+def attachment_create(doors, name):
     with resources.open_binary(images_assets, name) as fd:
         attachment = doors.attachments.upload(fd)
         result = {
-            "arc_attachment_identity": attachment["identity"],
-            "arc_hash_alg": attachment["hash"]["alg"],
-            "arc_hash_value": attachment["hash"]["value"],
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": attachment["identity"],
+            "arc_blob_hash_alg": attachment["hash"]["alg"],
+            "arc_blob_hash_value": attachment["hash"]["value"],
+            "arc_file_name": name,
         }
-        if idx == 0:
-            result["arc_display_name"] = "arc_primary_image"
 
         return result
 
@@ -294,6 +294,23 @@ def create_cards(cards):
     return cards_map
 
 
+def find_attachment_attributes(attrs):
+    if attrs is None:
+        return []
+
+    attachment_attrs = []
+    for _, attribute in attrs.items():
+        if not isinstance(attribute, dict):
+            continue
+
+        if attribute.get("arc_attribute_type") != "arc_attachment":
+            continue
+
+        attachment_attrs.append(attribute)
+
+    return attachment_attrs
+
+
 # Use case functions
 ####################
 
@@ -303,7 +320,7 @@ def list_doors(doors):
     for door in doors.assets.list():
         attrs = door["attributes"]
         location = doors.locations.read(attrs["arc_home_location_identity"])
-        attachments = attrs["arc_attachments"] or []
+        attachments = find_attachment_attributes(attrs)
 
         print(f"\tAsset name:\t{attrs['arc_display_name']}")
         print(f"\tAsset type:\t{attrs['arc_display_type']}")
@@ -311,10 +328,10 @@ def list_doors(doors):
         print(f"\tAsset address:\t{location['attributes']['address']}")
         print(f"\tArchivist ID:\t{door['identity']}")
         for a in attachments:
-            print(f"\tAttachment identity: \t{a['arc_attachment_identity']}")
-            print(f"\tAttachment name: \t{a['arc_display_name']}")
+            print(f"\tAttachment identity: \t{a['arc_blob_identity']}")
+            print(f"\tAttachment name: \t{a.get('arc_display_name')}")
             with open("/tmp/xxx", "wb") as fd:
-                doors.attachments.download(a["arc_attachment_identity"], fd)
+                doors.attachments.download(a["arc_blob_identity"], fd)
 
         print("-----")
 
@@ -455,7 +472,7 @@ def open_door(doors, doorid, cards, cardid):
     # delivery people take photos of parcels left in safe places
     door_image = door.primary_image
     if not door_image:
-        LOGGER.error("Door location is missing")
+        LOGGER.error("Door image is missing")
         return
 
     # Capture a picture from the built-in camera on the door
@@ -504,16 +521,14 @@ def open_door(doors, doorid, cards, cardid):
             "wavestone_evt_type": "door_open",
             # Attachments list is optional, and allows attaching extra evidence
             # such as photographs, scans, PDFs etc to the event record. Adding
-            # one with dispaly name arc_primary_image will instruct the UI to
+            # one called arc_primary_image will instruct the UI to
             # display it (although it's not required)
-            "arc_attachments": [
-                {
-                    "arc_display_name": "arc_primary_image",
-                    "arc_attachment_identity": image["identity"],
-                    "arc_hash_value": image["hash"]["value"],
-                    "arc_hash_alg": image["hash"]["alg"],
-                }
-            ],
+            "arc_primary_image": {
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": image["identity"],
+                "arc_blob_hash_alg": image["hash"]["alg"],
+                "arc_blob_hash_value": image["hash"]["value"],
+            },
         },
         confirm=True,
     )
@@ -550,7 +565,7 @@ def open_door(doors, doorid, cards, cardid):
             "wavestone_door_name": wsext_doorname,
             "wavestone_door_archivist_id": door["identity"],
             "wavestone_evt_type": "door_open",
-            "arc_attachments": [door_image],
+            "arc_primary_image": [door_image],
         },
         confirm=True,
     )

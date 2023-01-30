@@ -146,7 +146,6 @@ In order to control data sharing to restrict general customers to see only the r
             "arc_display_type",
             "arc_display_name",
             "arc_description",
-            "arc_attachments",
             "sbom_component",
             "sbom_supplier",
             "sbom_uuid",

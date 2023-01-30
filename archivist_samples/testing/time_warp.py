@@ -15,4 +15,4 @@ class TimeWarp:  # pylint: disable=too-few-public-methods
     def now(self):
         """Get the warped time"""
         delta = (datetime.datetime.now() - self._start_time).total_seconds()
-        return self._origin + datetime.timedelta(seconds=(delta * self._rate))
+        return self._origin + datetime.timedelta(seconds=delta * self._rate)

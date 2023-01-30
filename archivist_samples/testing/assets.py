@@ -71,10 +71,13 @@ def make_assets_create(attachment_creator=None, confirm=False):
                 asset_attrs["arc_home_location_identity"] = location["identity"]
 
             if attachments is not None and attachment_creator is not None:
-                asset_attrs["arc_attachments"] = [
-                    attachment_creator(arch, i, attachment)
-                    for i, attachment in enumerate(attachments)
-                ]
+                for i, attachment in enumerate(attachments):
+                    attachment_attr = attachment_creator(arch, attachment)
+                    if i == 0:
+                        asset_attrs["arc_primary_image"] = attachment_attr
+                        continue
+
+                    asset_attrs[f"attachment_attr_{i}"] = attachment_attr
 
             LOGGER.debug("asset_attrs %s", asset_attrs)
             asset = arch.assets.create(

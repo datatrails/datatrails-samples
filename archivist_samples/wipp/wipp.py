@@ -26,21 +26,25 @@ def upload_attachment(arch, path, name):
         blob = arch.attachments.upload(fd)
         attachment = {
             "arc_display_name": name,
-            "arc_attachment_identity": blob["identity"],
-            "arc_hash_value": blob["hash"]["value"],
-            "arc_hash_alg": blob["hash"]["alg"],
+            "arc_file_name": path,
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": blob["identity"],
+            "arc_blob_hash_alg": blob["hash"]["alg"],
+            "arc_blob_hash_value": blob["hash"]["value"],
         }
         return attachment
 
 
-def attachment_create(arch, unused_idx, name):
+def attachment_create(arch, name):
     with resources.open_binary(wipp_files, name[0]) as fd:
         attachment = arch.attachments.upload(fd)
         result = {
-            "arc_attachment_identity": attachment["identity"],
-            "arc_hash_alg": attachment["hash"]["alg"],
-            "arc_hash_value": attachment["hash"]["value"],
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": attachment["identity"],
+            "arc_blob_hash_alg": attachment["hash"]["alg"],
+            "arc_blob_hash_value": attachment["hash"]["value"],
             "arc_display_name": name[1],
+            "arc_file_name": name[0],
         }
 
         return result
@@ -145,8 +149,11 @@ class Wipp:
             "arc_display_type": "WO Characterize",
             "arc_description": wipp["description"],
             "arc_evidence": "N/A",
-            "arc_attachments": attachments or [],
         }
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -185,8 +192,12 @@ class Wipp:
             "arc_display_type": "WO Confirmation",
             "arc_description": wipp_tom["description"],
             "arc_evidence": "Radiograph attached",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -225,8 +236,12 @@ class Wipp:
             "arc_display_type": "WO Loading",
             "arc_description": wipp_load["description"],
             "arc_evidence": "Loading placement image attached",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -261,8 +276,12 @@ class Wipp:
             "arc_display_type": "WO Preship Inspection",
             "arc_description": wipp_preship["description"],
             "arc_evidence": "Image attached",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -290,8 +309,12 @@ class Wipp:
             "arc_display_type": "WO Transit",
             "arc_description": wipp_dep["description"],
             "arc_evidence": "Routing instructions in attachments",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -321,8 +344,12 @@ class Wipp:
             "arc_evidence": "Signature: 0x1234abcd",
             "arc_gis_lat": wipp_way["latitude"],
             "arc_gis_lng": wipp_way["longitude"],
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -350,8 +377,12 @@ class Wipp:
             "arc_display_type": "WO Transit",
             "arc_description": wipp_arr["description"],
             "arc_evidence": "Routing instructions in attachments",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -380,8 +411,12 @@ class Wipp:
             "arc_display_type": "WO Unloading",
             "arc_description": wipp_unload["description"],
             "arc_evidence": "Packing image attached",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
@@ -416,8 +451,12 @@ class Wipp:
             "arc_display_type": "WO Emplacement",
             "arc_description": wipp_emplace["description"],
             "arc_evidence": "Packing image attached",
-            "arc_attachments": attachments or [],
         }
+
+        safe_attachments = attachments or []
+        for i, attachment in enumerate(safe_attachments):
+            attrs[f"attachment_attr_{i}"] = attachment
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
