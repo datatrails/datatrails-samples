@@ -54,14 +54,12 @@ def create_smartcity_device(
         "arc_description": description,
         "arc_home_location_identity": locationid,
         "arc_display_type": displaytype,
-        "arc_attachments": [
-            {
-                "arc_display_name": "arc_primary_image",
-                "arc_attachment_identity": image["identity"],
-                "arc_hash_value": image["hash"]["value"],
-                "arc_hash_alg": image["hash"]["alg"],
-            }
-        ],
+        "arc_primary_image": {
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": image["identity"],
+            "arc_blob_hash_alg": image["hash"]["alg"],
+            "arc_blob_hash_value": image["hash"]["value"],
+        },
     }
     newasset = assets_create_if_not_exists(ac, attrs)
     LOGGER.debug(newasset)

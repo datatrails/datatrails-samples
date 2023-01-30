@@ -88,21 +88,19 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         "Safety conformance approved for version 1.6. See attached conformance report",
         "DVA Conformance Report attached",
         {
-            "arc_primary_image_identity": iattachment["identity"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": "arc_primary_image",
-                    "arc_attachment_identity": iattachment["identity"],
-                    "arc_hash_value": iattachment["hash"]["value"],
-                    "arc_hash_alg": iattachment["hash"]["alg"],
-                },
-                {
-                    "arc_display_name": "Conformance Report",
-                    "arc_attachment_identity": rattachment["identity"],
-                    "arc_hash_value": rattachment["hash"]["value"],
-                    "arc_hash_alg": rattachment["hash"]["alg"],
-                },
-            ],
+            "arc_primary_image": {
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": iattachment["identity"],
+                "arc_blob_hash_alg": iattachment["hash"]["alg"],
+                "arc_blob_hash_value": iattachment["hash"]["value"],
+            },
+            "attachment_attr_1": {
+                "arc_display_name": "Conformance Report",
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": rattachment["identity"],
+                "arc_blob_hash_alg": rattachment["hash"]["alg"],
+                "arc_blob_hash_value": rattachment["hash"]["value"],
+            },
         },
         extra_attrs={"synsation_conformance_report": rattachment["identity"]},
     )

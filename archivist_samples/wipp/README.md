@@ -177,7 +177,6 @@ In order to control data sharing one can restrict access allowing certain partie
             "arc_display_type",
             "arc_display_name",
             "arc_description",
-            "arc_attachments",
             "wipp_a2fraction_characterized",
             "wipp_a2fraction_confirmed",
             "wipp_activity_characterized",

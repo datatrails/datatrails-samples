@@ -102,16 +102,17 @@ class SoftwareDeployment:
             "sbom_installation_supplier": sbom_installation["supplier"],
             "sbom_installation_uuid": sbom_installation["uuid"],
             "sbom_installation_environment": sbom_installation["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_installation["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_installation["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         asset_attrs = {
@@ -166,16 +167,17 @@ class SoftwareDeployment:
             "sbom_decomission_target_date": sbom_decomission["target_date"],
             "sbom_decomission_status": sbom_decomission["status"],
             "sbom_decomission_environment": sbom_decomission["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_decomission["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_decomission["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         asset_attrs = {
@@ -222,16 +224,17 @@ class SoftwareDeployment:
             "sbom_upgrade_supplier": sbom_upgrade["supplier"],
             "sbom_upgrade_uuid": sbom_upgrade["uuid"],
             "sbom_upgrade_environment": sbom_upgrade["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_upgrade["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_upgrade["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         asset_attrs = {
@@ -282,16 +285,17 @@ class SoftwareDeployment:
             "sbom_planned_version": sbom_planned["version"],
             "sbom_planned_reference": sbom_planned["reference"],
             "sbom_planned_environment": sbom_planned["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_planned["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_planned["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
@@ -327,16 +331,17 @@ class SoftwareDeployment:
             "sbom_accepted_version": sbom_accepted["version"],
             "sbom_accepted_reference": sbom_accepted["reference"],
             "sbom_accepted_environment": sbom_accepted["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_accepted["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_accepted["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
@@ -375,16 +380,17 @@ class SoftwareDeployment:
             "sbom_rollback_supplier": sbom_rollback["supplier"],
             "sbom_rollback_uuid": sbom_rollback["uuid"],
             "sbom_rollback_environment": sbom_rollback["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_rollback["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_rollback["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         asset_attrs = {
@@ -435,16 +441,17 @@ class SoftwareDeployment:
             "sbom_planned_version": sbom_planned["version"],
             "sbom_planned_reference": sbom_planned["reference"],
             "sbom_planned_environment": sbom_planned["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_planned["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_planned["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
@@ -480,16 +487,17 @@ class SoftwareDeployment:
             "sbom_accepted_version": sbom_accepted["version"],
             "sbom_accepted_reference": sbom_accepted["reference"],
             "sbom_accepted_environment": sbom_accepted["environment"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": sbom_accepted["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": sbom_accepted["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
@@ -525,16 +533,16 @@ class SoftwareDeployment:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": vuln["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": vuln["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -568,16 +576,17 @@ class SoftwareDeployment:
             "vuln_author": vuln["author"],
             "vuln_target_component": vuln["target_component"],
             "vuln_target_version": vuln["target_version"],
-            "arc_attachments": [
-                {
-                    "arc_display_name": vuln["description"],
-                    "arc_attachment_identity": attachment["identity"],
-                    "arc_hash_value": attachment["hash"]["value"],
-                    "arc_hash_alg": attachment["hash"]["alg"],
-                }
-                for attachment in self._attachments
-            ],
         }
+
+        for i, attachment in enumerate(self._attachments):
+            attrs[f"attachment_attr_{i}"] = {
+                "arc_display_name": vuln["description"],
+                "arc_attribute_type": "arc_attachment",
+                "arc_blob_identity": attachment["identity"],
+                "arc_blob_hash_alg": attachment["hash"]["alg"],
+                "arc_blob_hash_value": attachment["hash"]["value"],
+            }
+
         if custom_attrs is not None:
             attrs.update(custom_attrs)
 
