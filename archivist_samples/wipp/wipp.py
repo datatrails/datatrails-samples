@@ -93,7 +93,6 @@ class Wipp:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         attrs = {
             "arc_description": description,
             "arc_serial_number": serial,
@@ -140,7 +139,6 @@ class Wipp:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -183,7 +181,6 @@ class Wipp:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -227,7 +224,6 @@ class Wipp:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -267,7 +263,6 @@ class Wipp:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -300,7 +295,6 @@ class Wipp:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -333,7 +327,6 @@ class Wipp:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -368,7 +361,6 @@ class Wipp:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -402,7 +394,6 @@ class Wipp:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -442,7 +433,6 @@ class Wipp:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
