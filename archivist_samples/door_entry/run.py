@@ -51,7 +51,6 @@ doors_creator = make_assets_create(attachment_creator=attachment_create, confirm
 
 
 def create_rkvst_paris(doors):
-
     # Unlike the others, which feature images of the whole building,
     # this one is actually a close-up of the connected door terminal
     return doors_creator(
@@ -85,7 +84,6 @@ def create_rkvst_paris(doors):
 
 
 def create_cityhall(doors):
-
     return doors_creator(
         doors,
         "City Hall front door",
@@ -148,7 +146,6 @@ def create_courts(doors):
 
 
 def create_bastille(doors):
-
     return doors_creator(
         doors,
         "Bastille front door",
@@ -182,7 +179,6 @@ def create_bastille(doors):
 
 
 def create_gdn_front(doors):
-
     return doors_creator(
         doors,
         "Gare du Nord apartments front door",
@@ -216,7 +212,6 @@ def create_gdn_front(doors):
 
 
 def create_gdn_side(doors):
-
     return doors_creator(
         doors,
         "Gare du Nord apartments side door",
@@ -577,7 +572,6 @@ def open_door(doors, doorid, cards, cardid):
 
 
 def run(arch, args):
-
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 

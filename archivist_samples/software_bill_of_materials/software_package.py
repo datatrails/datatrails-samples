@@ -65,7 +65,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         attrs = {
             "arc_description": sbom_description,
             "arc_display_type": "Software Package",
@@ -112,7 +111,6 @@ class SoftwarePackage:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         # sbom_name: str,
         # sbom_description: str,
         # sbom_hash: str,
@@ -174,7 +172,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -207,7 +204,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -242,7 +238,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -276,7 +271,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -312,7 +306,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict],
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -348,7 +341,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",
@@ -386,7 +378,6 @@ class SoftwarePackage:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         props = {
             "operation": "Record",
             "behaviour": "RecordEvidence",

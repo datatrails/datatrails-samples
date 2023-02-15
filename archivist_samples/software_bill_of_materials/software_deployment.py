@@ -48,7 +48,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         if sbom_environment is not None:
             self._environment = sbom_environment
         else:
@@ -79,7 +78,6 @@ class SoftwareDeployment:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         if sbom_installation["environment"] is not None:
             self._environment = sbom_installation["environment"]
         else:
@@ -143,7 +141,6 @@ class SoftwareDeployment:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         if sbom_decomission["environment"] is not None:
             self._environment = sbom_decomission["environment"]
         else:
@@ -201,7 +198,6 @@ class SoftwareDeployment:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         if sbom_upgrade["environment"] is not None:
             self._environment = sbom_upgrade["environment"]
         else:
@@ -263,7 +259,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         if sbom_planned["environment"] is not None:
             self._environment = sbom_planned["environment"]
         else:
@@ -309,7 +304,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         if sbom_accepted["environment"] is not None:
             self._environment = sbom_accepted["environment"]
         else:
@@ -357,7 +351,6 @@ class SoftwareDeployment:
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
     ):
-
         if sbom_rollback["environment"] is not None:
             self._environment = sbom_rollback["environment"]
         else:
@@ -419,7 +412,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         if sbom_planned["environment"] is not None:
             self._environment = sbom_planned["environment"]
         else:
@@ -465,7 +457,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         if sbom_accepted["environment"] is not None:
             self._environment = sbom_accepted["environment"]
         else:
@@ -513,7 +504,6 @@ class SoftwareDeployment:
         attachments: Optional[list] = None,
         custom_attrs: Optional[dict] = None,
     ):
-
         self._add_attachments(attachments)
 
         props = {

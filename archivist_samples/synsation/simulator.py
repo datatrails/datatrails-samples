@@ -47,7 +47,12 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         input("Press to enact White Hat Hacker")
 
     cve_id = "CVE2020-deadbeef"
-    MyAsset(ac, asset_id, tw, "Brian@WhiteHatHackers.io",).report_vulnerability(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "Brian@WhiteHatHackers.io",
+    ).report_vulnerability(
         (
             f"Synsation Industries {asset_type}s are vulnerable "
             f"to {cve_id}. Upgrade as soon as possible."
@@ -63,7 +68,12 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact OEM issue patch")
 
-    MyAsset(ac, asset_id, tw, "Releases@SynsationIndustries.com",).patch_vulnerability(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "Releases@SynsationIndustries.com",
+    ).patch_vulnerability(
         f"Patch for critical vulnerability '{cve_id}' released in version 1.6",
         (
             "SHA256-sum for official 1.6 release: "
@@ -84,7 +94,12 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
         ac, "trafficlightconformance.pdf", "application/pdf"
     )
 
-    MyAsset(ac, asset_id, tw, "Releases@SynsationIndustries.com",).certify_patch(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "Releases@SynsationIndustries.com",
+    ).certify_patch(
         "Safety conformance approved for version 1.6. See attached conformance report",
         "DVA Conformance Report attached",
         {
@@ -112,7 +127,12 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact Owner approves")
 
-    MyAsset(ac, asset_id, tw, "Legal@SmartCity.fr",).service_required(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "Legal@SmartCity.fr",
+    ).service_required(
         "Version 1.6 accepted. Please install ASAP",
         job_corval,
     )
@@ -124,12 +144,22 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
     else:
         input("Press to enact Maintenance")
 
-    MyAsset(ac, asset_id, tw, "Phil@SynsationServicing.com",).service(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "Phil@SynsationServicing.com",
+    ).service(
         f"Upgraded and restarted {asset_type} during safe downtime window",
         job_corval,
     )
 
-    MyAsset(ac, asset_id, tw, "otaService@SynsationServicing.com",).update_firmware(
+    MyAsset(
+        ac,
+        asset_id,
+        tw,
+        "otaService@SynsationServicing.com",
+    ).update_firmware(
         "Responding to vulnerability 'CVE2020-deadbeef' with patch 'v1.6'",
         "1.6",
         cve_corval,

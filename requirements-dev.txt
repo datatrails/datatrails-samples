@@ -1,11 +1,11 @@
 -r requirements.txt
 
 # code quality
-autopep8~=1.6
-black~=22.6
-pycodestyle~=2.9
-pylint~=2.14
+autopep8~=2.0
+black~=23.1
+pycodestyle~=2.10
+pylint~=2.16
 
 # uploading to pypi
-build~=0.8
+build~=0.10
 twine~=4.0

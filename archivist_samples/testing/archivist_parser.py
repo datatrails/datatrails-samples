@@ -97,7 +97,6 @@ def common_parser(description):
 
 
 def endpoint(args):
-
     if args.verbose:
         set_logger("DEBUG")
     else:
@@ -115,7 +114,7 @@ def endpoint(args):
         with open(args.auth_token_file, mode="r", encoding="utf-8") as tokenfile:
             authtoken = tokenfile.read().strip()
 
-        arch = Archivist(args.url, authtoken, verify=False, fixtures=fixtures)
+        arch = Archivist(args.url, authtoken, fixtures=fixtures)
 
     if arch is None:
         LOGGER.error("Critical error.  Aborting.")
