@@ -8,11 +8,11 @@ from importlib import resources
 
 import logging
 from sys import exit as sys_exit
-from typing import Optional
+from typing import List, Optional
 
 from archivist import archivist as type_helper
 
-from ..testing.assets import make_assets_create
+from ..testing.assets import make_assets_create, AttachmentDescription
 
 from . import sbom_files
 
@@ -20,17 +20,17 @@ from . import sbom_files
 LOGGER = logging.getLogger(__name__)
 
 
-def attachment_create(sboms, name):
-    LOGGER.info("sbom attachment creator: %s", name)
-    with resources.open_binary(sbom_files, name[0]) as fd:
+def attachment_create(sboms, attachment_description: AttachmentDescription):
+    LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
+    with resources.open_binary(sbom_files, attachment_description.filename) as fd:
         attachment = sboms.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": attachment["identity"],
             "arc_blob_hash_alg": attachment["hash"]["alg"],
             "arc_blob_hash_value": attachment["hash"]["value"],
-            "arc_display_name": name[1],
-            "arc_file_name": name[0],
+            "arc_display_name": attachment_description.attribute_name,
+            "arc_file_name": attachment_description.filename,
         }
         return result
 
@@ -62,7 +62,7 @@ class SoftwarePackage:
         sbom_name: str,
         sbom_description: str,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         attrs = {
@@ -106,7 +106,7 @@ class SoftwarePackage:
         self,
         sbom: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         latest_sbom: Optional[dict] = None,
         custom_attrs: Optional[dict] = None,
         custom_asset_attrs: Optional[dict] = None,
@@ -139,8 +139,10 @@ class SoftwarePackage:
             "sbom_uuid": sbom["uuid"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -169,7 +171,7 @@ class SoftwarePackage:
         self,
         sbom_planned: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -187,8 +189,10 @@ class SoftwarePackage:
             "sbom_planned_reference": sbom_planned["reference"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -201,7 +205,7 @@ class SoftwarePackage:
         self,
         sbom_accepted: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -220,8 +224,10 @@ class SoftwarePackage:
             "sbom_accepted_vuln_reference": sbom_accepted["reference"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -235,7 +241,7 @@ class SoftwarePackage:
         self,
         sbom_patch: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -254,8 +260,10 @@ class SoftwarePackage:
             "sbom_patch_uuid": sbom_patch["uuid"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -268,7 +276,7 @@ class SoftwarePackage:
         self,
         sbom_patch: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -288,8 +296,10 @@ class SoftwarePackage:
             "sbom_patch_vuln_reference": sbom_patch["reference"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -303,7 +313,7 @@ class SoftwarePackage:
         self,
         vuln: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict],
     ):
         props = {
@@ -325,8 +335,10 @@ class SoftwarePackage:
             "vuln_target_version": vuln["target_version"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -338,7 +350,7 @@ class SoftwarePackage:
     def vuln_update(
         self,
         vuln: dict,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -360,8 +372,10 @@ class SoftwarePackage:
             "vuln_target_version": vuln["target_version"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -375,7 +389,7 @@ class SoftwarePackage:
         self,
         sbom_eol: dict,
         *,
-        attachments: Optional[list] = None,
+        attachments: Optional[List[AttachmentDescription]] = None,
         custom_attrs: Optional[dict] = None,
     ):
         props = {
@@ -393,8 +407,10 @@ class SoftwarePackage:
             "sbom_eol_target_date": sbom_eol["target_date"],
         }
         if attachments:
-            for i, attachment in enumerate(attachments):
-                attrs[f"attachment_attr_{i}"] = attachment_create(self.arch, attachment)
+            for attachment in attachments:
+                attrs[attachment.attribute_name] = attachment_create(
+                    self.arch, attachment
+                )
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)

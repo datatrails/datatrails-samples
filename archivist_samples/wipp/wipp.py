@@ -14,19 +14,20 @@ from typing import Optional
 
 from archivist import archivist as type_helper
 
-from ..testing.assets import make_assets_create
+from ..testing.assets import make_assets_create, AttachmentDescription
 
 from . import wipp_files
 
 LOGGER = logging.getLogger(__name__)
 
 
-def upload_attachment(arch, path, name):
-    with resources.open_binary(wipp_files, path) as fd:
+def upload_attachment(arch, attachment_description: AttachmentDescription):
+    with resources.open_binary(wipp_files, attachment_description.filename) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
-            "arc_display_name": name,
-            "arc_file_name": path,
+            # sample-specific attr to relay attachment name
+            "rkvst_samples_display_name": attachment_description.attribute_name,
+            "arc_file_name": attachment_description.filename,
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": blob["identity"],
             "arc_blob_hash_alg": blob["hash"]["alg"],
@@ -35,16 +36,16 @@ def upload_attachment(arch, path, name):
         return attachment
 
 
-def attachment_create(arch, name):
-    with resources.open_binary(wipp_files, name[0]) as fd:
+def attachment_create(arch, attachment_description: AttachmentDescription):
+    with resources.open_binary(wipp_files, attachment_description.filename) as fd:
         attachment = arch.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": attachment["identity"],
             "arc_blob_hash_alg": attachment["hash"]["alg"],
             "arc_blob_hash_value": attachment["hash"]["value"],
-            "arc_display_name": name[1],
-            "arc_file_name": name[0],
+            "arc_display_name": attachment_description.attribute_name,
+            "arc_file_name": attachment_description.filename,
         }
 
         return result
@@ -149,8 +150,8 @@ class Wipp:
             "arc_evidence": "N/A",
         }
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -192,8 +193,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -235,8 +236,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -274,8 +275,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -306,8 +307,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -340,8 +341,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -372,8 +373,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -405,8 +406,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -444,8 +445,8 @@ class Wipp:
         }
 
         safe_attachments = attachments or []
-        for i, attachment in enumerate(safe_attachments):
-            attrs[f"attachment_attr_{i}"] = attachment
+        for attachment in safe_attachments:
+            attrs[attachment["rkvst_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)

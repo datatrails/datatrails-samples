@@ -16,7 +16,7 @@ from archivist.errors import ArchivistNotFoundError
 from .images import assets as images_assets
 from .images import events as images_events
 
-from ..testing.assets import make_assets_create
+from ..testing.assets import make_assets_create, AttachmentDescription
 
 
 DOOR_TERMINAL = "Door access terminal"
@@ -29,15 +29,15 @@ LOGGER = logging.getLogger(__name__)
 ############
 
 
-def attachment_create(doors, name):
-    with resources.open_binary(images_assets, name) as fd:
+def attachment_create(doors, attachment_description: AttachmentDescription):
+    with resources.open_binary(images_assets, attachment_description.filename) as fd:
         attachment = doors.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": attachment["identity"],
             "arc_blob_hash_alg": attachment["hash"]["alg"],
             "arc_blob_hash_value": attachment["hash"]["value"],
-            "arc_file_name": name,
+            "arc_file_name": attachment_description.filename,
         }
 
         return result
@@ -78,7 +78,7 @@ def create_rkvst_paris(doors):
             },
         },
         attachments=[
-            "entry_terminal.jpg",
+            AttachmentDescription("entry_terminal.jpg", "arc_primary_image"),
         ],
     )
 
@@ -109,7 +109,7 @@ def create_cityhall(doors):
             },
         },
         attachments=[
-            "cityhall.jpg",
+            AttachmentDescription("cityhall.jpg", "arc_primary_image"),
         ],
     )
 
@@ -140,7 +140,7 @@ def create_courts(doors):
             },
         },
         attachments=[
-            "courts.jpg",
+            AttachmentDescription("courts.jpg", "arc_primary_image"),
         ],
     )
 
@@ -173,7 +173,7 @@ def create_bastille(doors):
             },
         },
         attachments=[
-            "bastille.jpg",
+            AttachmentDescription("bastille.jpg", "arc_primary_image"),
         ],
     )
 
@@ -206,7 +206,7 @@ def create_gdn_front(doors):
             },
         },
         attachments=[
-            "gdn_front.jpg",
+            AttachmentDescription("gdn_front.jpg", "arc_primary_image"),
         ],
     )
 
@@ -239,7 +239,7 @@ def create_gdn_side(doors):
             },
         },
         attachments=[
-            "gdn_side.jpg",
+            AttachmentDescription("gdn_side.jpg", "arc_primary_image"),
         ],
     )
 

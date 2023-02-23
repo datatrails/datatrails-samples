@@ -109,7 +109,7 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
                 "arc_blob_hash_alg": iattachment["hash"]["alg"],
                 "arc_blob_hash_value": iattachment["hash"]["value"],
             },
-            "attachment_attr_1": {
+            "Conformance Report": {
                 "arc_display_name": "Conformance Report",
                 "arc_attribute_type": "arc_attachment",
                 "arc_blob_identity": rattachment["identity"],
