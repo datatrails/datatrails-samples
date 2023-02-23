@@ -9,6 +9,7 @@ from sys import exit as sys_exit
 from archivist import about
 
 from .wipp import Wipp, upload_attachment
+from ..testing.assets import AttachmentDescription
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ def run(arch, args):
         drumname,
         "Standard non-POC 55 gallon drum",
         args.namespace,
-        attachments=[("55gallon.jpg", "arc_primary_image")],
+        attachments=[AttachmentDescription("55gallon.jpg", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "55",
             "wipp_package_id": args.namespace,
@@ -47,7 +48,7 @@ def run(arch, args):
         caskname,
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
         args.namespace,
-        attachments=[("rh72b.png", "arc_primary_image")],
+        attachments=[AttachmentDescription("rh72b.png", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "3",
         },
@@ -70,9 +71,17 @@ def run(arch, args):
         },
         attachments=[
             upload_attachment(
-                arch, "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                arch,
+                AttachmentDescription(
+                    "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                ),
             ),
-            upload_attachment(arch, "characterization.pdf", "Characterization report"),
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "characterization.pdf", "Characterization report"
+                ),
+            ),
         ],
     )
     LOGGER.info("Characterization registered...")
@@ -88,9 +97,14 @@ def run(arch, args):
             "total_confirmed": "2.12E+02",
         },
         attachments=[
-            upload_attachment(arch, "wipp_radiography.jpg", "arc_primary_image"),
             upload_attachment(
-                arch, "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                arch, AttachmentDescription("wipp_radiography.jpg", "arc_primary_image")
+            ),
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                ),
             ),
         ],
     )
@@ -105,7 +119,9 @@ def run(arch, args):
             "container": cask.asset["identity"],
         },
         attachments=[
-            upload_attachment(arch, "trupact_loading.jpg", "arc_primary_image")
+            upload_attachment(
+                arch, AttachmentDescription("trupact_loading.jpg", "arc_primary_image")
+            )
         ],
     )
     cask.loading(
@@ -118,7 +134,9 @@ def run(arch, args):
             "wipp_inventory": drum.asset["identity"],
         },
         attachments=[
-            upload_attachment(arch, "trupact_loading.jpg", "arc_primary_image")
+            upload_attachment(
+                arch, AttachmentDescription("trupact_loading.jpg", "arc_primary_image")
+            )
         ],
     )
     LOGGER.info("Loading registered...")
@@ -131,7 +149,12 @@ def run(arch, args):
             + cask.asset["attributes"]["arc_display_name"],
         },
         attachments=[
-            upload_attachment(arch, "preshipment_inspection.jpg", "arc_primary_image")
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "preshipment_inspection.jpg", "arc_primary_image"
+                ),
+            )
         ],
     )
     cask.preshipping(
@@ -139,7 +162,12 @@ def run(arch, args):
             "description": "Inspected " + cask.asset["attributes"]["arc_display_name"],
         },
         attachments=[
-            upload_attachment(arch, "preshipment_inspection.jpg", "arc_primary_image")
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "preshipment_inspection.jpg", "arc_primary_image"
+                ),
+            )
         ],
     )
     LOGGER.info("Pre-shipping inspection registered...")
@@ -152,9 +180,14 @@ def run(arch, args):
             + cask.asset["attributes"]["arc_display_name"],
         },
         attachments=[
-            upload_attachment(arch, "truck_departure.jpg", "arc_primary_image"),
             upload_attachment(
-                arch, "SRS_to_WPP_route_instructions.pdf", "approved_route"
+                arch, AttachmentDescription("truck_departure.jpg", "arc_primary_image")
+            ),
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "SRS_to_WPP_route_instructions.pdf", "approved_route"
+                ),
             ),
         ],
     )
@@ -164,9 +197,14 @@ def run(arch, args):
             + "departing for WIPP."
         },
         attachments=[
-            upload_attachment(arch, "truck_departure.jpg", "arc_primary_image"),
             upload_attachment(
-                arch, "SRS_to_WPP_route_instructions.pdf", "approved_route"
+                arch, AttachmentDescription("truck_departure.jpg", "arc_primary_image")
+            ),
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "SRS_to_WPP_route_instructions.pdf", "approved_route"
+                ),
             ),
         ],
     )
@@ -206,7 +244,10 @@ def run(arch, args):
                 "wipp_sensors_rad": "45",
             },
             attachments=[
-                upload_attachment(arch, "truck_departure.jpg", "arc_primary_image")
+                upload_attachment(
+                    arch,
+                    AttachmentDescription("truck_departure.jpg", "arc_primary_image"),
+                )
             ],
         )
     LOGGER.info("Waypoints registered...")
@@ -218,14 +259,22 @@ def run(arch, args):
             "description": "At WIPP, inventory"
             + cask.asset["attributes"]["arc_display_name"],
         },
-        attachments=[upload_attachment(arch, "truck_arrival.jpg", "arc_primary_image")],
+        attachments=[
+            upload_attachment(
+                arch, AttachmentDescription("truck_arrival.jpg", "arc_primary_image")
+            )
+        ],
     )
     cask.arrival(
         {
             "description": cask.asset["attributes"]["arc_display_name"]
             + "arriving at WIPP",
         },
-        attachments=[upload_attachment(arch, "truck_arrival.jpg", "arc_primary_image")],
+        attachments=[
+            upload_attachment(
+                arch, AttachmentDescription("truck_arrival.jpg", "arc_primary_image")
+            )
+        ],
     )
     LOGGER.info("Arrival registered...")
 
@@ -240,7 +289,10 @@ def run(arch, args):
             "wipp_container": "",
         },
         attachments=[
-            upload_attachment(arch, "trupact_unloading.jpg", "arc_primary_image")
+            upload_attachment(
+                arch,
+                AttachmentDescription("trupact_unloading.jpg", "arc_primary_image"),
+            )
         ],
     )
     cask.unloading(
@@ -251,7 +303,10 @@ def run(arch, args):
             "wipp_inventory": "",
         },
         attachments=[
-            upload_attachment(arch, "trupact_unloading.jpg", "arc_primary_image")
+            upload_attachment(
+                arch,
+                AttachmentDescription("trupact_unloading.jpg", "arc_primary_image"),
+            )
         ],
     )
     LOGGER.info("Unloading registered...")
@@ -264,7 +319,9 @@ def run(arch, args):
             "location": "D-32",
         },
         attachments=[
-            upload_attachment(arch, "waste_placement.jpg", "arc_primary_image")
+            upload_attachment(
+                arch, AttachmentDescription("waste_placement.jpg", "arc_primary_image")
+            )
         ],
     )
     LOGGER.info("Emplacement registered...")

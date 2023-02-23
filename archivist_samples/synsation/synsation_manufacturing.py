@@ -6,19 +6,21 @@
 import string
 import random
 
-from ..testing.assets import make_assets_create
+from ..testing.assets import make_assets_create, AttachmentDescription
 
 from .util import asset_attachment_upload_from_file
 
 
-def attachment_create(arch, name):
-    attachment = asset_attachment_upload_from_file(arch, name, "image/jpg")
+def attachment_create(arch, attachment_description: AttachmentDescription):
+    attachment = asset_attachment_upload_from_file(
+        arch, attachment_description.filename, "image/jpg"
+    )
     result = {
         "arc_attribute_type": "arc_attachment",
         "arc_blob_identity": attachment["identity"],
         "arc_blob_hash_alg": attachment["hash"]["alg"],
         "arc_blob_hash_value": attachment["hash"]["value"],
-        "arc_file_name": name,
+        "arc_file_name": attachment_description.filename,
     }
 
     return result
@@ -91,7 +93,7 @@ def create_shipping_crate(
         },
         location=loc_id,
         attachments=[
-            image,
+            AttachmentDescription(image, "arc_primary_image"),
         ],
     )
     return newasset, existed
