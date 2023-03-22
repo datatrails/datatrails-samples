@@ -13,8 +13,9 @@ Use the standard python pip utility:
 python3 -m pip install --user rkvst-samples
 ```
 
-and this will create 6 entry points:
+and this will create 7 entry points:
 
+      - archivist_samples_document
       - archivist_samples_door_entry
       - archivist_samples_estate_info
       - archivist_samples_signed_records
