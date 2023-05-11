@@ -1,3 +1,5 @@
+# TODO: this version is subject to a security alert but
+# upgrading requires code changes.
 cryptography~=38.0
-rkvst-archivist==0.20.2
+rkvst-archivist==0.22.0
 pyyaml~=6.0
