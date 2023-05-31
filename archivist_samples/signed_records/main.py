@@ -63,7 +63,7 @@ def load_keys(asset_name):
         privkey_pem = privkeyfile.read().strip()
 
     backend = backends.default_backend()
-    private_key = backend.load_pem_private_key(privkey_pem, password=None)
+    private_key = backend.load_pem_private_key(privkey_pem, None, False)
     public_key = private_key.public_key()
 
     return private_key, public_key
