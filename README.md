@@ -111,7 +111,7 @@ archivist_samples_signed_records $ARGS --check 'samples'
 
 ```bash
 archivist_samples_synsation initialise  $ARGS --num-assets 100 --wait 1 --await-confirmation
-archivist_samples_synsation charger     $ARGS --start-date 20190909 --stop-date 20200909 --fast-forward 9876
+archivist_samples_synsation charger     $ARGS --start-date 20190909 --stop-date 20191009 --fast-forward 9876
 archivist_samples_synsation simulator   $ARGS --asset-name tcl.ccj.001 --wait 1.0
 archivist_samples_synsation wanderer    $ARGS
 archivist_samples_synsation analyze     $ARGS 
