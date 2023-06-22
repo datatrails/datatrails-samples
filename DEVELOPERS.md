@@ -87,6 +87,8 @@ Available functional tests are:
     TEST_SELECTOR=synsation_charger task samples
     TEST_SELECTOR=synsation_simulator task samples
     TEST_SELECTOR=synsation_wanderer task samples
+    TEST_SELECTOR=sbom task samples
+    TEST_SELECTOR=wipp task samples
 
 To run more than one test use a comma-separated list:
 
