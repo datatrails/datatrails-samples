@@ -45,10 +45,15 @@ def make_assets_create(
         Callable[[type_helper.Archivist, AttachmentDescription], Dict]
     ] = None,
     confirm=False,
+    public=False,
 ):
     """
     Creates a general function that creates an asset with a location
     and a list of attachments but only if the asset does not already exist.
+
+    By default the selector for, if the asset already exists, is the `arc_display_name`.
+    But passing in `selector_key` and `selector_value` to the returned
+    function allows for a custom selector.
 
     the argument is the method that creates an attachment of the form
          attachment_create(arch, ("filename", "display_name"))
@@ -56,24 +61,31 @@ def make_assets_create(
 
     def assets_create(
         arch,
-        displayname,
+        display_name,
         asset_attrs,
         *,
         location=None,
         attachments: Optional[List[AttachmentDescription]] = None,
+        selector_key="arc_display_name",
+        selector_value=None
     ):
         asset = None
         existed = False
+
+        # by default use the display name as the selector value
+        if selector_value is None:
+            selector_value = display_name
+
         try:
             asset = arch.assets.read_by_signature(
                 attrs={
-                    "arc_display_name": displayname,
+                    selector_key: selector_value,
                 },
             )
 
         except ArchivistNotFoundError:
-            LOGGER.info("%s does not exist", displayname)
-            asset_attrs["arc_display_name"] = displayname
+            LOGGER.info("%s does not exist", display_name)
+            asset_attrs["arc_display_name"] = display_name
             if location is not None:
                 location = locations_create_if_not_exists(
                     arch,
@@ -87,14 +99,17 @@ def make_assets_create(
                     attachment_attr = attachment_creator(arch, attachment)
                     asset_attrs[attachment.attribute_name] = attachment_attr
 
+            # add the selector for the next run
+            if selector_key != "arc_display_name" and selector_value is not None:
+                asset_attrs[selector_key] = selector_value
+
             LOGGER.debug("asset_attrs %s", asset_attrs)
             asset = arch.assets.create(
-                attrs=asset_attrs,
-                confirm=confirm,
+                attrs=asset_attrs, confirm=confirm, props={"public": public}
             )
 
         else:
-            LOGGER.info("%s already existed", displayname)
+            LOGGER.info("%s already existed", display_name)
             existed = True
 
         return asset, existed

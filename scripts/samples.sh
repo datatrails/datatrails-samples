@@ -34,6 +34,7 @@ then
     echo "    TEST_SELECTOR=synsation_analyze ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=sbom ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=wipp ${SAMPLESCMD}"
+    echo "    TEST_SELECTOR=document ${SAMPLESCMD}"
     echo ""
     echo "To run more than one test use a comma-separated list:"
     echo ""
@@ -70,6 +71,7 @@ TEST_NO_SYNSATION_SIMULATOR=${TEST_NO}
 TEST_NO_SYNSATION_WANDERER=${TEST_NO}
 TEST_NO_SBOM=${TEST_NO}
 TEST_NO_WIPP=${TEST_NO}
+TEST_NO_DOCUMENT=${TEST_NO}
 
 IFS=',' read -r -a SELECTION_LIST <<< "$TEST_SELECTOR"
 for selection in "${SELECTION_LIST[@]}"
@@ -161,4 +163,8 @@ ${SBOM}
 # archivist_samples_wipp
 WIPP="${TEST_NO_WIPP} $(command wipp) ${ARGS} ${NAMESPACE}"
 ${WIPP}
+
+# archivist_samples_document
+DOCUMENT="${TEST_NO_DOCUMENT} $(command document) ${ARGS} ${NAMESPACE}"
+${DOCUMENT}
 
