@@ -42,8 +42,8 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
 ```python
     # Binaries such as images and SBOM XML need to be uploaded to RKVST first
     def attachment_create(sboms, attachment_description: AttachmentDescription):
-    LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
-    with resources.open_binary(sbom_files, attachment_description.filename) as fd:
+      LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
+      with resources.open_binary(sbom_files, attachment_description.filename) as fd:
         attachment = sboms.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",
@@ -53,7 +53,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
             "arc_display_name": attachment_description.attribute_name,
             "arc_file_name": attachment_description.filename,
         }
-        return result
+      return result
 
     # Instantiate SoftwarePackage object and create an RKVST record to begin
     # tracing and publishing its version history
