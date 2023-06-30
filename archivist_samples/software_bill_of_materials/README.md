@@ -53,7 +53,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
             "arc_display_name": attachment_description.attribute_name,
             "arc_file_name": attachment_description.filename,
         }
-      return result
+        return result
 
     # Instantiate SoftwarePackage object and create an RKVST record to begin
     # tracing and publishing its version history
