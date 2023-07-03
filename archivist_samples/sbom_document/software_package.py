@@ -41,7 +41,7 @@ sboms_creator = make_assets_create(
 
 
 class SoftwarePackageDocument:
-    selector_key = "OnboardingSampleID15"
+    selector_key = "OnboardingSampleID"
     selector_value = "SBOM"
 
     def __init__(self, arch: "type_helper.Archivist"):
