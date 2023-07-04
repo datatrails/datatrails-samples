@@ -36,7 +36,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
 
 
 sboms_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=True, public=True
+    attachment_creator=attachment_create, confirm=True
 )
 
 
