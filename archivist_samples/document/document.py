@@ -53,7 +53,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
 
 
 document_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=True, public=True
+    attachment_creator=attachment_create, confirm=True
 )
 
 
