@@ -35,9 +35,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
         return result
 
 
-sboms_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=True
-)
+sboms_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
 
 
 class SoftwarePackageDocument:
