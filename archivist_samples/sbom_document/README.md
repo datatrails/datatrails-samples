@@ -20,7 +20,7 @@ This sample shows how to quickly get started with integrating your build and SBO
 
 ## Running the sample
 
-The sample creates a SoftwarePackage object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector". It takes the concept of assured data one step further and extends to assured processes by simulating a series of product lifecycle events that result in a variety of updates to the SBOM, including private patches for specific customers and internal planning and approval for major updates.
+The sample creates a SoftwarePackage Document object and uploads a Software Bill of Materials based on the [standard SWID example](https://www.ntia.gov/files/ntia/publications/ntia_sbom_formats_and_standards_whitepaper_-_version_20191025.pdf "ACME Roadrunner Detector") "ACME Roadrunner Detector". It takes the concept of assured data one step further and extends to assured processes by simulating a series of product lifecycle events that result in a variety of updates to the SBOM, including private patches for specific customers and internal planning and approval for major updates.
 
 To run it: 
 
@@ -52,7 +52,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
             }
             return attachment
 
-    # Instantiate SoftwarePackage object and create an RKVST record to begin
+    # Instantiate SoftwarePackageDocument object and create an RKVST record to begin
     # tracing and publishing its version history
     package = SoftwarePackageDocument(arch)
     package.create(
@@ -65,7 +65,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
 
 ### Loading an existing SoftwarePackageDocument
 
-If you know the RKVST Asset Identity you can load the SBOM directly as a SoftwarePackage using `SoftwarePackageDocument.read()`:
+If you know the RKVST Asset Identity you can load the SBOM directly as a SoftwarePackageDocument using `SoftwarePackageDocument.read()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -73,7 +73,7 @@ package = SoftwarePackageDocument(arch)
 package.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
-If you do not know the RKVST Asset Identity then you can load the SBOM based on any unique set of attributes using `SoftwarePackage.read_by_signature()`:
+If you do not know the RKVST Asset Identity then you can load the SBOM based on any unique set of attributes using `SoftwarePackageDocument.read_by_signature()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -84,7 +84,7 @@ package.read_by_signature({"sbom_uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0"})
 
 ### Making a release
 
-When a new official release is issued, update the version history in RKVST with `SoftwarePackage.publish()`:
+When a new official release is issued, update the version history in RKVST with `SoftwarePackageDocument.publish()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
