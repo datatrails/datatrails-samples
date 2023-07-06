@@ -119,6 +119,7 @@ class Document:
         return self._asset
 
     # Publish new version of the document
+    # pylint: disable=too-many-arguments
     def publish(
         self,
         document: dict,
@@ -127,6 +128,7 @@ class Document:
         doc_hash: str,
         authors: "list[dict]",
         name: str,
+        custom_attrs: "dict|None" = None,
     ):
         props = {
             "operation": "Record",
@@ -137,6 +139,9 @@ class Document:
             "arc_description": description,
             "document_version_authors": authors,
         }
+
+        if custom_attrs is not None:
+            attrs.update(custom_attrs)
 
         asset_attrs = {
             "arc_display_name": name,
