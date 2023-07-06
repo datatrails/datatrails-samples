@@ -98,5 +98,8 @@ def run(arch, args):
         doc_hash="84ffc357a12491f7313b25cfdec0efb97929c87b411ef28586e62d7330c8cd77",
         version="V3",
         name="Asteroid Mining Inc Invoice",
+        custom_attrs={
+            "OnboardingFinalEventMarker": "true",
+        },
     )
     LOGGER.info("V3 published, with discount applied")

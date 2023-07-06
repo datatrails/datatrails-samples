@@ -122,6 +122,9 @@ def run(arch, args):
             "supplier": "Coyote Services, Inc.",
             "uuid": "com.acme.rrd2013-ce-sp1-v5-0-0-0",
         },
+        custom_attrs={
+            "OnboardingFinalEventMarker": "true",
+        },
     )
     LOGGER.info("Release registered.")
     sys_exit(0)
