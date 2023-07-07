@@ -1,0 +1,50 @@
+{
+    "alg": "es256",
+    "private_key": "es256_private.key",
+    "sign_cert": "es256_certs.pem",
+    "ta_url": "http://timestamp.digicert.com",
+    
+    "claim_generator": "VinylTestApp",
+    "title": "pexels-miguel-á-padriñán-5764283",
+    "thumbnail": {
+        "identifier": "pexels-miguel-á-padriñán-5764283.jpg",
+        "format": "image/jpeg"
+    },
+    "assertions": [
+        {
+            "label": "c2pa.actions",
+            "data": {
+                "actions": [
+                    {
+                        "action": "c2pa.opened"
+                    },
+                    {
+                        "action":"c2pa.redacted",
+                        "parameters": {
+                            "ingredients": [
+                                {
+                                    "url": "self#jumbf=c2pa.assertions/pexels"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "metadata": {
+                    "reviewRatings": [
+                        {
+                            "code": "c2pa.unknown",
+                            "explanation": "Something untracked happened",
+                            "value": 4
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "label": "c2pa.demo",
+            "data": {
+                "use": "allowed"
+            }
+        }
+    ]
+}
