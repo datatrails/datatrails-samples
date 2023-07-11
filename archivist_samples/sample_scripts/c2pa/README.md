@@ -16,14 +16,16 @@ C2PA Readme sections relevant to this script:
 - Creating an ingredient from a file 
 - Detail manifest report 
 
- ## Environment Variables
+## Environment Variables
 
- Please set the below environment variables, they represent the client id and location of client secret for RKVST app registrations:
+Please set the below environment variables, they represent the client id and location of client secret for RKVST app registrations:
 
+```bash
 export HONEST_CLIENT_ID=”client id app registration for Honest Abe” 
 export HONEST_CLIENT_SECRET_FILENAME=”credentials/.honest_secret” 
 export EVIL_CLIENT_ID=”client id app registration for Evil Eddie” 
 export EVIL_C2_CLIENT_SECRET_FILENAME=”credentials/.evil_secret” 
+```
 
 In addition, this script utilizes RKVST Python3 SDK, located [here](https://github.com/rkvst/rkvst-python).  This is not a requirement as RKVST APIs are code agnostic. 
 
