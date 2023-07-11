@@ -56,7 +56,7 @@ def honest_arch():
 # to the production instance of RKVST.
 #
 # EVIL_CLIENT_ID = represents the client ID from an App Registration
-# EVIL_CLIENT_SECRETD_FILENAME = represents location client secret from an App Registration
+# EVIL_CLIENT_SECRET_FILENAME = represents location client secret from an App Registration
 def evil_arch():
     client_id = getenv("EVIL_CLIENT_ID")
     client_secret_file = getenv("EVIL_CLIENT_SECRET_FILENAME")
@@ -174,6 +174,8 @@ def get_asset(arch, id):
 #
 # See "Adding a manifest to an asset file"
 #
+# c2patool sample/pexels-miguel-á-padriñán-5764283.jpg -m sample/definition.json -f -o sample/signed_pexels-miguel-á-padriñán-5764283.jpg
+#
 # image = represents the file a manifest will be created against
 # definition = represents the json file used to create the manifest
 # signed_image = represents the output file that contains the manifest
@@ -256,6 +258,8 @@ def create_publish(arch, id, version, manifest, description, author):
 #
 # See "Creating an ingredient from a file"
 #
+# c2patool sample/pexels-miguel-á-padriñán-5764283.jpg --ingredient --force --output ./ingredient
+#
 # image = represents asset-embedded file used to create ingredient info
 # Output file is located in directory called "ingredient" and copied to
 # sample directory.
@@ -302,6 +306,8 @@ def create_ingredient(arch, id, image):
 # Passing the ingredient file of the "parent" image to be added to the manifest
 # for the "child" image.
 #
+# c2patool sample/pexels-miguel-á-padriñán-5764284.jpg -m sample/4defintion.json -p ./ingredient -f -o sample/signed_pexels-miguel-á-padriñán-5764284.jpg
+#
 # image = represents "child" image that DOES NOT have a manifest
 # defintion = represents the json file used to create the manifest
 # signed_image = represents the output file that contains the manifest
@@ -344,6 +350,8 @@ def create_parent(arch, id, image, definition):
 # https://github.com/contentauth/c2patool
 #
 # See "Detailed manifest report"
+#
+# c2patool sample/signed_pexels-miguel-á-padriñán-5764284.jpg -d --force --output ./details
 #
 # detailed.json = represents info about the format of c2pa file
 # manifest_store.json = represents  the manifest(s) info related to the signed image file
