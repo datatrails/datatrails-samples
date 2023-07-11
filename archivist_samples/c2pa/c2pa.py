@@ -296,11 +296,11 @@ class C2PADocument:
 
     # edit_manifest
     #
-    # uses a premade editted manifest for `editted_manifest`
+    # uses a premade edited manifest for `edited_manifest`
     def edit_manifest(
         self,
         description: str,
-        editted_manifest: dict,
+        edited_manifest: dict,
     ):
         props = {
             "operation": "Record",
@@ -309,7 +309,7 @@ class C2PADocument:
         attrs = {
             "arc_display_type": "Manifest Edit",
             "arc_description": description,
-            "edited_signed_image": editted_manifest,
+            "edited_signed_image": edited_manifest,
         }
 
         return self.arch.events.create(
