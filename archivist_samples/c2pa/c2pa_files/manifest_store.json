@@ -1,0 +1,71 @@
+{
+  "active_manifest": "urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c",
+  "manifests": {
+    "urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c": {
+      "claim_generator": "TestApp c2patool/0.5.3 c2pa-rs/0.21.0",
+      "title": "My Title",
+      "format": "image/jpeg",
+      "instance_id": "xmp.iid:813ee422-9736-4cdc-9be6-4e35ed8e41cb",
+      "thumbnail": {
+        "format": "image/jpeg",
+        "identifier": "urn-uuid-8c895a4c-6bfc-44b7-8af3-79323945c62c.jpg"
+      },
+      "ingredients": [],
+      "assertions": [
+        {
+          "label": "stds.schema-org.CreativeWork",
+          "data": {
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            "author": [
+              {
+                "@type": "Person",
+                "name": "Joe Bloggs"
+              }
+            ]
+          },
+          "kind": "Json"
+        },
+        {
+          "label": "c2pa.actions",
+          "data": {
+            "actions": [
+              {
+                "action": "c2pa.opened"
+              }
+            ],
+            "metadata": {
+              "reviewRatings": [
+                {
+                  "code": "c2pa.unknown",
+                  "explanation": "Something untracked happened",
+                  "value": 4
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "my.assertion",
+          "data": {
+            "any_tag": "whatever I want"
+          }
+        },
+        {
+          "label": "c2pa.hash.data",
+          "data": {
+            "alg": "sha256",
+            "hash": "+Zn9eL/oqDyW5GigeIMLqUSFvBvG/QhvuUpDvSndDyM=",
+            "name": "jumbf manifest",
+            "pad": "<omitted>"
+          }
+        }
+      ],
+      "signature_info": {
+        "issuer": "C2PA Test Signing Cert",
+        "time": "2023-05-25T16:48:56+00:00"
+      },
+      "label": "urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c"
+    }
+  }
+}

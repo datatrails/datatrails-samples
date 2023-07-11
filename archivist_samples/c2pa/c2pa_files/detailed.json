@@ -1,0 +1,117 @@
+{
+  "active_manifest": "urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c",
+  "manifests": {
+    "urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c": {
+      "claim": {
+        "alg": "sha256",
+        "assertions": [
+          {
+            "hash": "OCP1o/5eK6RRdDjKOWuxkKk5S15me8lw3+dyWHNf/WE=",
+            "url": "self#jumbf=c2pa.assertions/c2pa.thumbnail.claim.jpeg"
+          },
+          {
+            "hash": "d0OWPeQ9pFSO06V37MvWtTLLuaF5sWsTpPaEnOFdstM=",
+            "url": "self#jumbf=c2pa.assertions/stds.schema-org.CreativeWork"
+          },
+          {
+            "hash": "p3QVMYKSMb3v/vEKkBZXM/bERNl9ZYQHLgtKjj2tKOw=",
+            "url": "self#jumbf=c2pa.assertions/c2pa.actions"
+          },
+          {
+            "hash": "3Ex9BJ/X/tDukPh5ExaGNyuSbWjq/zmBN6IbFF5l56I=",
+            "url": "self#jumbf=c2pa.assertions/my.assertion"
+          },
+          {
+            "hash": "xCNSvNrMyv6D07gHRXZDOt8OwBrV1/kQF4te8pw66NQ=",
+            "url": "self#jumbf=c2pa.assertions/c2pa.hash.data"
+          }
+        ],
+        "claim_generator": "TestApp c2patool/0.5.3 c2pa-rs/0.21.0",
+        "dc:format": "image/jpeg",
+        "dc:title": "My Title",
+        "instanceID": "xmp.iid:813ee422-9736-4cdc-9be6-4e35ed8e41cb",
+        "signature": "self#jumbf=c2pa.signature"
+      },
+      "assertion_store": {
+        "c2pa.actions": {
+          "actions": [
+            {
+              "action": "c2pa.opened"
+            }
+          ],
+          "metadata": {
+            "reviewRatings": [
+              {
+                "code": "c2pa.unknown",
+                "explanation": "Something untracked happened",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "c2pa.hash.data": {
+          "alg": "sha256",
+          "hash": "+Zn9eL/oqDyW5GigeIMLqUSFvBvG/QhvuUpDvSndDyM=",
+          "name": "jumbf manifest",
+          "pad": "<omitted>"
+        },
+        "c2pa.thumbnail.claim.jpeg": "<omitted> len = 53379",
+        "my.assertion": {
+          "any_tag": "whatever I want"
+        },
+        "stds.schema-org.CreativeWork": {
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          "author": [
+            {
+              "@type": "Person",
+              "name": "Joe Bloggs"
+            }
+          ]
+        }
+      },
+      "signature": {
+        "alg": "es256",
+        "issuer": "C2PA Test Signing Cert",
+        "time": "2023-05-25T16:48:56+00:00"
+      }
+    }
+  },
+  "validation_status": [
+    {
+      "code": "claimSignature.validated",
+      "url": "self#jumbf=/c2pa/urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c/c2pa.signature",
+      "explanation": "claim signature valid"
+    },
+    {
+      "code": "assertion.hashedURI.match",
+      "url": "self#jumbf=c2pa.assertions/c2pa.thumbnail.claim.jpeg",
+      "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.thumbnail.claim.jpeg"
+    },
+    {
+      "code": "assertion.hashedURI.match",
+      "url": "self#jumbf=c2pa.assertions/stds.schema-org.CreativeWork",
+      "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/stds.schema-org.CreativeWork"
+    },
+    {
+      "code": "assertion.hashedURI.match",
+      "url": "self#jumbf=c2pa.assertions/c2pa.actions",
+      "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.actions"
+    },
+    {
+      "code": "assertion.hashedURI.match",
+      "url": "self#jumbf=c2pa.assertions/my.assertion",
+      "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/my.assertion"
+    },
+    {
+      "code": "assertion.hashedURI.match",
+      "url": "self#jumbf=c2pa.assertions/c2pa.hash.data",
+      "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.hash.data"
+    },
+    {
+      "code": "assertion.dataHash.match",
+      "url": "self#jumbf=/c2pa/urn:uuid:8c895a4c-6bfc-44b7-8af3-79323945c62c/c2pa.assertions/c2pa.hash.data",
+      "explanation": "data hash valid"
+    }
+  ]
+}

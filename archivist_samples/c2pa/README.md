@@ -1,19 +1,7 @@
-# Document Lineage Sample
+# C2PA Sample
 
-RKVST offers complete document lineage.
+The purpose of this sample is to demonstrate how one can record and trace the lifecycle of an asset-embedded manifest within RKVST thus providing a historical chain of events of wanted or unwanted changes and/or updates.
 
-This sample focuses on an invoice document for a fabricated Asteroid Mining Company.
-
-It shows the evolution of an invoice document over time, where each version adds or ammends information to the invoice:
-
-* Version 1 - Standard invoice
-* Version 2 - Updates the invoice with an order number
-* Version 3 - Updates the invoice with a discount
- 
-This sample shows that although there are multiple versions of the invoice, with varying
-amounts of money, it is clear to both the selling and buying party, which version is correct. In this case the latest version is correct.
-
-If the document contains sensitive information, it is also possible to just provide the document hash without uploading the sensitive document.
 
 ## Pre-requisites
 
@@ -35,17 +23,23 @@ credentials/.authtoken
 To run the sample: 
 
 ```bash
-archivist_samples_document [-v] -t credentials/.authtoken
+archivist_samples_c2pa [-v] -t credentials/.authtoken
 ```
 
-## Using the Document class
+## Using the C2PADocument class
 
-The Document class can create a Document Asset and currently has the ability to add
+The Document class can create a C2PA Document Asset and currently has the ability to add
 `publish` events to that Document Asset.
+
+We also have the ability to:
+* create a parent
+* create an external manifest 
+* create the ingredients
+* create an info report
 
 ### Creating a Document
 
-To create a brand new Document Asset, use `document.create()`.
+To create a brand new C2PA Document Asset, use `document.create()`.
 
 see `run.py` for example.
 
