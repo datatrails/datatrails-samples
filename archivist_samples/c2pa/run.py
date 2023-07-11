@@ -149,25 +149,25 @@ def run(arch, args):
     )
     LOGGER.info("V1.2.PM published")
 
-    LOGGER.info("Creating Editted Manifest ...")
-    # editted manifest
+    LOGGER.info("Creating Edited Manifest ...")
+    # edited manifest
     c2pa_document.edit_manifest(
         description="Removing Data From Manifest",
-        editted_manifest=upload_attachment(
+        edited_manifest=upload_attachment(
             arch,
-            AttachmentDescription("editted_signed_image.c2pa", "Editted Definition"),
+            AttachmentDescription("edited_signed_image.c2pa", "Edited Definition"),
         ),
     )
 
-    LOGGER.info("Editted Manifest Created")
+    LOGGER.info("edited Manifest Created")
 
     LOGGER.info("Publishing V1.3.ME ...")
     c2pa_document.publish(
         document=upload_attachment(
             arch,
-            AttachmentDescription("editted_signed_image.c2pa", "Editted Definition"),
+            AttachmentDescription("edited_signed_image.c2pa", "Edited Definition"),
         ),
-        description="Publishing Editted Manifest.",
+        description="Publishing Edited Manifest.",
         authors=[
             {"display_name": "Don Diego", "email": "dondiego@example.com"},
         ],
