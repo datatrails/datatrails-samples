@@ -6,9 +6,9 @@ The purpose of this script is to demonstrate how one can record and trace the li
 
 ## Prerequisite:
 
-[Install C2PA Command Line Utility](https://github.com/contentauth/c2patool)
-
 This script uses the C2PA command line utility to create asset-embedded manifests and other output files. Please install this utility before executing this script. 
+
+[Install C2PA Command Line Utility](https://github.com/contentauth/c2patool)
 
 C2PA Readme sections relevant to this script: 
 - Adding a manifest to an asset file 
@@ -18,12 +18,18 @@ C2PA Readme sections relevant to this script:
 
 ## Environment Variables
 
+There are two app registrations that represent each actor within the script.  The information obtained by the app registration (client id and client secret) are referenced by using environment variables. 
+
+To create an RKVST App Registrtaion feel free to reference our [documentation](https://docs.rkvst.com/developers/developer-patterns/getting-access-tokens-using-app-registrations/). 
+
+## Note: One does not have to create a token, just the app registrations.
+
 Please set the below environment variables, they represent the client id and location of client secret for RKVST app registrations:
 
 ```bash
-export HONEST_CLIENT_ID=”client id app registration for Honest Abe” 
+export HONEST_CLIENT_ID=”client id for Honest Abe” 
 export HONEST_CLIENT_SECRET_FILENAME=”credentials/.honest_secret” 
-export EVIL_CLIENT_ID=”client id app registration for Evil Eddie” 
+export EVIL_CLIENT_ID=”client id for Evil Eddie” 
 export EVIL_C2_CLIENT_SECRET_FILENAME=”credentials/.evil_secret” 
 ```
 
