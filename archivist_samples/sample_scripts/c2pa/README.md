@@ -1,6 +1,8 @@
 # Purpose
 
-The purpose of this script is to demonstrate how one can record and trace the lifecycle of an asset-embedded manifest within RKVST thus providing a historical chain of events of wanted or unwanted changes and/or updates. 
+The purpose of this sample is to demonstrate how one can record and trace the lifecycle of an embedded file manifest within RKVST thus providing a historical chain of events of wanted or unwanted changes and/or updates.
+
+It creates 2 separate assets, controlled by different credentials, to show how potentially malicious redaction or stripping of provenance information can be detected and proven.
 
 # Installation
 
