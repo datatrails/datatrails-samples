@@ -121,6 +121,9 @@ class C2PADocument:
         return self._asset
 
     # Publish new version of the document
+    #
+    # authors is a list in the form {'display_name': 'Bob', 'email':'Bob@example.com'}
+    #
     # pylint: disable=too-many-arguments
     def publish(
         self,
