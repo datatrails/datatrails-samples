@@ -24,7 +24,7 @@ There are two app registrations that represent each actor within the script.  Th
 
 To create an RKVST App Registrtaion feel free to reference our [documentation](https://docs.rkvst.com/developers/developer-patterns/getting-access-tokens-using-app-registrations/). 
 
-### Note: One does not have to create a token, just the app registrations.
+### Note: One does not have to create a JWT token for the REST API, just the app registrations in the RKVST tenant settings.
 
 Please set the below environment variables, they represent the client id and location of client secret for RKVST app registrations:
 
