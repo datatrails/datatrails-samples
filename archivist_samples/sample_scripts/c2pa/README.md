@@ -35,7 +35,7 @@ export EVIL_CLIENT_ID=”client id for Evil Eddie”
 export EVIL_C2_CLIENT_SECRET_FILENAME=”credentials/.evil_secret” 
 ```
 
-In addition, this script utilizes RKVST Python3 SDK, located [here](https://github.com/rkvst/rkvst-python).  This is not a requirement as RKVST APIs are code agnostic. 
+In addition, this script utilizes the RKVST Python3 SDK, located [here](https://github.com/rkvst/rkvst-python).  This is not a requirement as RKVST APIs are code agnostic. 
 
 # Scenario
 
