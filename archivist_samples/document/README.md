@@ -58,4 +58,4 @@ see `run.py` for example.
 
 ## Public Access
 
-By default the document created is public, and can be viewed publically.
+By default the document created is private, and cannot be viewed publically.
