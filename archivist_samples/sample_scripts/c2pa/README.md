@@ -1,6 +1,8 @@
 # Purpose
 
-The purpose of this script is to demonstrate how one can record and trace the lifecycle of an asset-embedded manifest within RKVST thus providing a historical chain of events of wanted or unwanted changes and/or updates. 
+The purpose of this sample is to demonstrate how one can record and trace the lifecycle of an embedded file manifest within RKVST thus providing a historical chain of events of wanted or unwanted changes and/or updates.
+
+It creates 2 separate assets, controlled by different credentials, to show how potentially malicious redaction or stripping of provenance information can be detected and proven.
 
 # Installation
 
@@ -22,7 +24,7 @@ There are two app registrations that represent each actor within the script.  Th
 
 To create an RKVST App Registrtaion feel free to reference our [documentation](https://docs.rkvst.com/developers/developer-patterns/getting-access-tokens-using-app-registrations/). 
 
-### Note: One does not have to create a token, just the app registrations.
+### Note: One does not have to create a JWT token for the REST API, just the app registrations in the RKVST tenant settings.
 
 Please set the below environment variables, they represent the client id and location of client secret for RKVST app registrations:
 
@@ -33,7 +35,7 @@ export EVIL_CLIENT_ID=”client id for Evil Eddie”
 export EVIL_C2_CLIENT_SECRET_FILENAME=”credentials/.evil_secret” 
 ```
 
-In addition, this script utilizes RKVST Python3 SDK, located [here](https://github.com/rkvst/rkvst-python).  This is not a requirement as RKVST APIs are code agnostic. 
+In addition, this script utilizes the RKVST Python3 SDK, located [here](https://github.com/rkvst/rkvst-python).  This is not a requirement as RKVST APIs are code agnostic. 
 
 # Scenario
 
