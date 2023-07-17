@@ -43,9 +43,7 @@ def honest_arch():
     with open(client_secret_file, mode="r", encoding="utf-8") as tokenfile:
         client_secret = tokenfile.read().strip()
 
-    arch = Archivist(
-        "https://app.rkvst.io", (client_id, client_secret), max_time=300
-    )
+    arch = Archivist("https://app.rkvst.io", (client_id, client_secret), max_time=300)
 
     return arch
 
@@ -63,9 +61,7 @@ def evil_arch():
     with open(client_secret_file, mode="r", encoding="utf-8") as tokenfile:
         client_secret = tokenfile.read().strip()
 
-    arch = Archivist(
-        "https://app.rkvst.io", (client_id, client_secret), max_time=300
-    )
+    arch = Archivist("https://app.rkvst.io", (client_id, client_secret), max_time=300)
 
     return arch
 
