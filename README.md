@@ -61,8 +61,8 @@ on the same URL.
 Each example creates assets,events,locations that are not visible to other examples.
 For example the door_entry assets,events etc are not visible to the synsation example.
 
-**Note: Assets and locations are only created if they do not already exist according to namespace.  If one wants to execute a sample multiple 
-times, feel free to set TEST_NAMESPACE to a different unique id.**
+***Note: Assets and locations are only created if they do not already exist according to namespace.  If one wants to execute a sample multiple 
+times, feel free to set TEST_NAMESPACE to a different unique id.***
 
 Due to restrictions attachments are always uploaded during every example execution.
 
