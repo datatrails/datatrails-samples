@@ -41,6 +41,18 @@ If TEST_VERBOSE is "-v" debugging output will appear when running the examples. 
 
 TEST_PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
 
+Windows using Powershell - at the command prompt set values for environment variables:
+
+```bash
+$Env:TEST_ARCHIVIST="https://app.rkvst.io"
+$Env:TEST_AUTHTOKEN = '<path of token location>'
+$Env:TEST_NAMESPACE = Get-Date -UFormat %s
+$Env:TEST_VERBOSE = '-v'
+$Env:TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
+```
+
+TEST_NAMESPACE is set to the date and time value in Unix format.
+
 ## TEST_NAMESPACE
 
 If TEST_NAMESPACE is blank or unspecified, any assets events, locations will be visible to other users running the same examples
@@ -49,7 +61,8 @@ on the same URL.
 Each example creates assets,events,locations that are not visible to other examples.
 For example the door_entry assets,events etc are not visible to the synsation example.
 
-Assets and locations are only created if they do not already exist according to namespace.
+**Note: TEST_NAMESPACE is a unique identifer that allows one to execute a sample once.  If one wants to execute a sample multiple 
+times, the TEST_NAMESPACE value has to be updated to a different unique id.**
 
 Due to restrictions attachments are always uploaded during every example execution.
 
