@@ -103,3 +103,5 @@ def run(arch, args):
         },
     )
     LOGGER.info("V3 published, with discount applied")
+
+    sys_exit(0)

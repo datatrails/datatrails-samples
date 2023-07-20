@@ -11,7 +11,7 @@ This sample shows how to quickly get started with integrating your build and SBO
 
 ## Pre-requisites
 
-* Python 3.7 and later versions are supported.
+* Python 3.8 and later versions are supported.
 
 * Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
 

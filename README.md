@@ -5,7 +5,7 @@ such as 'doors', 'cards', 'containers' etc.
 
 # Installing the samples code
 
-Python 3.7 and later versions are supported.
+Python 3.8 and later versions are supported.
 
 Use the standard python pip utility:
 

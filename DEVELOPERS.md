@@ -21,7 +21,7 @@ Clone this repo and cd into the root directory of the repo.
 
 ## Pre-requisites
 
-Python 3.7 and later versions are supported.
+Python 3.8 and later versions are supported.
 
 Build the docker image:
 

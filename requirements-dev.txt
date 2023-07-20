@@ -2,9 +2,9 @@
 
 # code quality
 autopep8~=2.0
-black~=23.1
+black~=23.7
 pycodestyle~=2.10
-pylint~=2.16
+pylint~=2.17
 
 # uploading to pypi
 build~=0.10
