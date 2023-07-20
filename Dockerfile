@@ -1,5 +1,5 @@
-ARG VERSION=3.7
-FROM python:${VERSION}-bullseye
+ARG VERSION=3.8
+FROM python:${VERSION}-bookworm
 
 COPY requirements.txt requirements-dev.txt /tmp/
 
