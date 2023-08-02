@@ -179,3 +179,4 @@ def run(arch, args):
         },
     )
     LOGGER.info("V1.3.ME published")
+    sys_exit(0)
