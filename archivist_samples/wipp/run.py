@@ -13,6 +13,7 @@ from ..testing.assets import AttachmentDescription
 
 LOGGER = logging.getLogger(__name__)
 
+
 def run_cask(arch, args):
     """
     Run the sample, only creating the cask asset
@@ -30,10 +31,7 @@ def run_cask(arch, args):
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
         args.namespace,
         attachments=[AttachmentDescription("rh72b.png", "arc_primary_image")],
-        custom_attrs={
-            "wipp_capacity": "3",
-            "OnboardingSampleID": "NuclearWIPP"
-        },
+        custom_attrs={"wipp_capacity": "3", "OnboardingSampleID": "NuclearWIPP"},
     )
     if cask.existed:
         LOGGER.info("Cask Asset %s already exists", caskname)
@@ -44,8 +42,7 @@ def run_cask(arch, args):
     LOGGER.info("Loading cask...")
     cask.loading(
         {
-            "description": "Filled with "
-            + "Drum",
+            "description": "Filled with " + "Drum",
             "container": cask.asset["identity"],
         },
         custom_asset_attrs={
@@ -167,9 +164,13 @@ def run_cask(arch, args):
                 AttachmentDescription("trupact_unloading.jpg", "arc_primary_image"),
             )
         ],
+        custom_attrs={
+            "OnboardingFinalEventMarker": "true",
+        },
     )
     LOGGER.info("Unloading registered...")
     sys_exit(0)
+
 
 def run(arch, args):
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
