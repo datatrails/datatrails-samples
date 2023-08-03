@@ -169,6 +169,7 @@ def run_cask(arch, args):
         ],
     )
     LOGGER.info("Unloading registered...")
+    sys_exit(0)
 
 def run(arch, args):
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
