@@ -9,7 +9,7 @@ This sample uses publicly-available information about WIPP (Waste Isolation Pilo
 
 ## Pre-requisites
 
-* Python 3.7 and later versions are supported.
+* Python 3.8 and later versions are supported.
 
 * Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
 
@@ -38,53 +38,62 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
 
 ```python
     # Binaries such as images need to be uploaded to RKVST first
-    def upload_attachment(arch, path, name):
-        with open(f"wipp_files/{path}", "rb") as fd:
-            blob = arch.attachments.upload(fd)
-            attachment = {
-                "arc_display_name": name,
-                "arc_attachment_identity": blob["identity"],
-                "arc_hash_value": blob["hash"]["value"],
-                "arc_hash_alg": blob["hash"]["alg"],
-            }
-            return attachment
+    def upload_attachment(arch, attachment_description: AttachmentDescription):
+    with resources.open_binary(wipp_files, attachment_description.filename) as fd:
+        blob = arch.attachments.upload(fd)
+        attachment = {
+            # sample-specific attr to relay attachment name
+            "rkvst_samples_display_name": attachment_description.attribute_name,
+            "arc_file_name": attachment_description.filename,
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": blob["identity"],
+            "arc_blob_hash_alg": blob["hash"]["alg"],
+            "arc_blob_hash_value": blob["hash"]["value"],
+        }
+        return attachment
 
     # Instantiate WIPP object and create an RKVST record to begin
     # tracing and publishing its lifecycle
     # Drum Asset
-    drum = Wipp(arch)
-    serial_num = "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
-    )
-    drumname = "Drum-" + serial_num
+    LOGGER.info("Creating Drum Asset...")
+    drum = Wipp(arch, "55 gallon drum")
+    drumname = "Drum"
 
     drum.create(
         drumname,
         "Standard non-POC 55 gallon drum",
-        serial_num,
-        attachments=[upload_attachment(arch, "55gallon.jpg", "arc_primary_image")],
+        args.namespace,
+        attachments=[AttachmentDescription("55gallon.jpg", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "55",
-            "wipp_package_id": serial_num,
+            "wipp_package_id": args.namespace,
         },
     )
+    if drum.existed:
+        LOGGER.info("Drum Asset %s already exists", drumname)
+        sys_exit(0)
+
+    LOGGER.info("Drum Asset Created (Identity=%s)", drum.asset["identity"])
 
     # Cask Asset
-    cask = Wipp(arch)
-    serial_num = "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(12)
-    )
-    caskname = "Cask-" + serial_num
+    LOGGER.info("Creating Cask Asset...")
+    caskname = "Cask"
 
-    cask.caskcreate(
+    cask = Wipp(arch, "TRU RH 72B Cask")
+    cask.create(
         caskname,
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
-        serial_num,
-        attachments=[upload_attachment(arch, "rh72b.png", "arc_primary_image")],
+        args.namespace,
+        attachments=[AttachmentDescription("rh72b.png", "arc_primary_image")],
         custom_attrs={
             "wipp_capacity": "3",
         },
     )
+    if cask.existed:
+        LOGGER.info("Cask Asset %s already exists", caskname)
+        sys_exit(1)
+
+    LOGGER.info("Cask Asset Created (Identity=%s)", cask.asset["identity"])
 ```
 
 
@@ -95,7 +104,7 @@ to the Drum and/or Cask Assset using `Wipp.read()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-Drum = Wipp(arch)
+Drum = Wipp(arch, "55 gallon drum")
 drum.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
@@ -103,8 +112,8 @@ If you do not know the RKVST Asset Identity then you can load data based on any 
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-Drum = Wipp(arch)
-drum.read_by_signature({"wipp_package_id": "gklh588i8wd9"})
+Drum = Wipp(arch, "55 gallon drum")
+drum.read_by_signature({"wipp_package_id": "wipp"})
 ```
 
 
@@ -115,7 +124,7 @@ When adding characterization, update the Drum Asset in RKVST with
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-drum = Wipp(arch)
+drum = Wipp(arch, "55 gallon drum")
 
 drum.characterize(
         {
@@ -127,11 +136,20 @@ drum.characterize(
         },
         attachments=[
             upload_attachment(
-                arch, "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                arch,
+                AttachmentDescription(
+                    "DOE-WIPP-02-3122_Rev_9_FINAL.pdf", "Reference WAC"
+                ),
             ),
-            upload_attachment(arch, "characterization.pdf", "Characterization report"),
+            upload_attachment(
+                arch,
+                AttachmentDescription(
+                    "characterization.pdf", "Characterization report"
+                ),
+            ),
         ],
     )
+    LOGGER.info("Characterization registered...")
 ```
 
 
@@ -161,7 +179,7 @@ In order to control data sharing one can restrict access allowing certain partie
 ```json
     {
       "identity": "access_policies/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-      "display_name": "Drum-gklh588i8wd9",
+      "display_name": "Drum",
       "filters": [
         {
           "or": [ "attributes.arc_display_type=55 gallon drum" ]

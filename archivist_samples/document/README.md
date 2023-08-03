@@ -17,7 +17,7 @@ If the document contains sensitive information, it is also possible to just prov
 
 ## Pre-requisites
 
-* Python 3.7 and later versions are supported.
+* Python 3.8 and later versions are supported.
 
 * Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
 
@@ -58,4 +58,4 @@ see `run.py` for example.
 
 ## Public Access
 
-By default the document created is public, and can be viewed publically.
+By default the document created is private, and cannot be viewed publically.

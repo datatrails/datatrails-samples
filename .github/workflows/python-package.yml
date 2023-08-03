@@ -6,14 +6,13 @@ name: Python Quality Control
 on: [pull_request]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  build_matrix:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11" ]
-
+        python-version: ["3.8", "3.9", "3.10", "3.11" ]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -25,6 +24,7 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements-dev.txt
         python3 -m pip install wheel
+      shell: bash
     - name: Run integrity checks
       run: |
         export PYTHONPATH=samples:${PYTHONPATH}
@@ -37,3 +37,4 @@ jobs:
             echo "there are $modified files that must be reformatted"
             exit 1
         fi
+      shell: bash

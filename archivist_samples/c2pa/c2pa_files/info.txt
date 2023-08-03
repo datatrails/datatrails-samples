@@ -1,0 +1,2 @@
+Information for image.jpg
+No C2PA Manifests. (file size = 61720)

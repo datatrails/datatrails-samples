@@ -5,7 +5,7 @@ such as 'doors', 'cards', 'containers' etc.
 
 # Installing the samples code
 
-Python 3.7 and later versions are supported.
+Python 3.8 and later versions are supported.
 
 Use the standard python pip utility:
 
@@ -41,6 +41,18 @@ If TEST_VERBOSE is "-v" debugging output will appear when running the examples. 
 
 TEST_PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
 
+Windows using Powershell - at the command prompt set values for environment variables:
+
+```bash
+$Env:TEST_ARCHIVIST="https://app.rkvst.io"
+$Env:TEST_AUTHTOKEN_FILENAME = '<path of token location>'
+$Env:TEST_NAMESPACE = Get-Date -UFormat %s
+$Env:TEST_VERBOSE = '-v'
+$Env:TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
+```
+
+TEST_NAMESPACE is set to the date and time value in Unix format, thus providing a unique id upon execution.
+
 ## TEST_NAMESPACE
 
 If TEST_NAMESPACE is blank or unspecified, any assets events, locations will be visible to other users running the same examples
@@ -49,7 +61,8 @@ on the same URL.
 Each example creates assets,events,locations that are not visible to other examples.
 For example the door_entry assets,events etc are not visible to the synsation example.
 
-Assets and locations are only created if they do not already exist according to namespace.
+***Note: Assets and locations are only created if they do not already exist according to namespace.  If one wants to execute a sample multiple 
+times, feel free to set TEST_NAMESPACE to a different unique id.***
 
 Due to restrictions attachments are always uploaded during every example execution.
 

@@ -7,6 +7,7 @@ from importlib import resources
 
 from copy import copy
 import logging
+from tempfile import TemporaryFile
 from sys import exit as sys_exit
 import uuid
 
@@ -325,7 +326,7 @@ def list_doors(doors):
         for a in attachments:
             print(f"\tAttachment identity: \t{a['arc_blob_identity']}")
             print(f"\tAttachment name: \t{a.get('arc_display_name')}")
-            with open("/tmp/xxx", "wb") as fd:
+            with TemporaryFile(mode="wb") as fd:
                 doors.attachments.download(a["arc_blob_identity"], fd)
 
         print("-----")

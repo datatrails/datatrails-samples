@@ -11,7 +11,7 @@ This sample shows how to quickly get started with integrating your build and SBO
 
 ## Pre-requisites
 
-* Python 3.7 and later versions are supported.
+* Python 3.8 and later versions are supported.
 
 * Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
 
@@ -41,25 +41,40 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
 
 ```python
     # Binaries such as images and SBOM XML need to be uploaded to RKVST first
-    def upload_attachment(arch, path, name):
-        with open(f"sbom_files/{path}", "r") as fd:
-            blob = arch.attachments.upload(fd)
-            attachment = {
-                "arc_display_name": name,
-                "arc_attachment_identity": blob["identity"],
-                "arc_hash_value": blob["hash"]["value"],
-                "arc_hash_alg": blob["hash"]["alg"],
-            }
-            return attachment
+    def attachment_create(sboms, attachment_description: AttachmentDescription):
+      LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
+      with resources.open_binary(sbom_files, attachment_description.filename) as fd:
+        attachment = sboms.attachments.upload(fd)
+        result = {
+            "arc_attribute_type": "arc_attachment",
+            "arc_blob_identity": attachment["identity"],
+            "arc_blob_hash_alg": attachment["hash"]["alg"],
+            "arc_blob_hash_value": attachment["hash"]["value"],
+            "arc_display_name": attachment_description.attribute_name,
+            "arc_file_name": attachment_description.filename,
+        }
+        return result
 
     # Instantiate SoftwarePackage object and create an RKVST record to begin
     # tracing and publishing its version history
+    package_name = "ACME Detector Coyote SP1"
+    LOGGER.info("Creating Software Package Asset...: %s", package_name)
     package = SoftwarePackage(arch)
+
     package.create(
-        "ACME Roadrunner Detector 2013 Coyote Edition SP1",
+        package_name,
         "Different box, same great taste!",
-        attachments=[upload_attachment(arch , "Comp_2.jpeg", "arc_primary_image")],
+        custom_attrs={
+            "sbom_license": "www.gnu.org/licenses/gpl.txt",
+            "proprietary_secret": "For your eyes only",
+        },
+        attachments=[AttachmentDescription("Comp_2.jpeg", "arc_primary_image")],
     )
+    if package.existed:
+        LOGGER.info("Software Package already Created: %s", package_name)
+        sys_exit(0)
+
+    LOGGER.info("Software Package Created (Identity=%s)", package.asset["identity"])
 ```
 
 
@@ -88,21 +103,17 @@ When a new official release is issued, update the version history in RKVST with 
 
 ```python
 # Assume Archivist connection already initialized in `arch`
-package = SoftwarePackage(arch)
-package.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-
 package.release(
-    {
-        "name": "ACME Roadrunner Detector 2013 Coyote Edition SP1",
-        "description": "v4.1.5 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
-        "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
-        "version": "v4.1.5",
-        "author": "The ACME Corporation",
-        "supplier": "Coyote Services, Inc.",
-        "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
-    },
-    attachments=[upload_attachment(arch , "v4_1_5_sbom.xml", "SWID SBOM XML")],
-    custom_attrs={"sbom_license": "www.gnu.org/licenses/gpl.txt"},
+        {
+            "name": package_name,
+            "description": "v4.1.5 Release - ACME Roadrunner Detector 2013 Coyote Edition SP1",
+            "hash": "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a",
+            "version": "v4.1.5",
+            "author": "The ACME Corporation",
+            "supplier": "Coyote Services, Inc.",
+            "uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0",
+        },
+        attachments=[AttachmentDescription("v4_1_5_sbom.xml", "SWID SBOM")],
 )
 ```
 

@@ -3,8 +3,6 @@
 # pylint:  disable=missing-docstring
 
 import logging
-from sys import exit as sys_exit
-from sys import stdout as sys_stdout
 
 from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
@@ -32,6 +30,3 @@ def main():
     arch = common_endpoint("sbom", args)
 
     run(arch, args)
-
-    parser.print_help(sys_stdout)
-    sys_exit(1)
