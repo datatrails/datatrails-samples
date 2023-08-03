@@ -31,7 +31,7 @@ def run_cask(arch, args):
         "NRC certified type-B road shipping container, capacity 3 x 55-gallon drum",
         args.namespace,
         attachments=[AttachmentDescription("rh72b.png", "arc_primary_image")],
-        custom_attrs={"wipp_capacity": "3", "OnboardingSampleID": "NuclearWIPP"},
+        custom_attrs={"wipp_capacity": "3", "OnboardingSampleID": "TrackAndTrace"},
     )
     if cask.existed:
         LOGGER.info("Cask Asset %s already exists", caskname)
