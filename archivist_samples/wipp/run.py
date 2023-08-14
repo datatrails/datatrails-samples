@@ -5,7 +5,6 @@
 
 import logging
 
-from sys import exit as sys_exit
 from archivist import about
 
 from .wipp import Wipp, upload_attachment
@@ -216,7 +215,7 @@ def run(arch, args):
     )
     if cask.existed:
         LOGGER.info("Cask Asset %s already exists", caskname)
-        sys_exit(1)
+        return 1
 
     LOGGER.info("Cask Asset Created (Identity=%s)", cask.asset["identity"])
 
