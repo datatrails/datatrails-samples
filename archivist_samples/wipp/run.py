@@ -16,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 
 def run_cask(arch, args):
     """
-    Run the sample, only creating the cask asset
+    Run the sample, only creating the cask asset, returns the system error code
     """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
@@ -35,7 +35,7 @@ def run_cask(arch, args):
     )
     if cask.existed:
         LOGGER.info("Cask Asset %s already exists", caskname)
-        sys_exit(1)
+        return 0
 
     LOGGER.info("Cask Asset Created (Identity=%s)", cask.asset["identity"])
 
@@ -169,10 +169,13 @@ def run_cask(arch, args):
         },
     )
     LOGGER.info("Unloading registered...")
-    sys_exit(0)
+    return 0
 
 
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
@@ -193,7 +196,7 @@ def run(arch, args):
     )
     if drum.existed:
         LOGGER.info("Drum Asset %s already exists", drumname)
-        sys_exit(0)
+        return 0
 
     LOGGER.info("Drum Asset Created (Identity=%s)", drum.asset["identity"])
 
@@ -483,4 +486,4 @@ def run(arch, args):
         ],
     )
     LOGGER.info("Emplacement registered...")
-    sys_exit(0)
+    return 0

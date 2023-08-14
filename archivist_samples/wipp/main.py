@@ -3,6 +3,8 @@
 # pylint:  disable=missing-docstring
 
 import logging
+from sys import exit as sys_exit
+from sys import stdout as sys_stdout
 
 from ..testing.archivist_parser import common_parser
 from ..testing.parser import common_endpoint
@@ -27,4 +29,8 @@ def main():
 
     poc = common_endpoint("wipp", args)
 
-    run(poc, args)
+    err_code = run(poc, args)
+
+    if err_code != 0:
+        parser.print_help(sys_stdout)
+        sys_exit(err_code)

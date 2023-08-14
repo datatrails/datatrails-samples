@@ -69,7 +69,8 @@ def main():
 
     arch = common_endpoint("door_entry", args)
 
-    run(arch, args)
+    err_code = run(arch, args)
 
-    parser.print_help(sys_stdout)
-    sys_exit(1)
+    if err_code != 0:
+        parser.print_help(sys_stdout)
+        sys_exit(err_code)
