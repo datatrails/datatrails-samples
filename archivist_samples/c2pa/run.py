@@ -5,7 +5,6 @@
 
 import logging
 
-from sys import exit as sys_exit
 from archivist import about
 
 from .c2pa import C2PADocument, upload_attachment
@@ -15,6 +14,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
@@ -56,7 +58,7 @@ def run(arch, args):
             "C2PA Image",
             c2pa_document.asset["identity"],
         )
-        sys_exit(0)
+        return 0
 
     LOGGER.info("C2PA Document Created (Identity=%s)", c2pa_document.asset["identity"])
 
@@ -179,4 +181,4 @@ def run(arch, args):
         },
     )
     LOGGER.info("V1.3.ME published")
-    sys_exit(0)
+    return 0

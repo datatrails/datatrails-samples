@@ -22,13 +22,15 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(poc, args):
-    """logic goes here"""
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     if args.quick_count:
         LOGGER.info("Number of events is %d", poc.events.count())
         LOGGER.info("Number of assets is %d", poc.assets.count())
         LOGGER.info("Number of locations is %d", poc.locations.count())
-        sys_exit(0)
+        return 0
 
     if args.double_check:
         # for around 550 events and 250 assets this can take about a 90s...
@@ -72,7 +74,9 @@ def run(poc, args):
         )
 
         LOGGER.info("Performing double-check... FINISH")
-        sys_exit(0)
+        return 0
+
+    return 1
 
 
 def main():
@@ -101,7 +105,8 @@ def main():
 
     poc = common_endpoint("estate_info", args)
 
-    run(poc, args)
+    err_code = run(poc, args)
 
-    parser.print_help(sys_stdout)
-    sys_exit(1)
+    if err_code != 0:
+        parser.print_help(sys_stdout)
+        sys_exit(err_code)

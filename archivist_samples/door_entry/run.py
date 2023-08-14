@@ -8,7 +8,6 @@ from importlib import resources
 from copy import copy
 import logging
 from tempfile import TemporaryFile
-from sys import exit as sys_exit
 import uuid
 
 from archivist import about
@@ -573,6 +572,9 @@ def open_door(doors, doorid, cards, cardid):
 
 
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
@@ -606,15 +608,15 @@ def run(arch, args):
         if args.wait_for_confirmation:
             cards.assets.wait_for_confirmed()
 
-        sys_exit(0)
+        return 0
 
     if number_of_doors == 0:
         LOGGER.error("Could not find door entry assets. Please create them first.")
-        sys_exit(1)
+        return 1
 
     if number_of_cards == 0:
         LOGGER.error("Could not find card assets. Please create them first.")
-        sys_exit(1)
+        return 1
 
     # Show info about the system ?
     if args.listspec:
@@ -632,10 +634,12 @@ def run(arch, args):
             list_usage(doors, cards, spec)
 
         LOGGER.info("List %s FINISH", spec)
-        sys_exit(0)
+        return 0
 
     # Open a door using a specified card ?
     if args.doorid_cardid:
         doorid, cardid = args.doorid_cardid
         open_door(doors, doorid, cards, cardid)
-        sys_exit(0)
+        return 0
+
+    return 1

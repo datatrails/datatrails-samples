@@ -307,7 +307,13 @@ def print_history(archivist, asset_name):
 
 # Main app loop
 ###############
+
+
+# pylint: disable=too-many-return-statements
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     if args.namespace:
         asset_name = "-".join(["signed-records", args.namespace])
@@ -328,11 +334,11 @@ def run(arch, args):
                 " Please choose a different name to create.",
                 asset_name,
             )
-            sys_exit(1)
+            return 1
 
         LOGGER.info("Generate crypto asset '%s'", asset_name)
         generate_crypto_asset(arch, asset_name)
-        sys_exit(0)
+        return 0
 
     if args.sign_message:
         if not asset_exists(arch, asset_name):
@@ -341,11 +347,11 @@ def run(arch, args):
                 " Please choose a different name to create.",
                 asset_name,
             )
-            sys_exit(1)
+            return 1
 
         LOGGER.info("Submit signed evidence '%s'", asset_name)
         submit_signed_evidence(arch, asset_name, args.sign_message, False)
-        sys_exit(0)
+        return 0
 
     if args.bad_sign_message:
         if not asset_exists(arch, asset_name):
@@ -354,11 +360,11 @@ def run(arch, args):
                 "Please choose the correct name or create it first.",
                 asset_name,
             )
-            sys_exit(1)
+            return 1
 
         LOGGER.info("Submit badly signed evidence %s", asset_name)
         submit_signed_evidence(arch, asset_name, args.bad_sign_message, True)
-        sys_exit(0)
+        return 0
 
     if args.check_sigs:
         if not asset_exists(arch, asset_name):
@@ -367,11 +373,11 @@ def run(arch, args):
                 "Please choose the correct name or create it first.",
                 asset_name,
             )
-            sys_exit(1)
+            return 1
 
     LOGGER.info("Check %s", asset_name)
     print_history(arch, asset_name)
-    sys_exit(0)
+    return 0
 
 
 def main():
@@ -427,7 +433,8 @@ def main():
 
     arch = common_endpoint("signed_records", args)
 
-    run(arch, args)
+    err_code = run(arch, args)
 
-    parser.print_help(sys_stdout)
-    sys_exit(1)
+    if err_code != 0:
+        parser.print_help(sys_stdout)
+        sys_exit(err_code)

@@ -3,7 +3,6 @@
 # pylint:  disable=missing-docstring
 
 import logging
-from sys import exit as sys_exit
 
 from archivist import about
 
@@ -14,6 +13,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
@@ -44,7 +46,7 @@ def run(arch, args):
 
     if package.existed:
         LOGGER.info("Software Package already Created: %s", package_name)
-        sys_exit(0)
+        return 0
 
     LOGGER.info("Software Package Created (Identity=%s)", package.asset["identity"])
 
@@ -127,4 +129,4 @@ def run(arch, args):
         },
     )
     LOGGER.info("Release registered.")
-    sys_exit(0)
+    return 0

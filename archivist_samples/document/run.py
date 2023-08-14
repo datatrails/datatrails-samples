@@ -5,7 +5,6 @@
 
 import logging
 
-from sys import exit as sys_exit
 from archivist import about
 
 from .document import Document, upload_attachment
@@ -15,6 +14,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(arch, args):
+    """
+    runs the sample and returns the system error code.
+    """
     LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
@@ -55,11 +57,8 @@ def run(arch, args):
             "Asteroid Mining Inc Invoice",
             document.asset["identity"],
         )
-        LOGGER.info(
-            "Public URL: %s/archivist/public%s", args.url, document.asset["identity"]
-        )
 
-        sys_exit(0)
+        return 0
 
     LOGGER.info("Invoice Asset Created (Identity=%s)", document.asset["identity"])
 
@@ -104,4 +103,4 @@ def run(arch, args):
     )
     LOGGER.info("V3 published, with discount applied")
 
-    sys_exit(0)
+    return 0
