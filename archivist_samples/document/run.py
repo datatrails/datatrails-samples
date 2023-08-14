@@ -57,9 +57,6 @@ def run(arch, args):
             "Asteroid Mining Inc Invoice",
             document.asset["identity"],
         )
-        LOGGER.info(
-            "Public URL: %s/archivist/public%s", args.url, document.asset["identity"]
-        )
 
         return 0
 
