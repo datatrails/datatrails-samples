@@ -24,6 +24,7 @@ if [ -z "${TEST_SELECTOR}" -o "$TEST_SELECTOR" = 'help' ]
 then
     echo "Available functional tests are:"
     echo ""
+    echo "    TEST_SELECTOR=c2pa ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=door_entry ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=estate_info ${SAMPLESCMD}"
     echo "    TEST_SELECTOR=signed_records ${SAMPLESCMD}"
@@ -61,6 +62,7 @@ then
     TEST_NO=''
 fi
 
+TEST_NO_C2PA=${TEST_NO}
 TEST_NO_DOOR_ENTRY=${TEST_NO}
 TEST_NO_ESTATE_INFO=${TEST_NO}
 TEST_NO_SIGNED_RECORDS=${TEST_NO}
@@ -107,6 +109,10 @@ command() {
         echo "archivist_samples_$1"
     fi
 }
+
+# archivist_samples_c2pa
+C2PA="${TEST_NO_C2PA} $(command c2pa) ${ARGS} ${NAMESPACE}"
+${C2PA}
 
 # archivist_samples_door_entry
 DOOR_ENTRY="${TEST_NO_DOOR_ENTRY} $(command door_entry) ${ARGS} ${NAMESPACE}"
