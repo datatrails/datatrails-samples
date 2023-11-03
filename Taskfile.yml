@@ -29,6 +29,11 @@ tasks:
     cmds:
       - docker build --no-cache --build-arg VERSION=3.11 -f Dockerfile -t rkvst-samples-api .
 
+  api-3.12:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg VERSION=3.12 -f Dockerfile -t rkvst-samples-api .
+
   check:
     desc: Check the style, bug and quality of the code
     deps: [about]
