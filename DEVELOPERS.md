@@ -44,8 +44,6 @@ export TEST_PROOF_MECHANISM="-i SIMPLE_HASH"
 
 If TEST_VERBOSE is "-v" debugging output will appear when running the tests.
 
-TEST_PROOF_MECHANISM must be either "KHIPU" or "SIMPLE_HASH"
-
 ## TEST_NAMESPACE
 
 If TEST_NAMESPACE is blank or unspecified then each execution of './scripts/samples.sh' will not be
