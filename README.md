@@ -34,12 +34,9 @@ export TEST_ARCHIVIST="https://app.rkvst.io"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
-export TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
 ```
 
 If TEST_VERBOSE is "-v" debugging output will appear when running the examples. Otherwise leave blank or undefined.
-
-TEST_PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the default is "SIMPLE_HASH"
 
 Windows using Powershell - at the command prompt set values for environment variables:
 
@@ -48,7 +45,6 @@ $Env:TEST_ARCHIVIST="https://app.rkvst.io"
 $Env:TEST_AUTHTOKEN_FILENAME = '<path of token location>'
 $Env:TEST_NAMESPACE = Get-Date -UFormat %s
 $Env:TEST_VERBOSE = '-v'
-$Env:TEST_PROOF_MECHANISM="--proof-mechanism=SIMPLE_HASH"
 ```
 
 TEST_NAMESPACE is set to the date and time value in Unix format, thus providing a unique id upon execution.
@@ -73,7 +69,7 @@ Events are created every execution of an example - currently no check is done if
 All examples use a common set of arguments:
 
 ```bash
-export AUTH="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_PROOF_MECHANISM"
+export AUTH="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE"
 export ARGS="$AUTH --namespace $TEST_NAMESPACE"
 ```
 
