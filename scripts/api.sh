@@ -21,5 +21,5 @@ docker run \
     -e GITHUB_REF \
     -e TWINE_USERNAME \
     -e TWINE_PASSWORD \
-    rkvst-samples-api \
+    datatrails-samples-api \
     "$@"

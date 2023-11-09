@@ -75,17 +75,17 @@ def interrupt_listener_run_until(tw, stop):
             # when the timewarp will hit this value rather than checking it
             # every time
             if stop and tw.now() > stop:
-                LOGGER.info("RKVST EV Charger example reached end time")
+                LOGGER.info("DataTrails EV Charger example reached end time")
                 break
 
     except KeyboardInterrupt:
-        LOGGER.info("RKVST EV Charger example stopped")
+        LOGGER.info("DataTrails EV Charger example stopped")
 
 
 def run(arch, args):
     """logic goes here"""
     # Stretch the timestamps in logs
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     LOGGER.info("Creating time warp...")

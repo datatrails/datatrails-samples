@@ -1,7 +1,7 @@
 """common parser argument
 
-   This is copied from rkvst-python repo. When acceptable this file will
-   be copied back to the rkvst-python repo.
+   This is copied from datatrails-python repo. When acceptable this file will
+   be copied back to the datatrails-python repo.
 """
 
 # pylint:  disable=missing-docstring
@@ -69,7 +69,7 @@ def common_parser(description):
         type=str,
         dest="url",
         action="store",
-        default="https://app.rkvst-poc.io",
+        default="https://app.datatrails.ai",
         help="url of Archivist service",
     )
     parser.add_argument(
@@ -103,7 +103,7 @@ def endpoint(args):
         set_logger("INFO")
 
     arch = None
-    LOGGER.info("Initialising connection to RKVST...")
+    LOGGER.info("Initialising connection to DataTrails...")
     fixtures = {
         "assets": {
             "proof_mechanism": args.proof_mechanism.name,

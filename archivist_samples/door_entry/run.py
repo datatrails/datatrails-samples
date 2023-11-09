@@ -50,24 +50,24 @@ doors_creator = make_assets_create(attachment_creator=attachment_create, confirm
 ####################################
 
 
-def create_rkvst_paris(doors):
+def create_datatrails_paris(doors):
     # Unlike the others, which feature images of the whole building,
     # this one is actually a close-up of the connected door terminal
     return doors_creator(
         doors,
-        "RKVST front door",
+        "DataTrails front door",
         {
             "arc_firmware_version": "1.0",
             "arc_serial_number": "das-j1-01",
             "arc_description": (
                 "Electronic door entry system controlling the main "
-                "staff entrance to RKVST France"
+                "staff entrance to DataTrails France"
             ),
-            "wavestone_asset_id": "paris.france.rkvst.das",
+            "wavestone_asset_id": "paris.france.datatrails.das",
         },
         location={
             "props": {
-                "display_name": "RKVST Paris",
+                "display_name": "DataTrails Paris",
                 "description": "Sales and sales support for the French region",
                 "latitude": 48.8339211,
                 "longitude": 2.371345,
@@ -247,7 +247,7 @@ def create_gdn_side(doors):
 def create_doors(doors):
     LOGGER.info("Creating all doors...")
     doors_map = {
-        "rkvst_paris": create_rkvst_paris(doors),
+        "datatrails_paris": create_datatrails_paris(doors),
         "cityhall": create_cityhall(doors),
         "courts": create_courts(doors),
         "bastille": create_bastille(doors),
@@ -575,7 +575,7 @@ def run(arch, args):
     """
     runs the sample and returns the system error code.
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     doors = copy(arch)

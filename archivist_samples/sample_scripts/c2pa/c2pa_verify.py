@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # List of imports used for this script
-# In addition this script uses RKVST Python3 SDK
+# In addition this script uses DataTrails Python3 SDK
 import os
 import os.path
 from os import getenv
@@ -30,10 +30,10 @@ except ImportError:
     import importlib_resources as pkg_resources
 
 
-# RKVST Connection Parameters -- Honest Abe
+# DataTrails Connection Parameters -- Honest Abe
 #
 # The below are environment variables that are parameters used to connect
-# to the production instance of RKVST.
+# to the production instance of DataTrails.
 #
 # HONEST_CLIENT_ID = represents the client ID from an App Registration
 # HONEST_CLIENT_SECRET_FILENAME = represents location of client secret from an App Registration
@@ -43,15 +43,17 @@ def honest_arch():
     with open(client_secret_file, mode="r", encoding="utf-8") as tokenfile:
         client_secret = tokenfile.read().strip()
 
-    arch = Archivist("https://app.rkvst.io", (client_id, client_secret), max_time=300)
+    arch = Archivist(
+        "https://app.datatrails.ai", (client_id, client_secret), max_time=300
+    )
 
     return arch
 
 
-# RKVST Connection Parameters -- Evil Eddie
+# DataTrails Connection Parameters -- Evil Eddie
 #
 # The below are environment variables that are parameters used to connect
-# to the production instance of RKVST.
+# to the production instance of DataTrails.
 #
 # EVIL_CLIENT_ID = represents the client ID from an App Registration
 # EVIL_CLIENT_SECRET_FILENAME = represents location client secret from an App Registration
@@ -61,12 +63,14 @@ def evil_arch():
     with open(client_secret_file, mode="r", encoding="utf-8") as tokenfile:
         client_secret = tokenfile.read().strip()
 
-    arch = Archivist("https://app.rkvst.io", (client_id, client_secret), max_time=300)
+    arch = Archivist(
+        "https://app.datatrails.ai", (client_id, client_secret), max_time=300
+    )
 
     return arch
 
 
-# Uploads attachments to RKVST
+# Uploads attachments to DataTrails
 def upload_attachment(arch, path, name):
     with pkg_resources.open_binary(sample, path) as fd:
         blob = arch.attachments.upload(fd)
@@ -81,7 +85,7 @@ def upload_attachment(arch, path, name):
         return attachment
 
 
-# Creates a SHA256 hash value for documents that are uploaded to RKVST
+# Creates a SHA256 hash value for documents that are uploaded to DataTrails
 def create_hash(path):
     with open(path, "rb") as f:
         data = f.read()
@@ -90,13 +94,13 @@ def create_hash(path):
     return digest
 
 
-# Creates a public Document Asset with a primary image and related attachments within RKVST
+# Creates a public Document Asset with a primary image and related attachments within DataTrails
 #
-# arc_primary_image = represents the primary image to be displayed within the RKVST user interface
-# document_document = represents the attachments/document to be uploaed to RKVST
+# arc_primary_image = represents the primary image to be displayed within the DataTrails user interface
+# document_document = represents the attachments/document to be uploaed to DataTrails
 #
-# For additional information regarding RKVST Document Profile see below:
-# https://docs.rkvst.com/developers/developer-patterns/document-profile/
+# For additional information regarding DataTrails Document Profile see below:
+# https://docs.datatrails.ai/developers/developer-patterns/document-profile/
 def create_asset(
     arch,
     displayname,
@@ -125,11 +129,11 @@ def create_asset(
     return arch.assets.create(props=props, attrs=attrs, confirm=True)
 
 
-# Uploads primary image and related attachments to RKVST
+# Uploads primary image and related attachments to DataTrails
 # Creates hash value for related attachments
 # Passes expected values to create_asset method
 #
-# image = represents the digital content to be recorded within RKVST
+# image = represents the digital content to be recorded within DataTrails
 # serial_num = represents unique Asset attribute (id) that can be referenced
 def create_c2docasset(arch, image):
     attachments = upload_attachment(arch, image, "arc_primary_image")
@@ -386,7 +390,7 @@ def create_details(arch, id, image):
 #
 # Records two public Document Assets by two individuals: Honest Abe and Evil Eddie
 #
-# Honest Abe and Evil Eddie reside in two separate RKVST tenancies with App Registrations that
+# Honest Abe and Evil Eddie reside in two separate DataTrails tenancies with App Registrations that
 # represent each tenancy.
 #
 # arch = Honest Abe

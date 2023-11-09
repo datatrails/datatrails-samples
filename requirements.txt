@@ -1,3 +1,4 @@
 cryptography~=41.0.2
-rkvst-archivist==0.26.0
+# TODO change to datatrails when released
+datatrails-archivist==0.27.1
 pyyaml~=6.0.1

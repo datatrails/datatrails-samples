@@ -175,7 +175,7 @@ def demo_flow(ac, asset_id, asset_type, tw, wait):
 
 def run(arch, args):
     """logic goes here"""
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     LOGGER.info("Looking for asset...")

@@ -71,7 +71,7 @@ def shipit(ac, crate_id, delay, tw):
 
 def run(arch, args):
     """logic goes here"""
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     # Find the asset record
