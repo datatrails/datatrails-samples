@@ -148,7 +148,7 @@ def generate_crypto_asset(archivist, asset_name):
     # samples for broader and richer use of asset attributes
     attrs = {
         "arc_display_name": asset_name,
-        "arc_description": "Sample cryptographic asset for RKVST",
+        "arc_description": "Sample cryptographic asset for DataTrails",
         "arc_display_type": "Crypto endpoint",
         "arc_evidence_signing_pubkey": pubkey_pem.decode("utf-8"),
     }
@@ -314,7 +314,7 @@ def run(arch, args):
     """
     runs the sample and returns the system error code.
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     if args.namespace:
         asset_name = "-".join(["signed-records", args.namespace])
     else:
@@ -325,7 +325,7 @@ def run(arch, args):
 
     if args.create_asset:
         # Don't create if there's already an asset record with this name.
-        # This is not strictly necessary - the RKVST system
+        # This is not strictly necessary - the DataTrails system
         # does not require arc_display_name to be unique - but to keep
         # things simple we'll avoid duplicates here.
         if asset_exists(arch, asset_name):

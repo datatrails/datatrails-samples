@@ -27,7 +27,7 @@ def upload_attachment(arch, attachment_description: AttachmentDescription):
         blob = arch.attachments.upload(fd)
         attachment = {
             # sample-specific attr to relay attachment name
-            "rkvst_samples_display_name": attachment_description.attribute_name,
+            "datatrails_samples_display_name": attachment_description.attribute_name,
             "arc_file_name": attachment_description.filename,
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": blob["identity"],

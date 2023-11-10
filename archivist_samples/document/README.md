@@ -1,6 +1,6 @@
 # Document Lineage Sample
 
-RKVST offers complete document lineage.
+DataTrails offers complete document lineage.
 
 This sample focuses on an invoice document for a fabricated Asteroid Mining Company.
 
@@ -19,9 +19,9 @@ If the document contains sensitive information, it is also possible to just prov
 
 * Python 3.8 and later versions are supported.
 
-* Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
+* Install the [DataTrails samples Python package](https://pypi.org/project/datatrails-samples/ "PyPi package page")
 
-* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.rkvst.com/docs/rkvst-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
+* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [DataTrails documentation](https://docs.datatrails.ai/docs/datatrails-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
 
 ## Running the sample

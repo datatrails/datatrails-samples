@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(arch, args):
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     if args.create_corporation:
@@ -50,7 +50,9 @@ def run(arch, args):
 
 
 def entry():
-    parser = common_parser("Populates a clean RKVST tenancy with Synsation test data")
+    parser = common_parser(
+        "Populates a clean DataTrails tenancy with Synsation test data"
+    )
     parser.add_argument(
         "--namespace",
         type=str,

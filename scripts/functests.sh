@@ -9,7 +9,7 @@
 #
 python3 -m venv samples-venv
 source samples-venv/bin/activate
-python3 -m pip install -q --force-reinstall dist/rkvst_samples-*.whl
+python3 -m pip install -q --force-reinstall dist/datatrails_samples-*.whl
 
 # do everything in sub directory to ensure that wheel is used and not local code.
 export TEST_AUTHTOKEN_FILENAME=../${TEST_AUTHTOKEN_FILENAME}

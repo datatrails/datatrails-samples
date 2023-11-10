@@ -1,6 +1,6 @@
-# rkvst-samples
+# datatrails-samples
 
-Sample python code that uses the rkvst python SDK to manage particular types of assets
+Sample python code that uses the datatrails python SDK to manage particular types of assets
 such as 'doors', 'cards', 'containers' etc.
 
 # Installing the samples code
@@ -10,7 +10,7 @@ Python 3.8 and later versions are supported.
 Use the standard python pip utility:
 
 ```bash
-python3 -m pip install --user rkvst-samples
+python3 -m pip install --user datatrails-samples
 ```
 
 and this will create 7 entry points:
@@ -30,7 +30,7 @@ Add a token to the file credentials/.auth_token and set some environment vars to
 specify the archivist endpoint:
 
 ```bash
-export TEST_ARCHIVIST="https://app.rkvst.io"
+export TEST_ARCHIVIST="https://app.datatrails.ai"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
@@ -44,7 +44,7 @@ TEST_PROOF_MECHANISM should be "KHIPU" or "SIMPLE_HASH". If unspecified the defa
 Windows using Powershell - at the command prompt set values for environment variables:
 
 ```bash
-$Env:TEST_ARCHIVIST="https://app.rkvst.io"
+$Env:TEST_ARCHIVIST="https://app.datatrails.ai"
 $Env:TEST_AUTHTOKEN_FILENAME = '<path of token location>'
 $Env:TEST_NAMESPACE = Get-Date -UFormat %s
 $Env:TEST_VERBOSE = '-v'

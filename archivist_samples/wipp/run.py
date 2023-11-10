@@ -17,7 +17,7 @@ def run_cask(arch, args):
     """
     Run the sample, only creating the cask asset, returns the system error code
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
     # Cask Asset
@@ -175,10 +175,10 @@ def run(arch, args):
     """
     runs the sample and returns the system error code.
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
-    # Wipp class encapsulates wipp object in RKVST
+    # Wipp class encapsulates wipp object in DataTrails
     LOGGER.info("Creating Drum Asset...")
     drum = Wipp(arch, "55 gallon drum")
     drumname = "Drum"

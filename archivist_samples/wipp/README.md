@@ -2,18 +2,18 @@
 
 Tracking the Nuclear Waste Management lifecycle is an important aspect to ensure that all safety protocols and procedures have been successfully executed.  Fragmented communication and manual checks can lead to honest mistakes and redundancy.  Digitizing the lifecycle and exposing data to the right parties at the right time can decrease honest mistakes and increase effective communication.  
 
-RKVST Continuous Assurance Hub offers a solution to fragmented communication and manual checks. Parties have near real-time access to data increasing seamless and effective communication in addition stakeholders can control the sharing of data ensuring one can view information that is relevant.  Policies, procedures and images can be included/attached thus reducing multiple checks and providing persons with the most recent documentation.
+DataTrails Continuous Assurance Hub offers a solution to fragmented communication and manual checks. Parties have near real-time access to data increasing seamless and effective communication in addition stakeholders can control the sharing of data ensuring one can view information that is relevant.  Policies, procedures and images can be included/attached thus reducing multiple checks and providing persons with the most recent documentation.
  
-This sample uses publicly-available information about WIPP (Waste Isolation Pilot Plant) and how to quickly get started with integrating Nuclear Waste Management lifecycle with RKVST Continuous Assurance Hub.
+This sample uses publicly-available information about WIPP (Waste Isolation Pilot Plant) and how to quickly get started with integrating Nuclear Waste Management lifecycle with DataTrails Continuous Assurance Hub.
 
 
 ## Pre-requisites
 
 * Python 3.8 and later versions are supported.
 
-* Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
+* Install the [DataTrails samples Python package](https://pypi.org/project/datatrails-samples/ "PyPi package page")
 
-* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.rkvst.com/docs/rkvst-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
+* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [DataTrails documentation](https://docs.datatrails.ai/docs/datatrails-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
 
 ## Running the sample
@@ -30,20 +30,20 @@ archivist_samples_wipp [-v]
 
 The WIPP class creates two Assets: Drum and Cask. The Drum is an item that contains nuclear waste which is loaded into the Cask for transportation.
 
-This Python class makes it easy to create the above assets and related events in RKVST.  Providing an assurance hub with trusted data.
+This Python class makes it easy to create the above assets and related events in DataTrails.  Providing an assurance hub with trusted data.
 
 ### Creating a Drum and Cask
 
 To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste lifecycle, use `Wipp.create()`:
 
 ```python
-    # Binaries such as images need to be uploaded to RKVST first
+    # Binaries such as images need to be uploaded to DataTrails first
     def upload_attachment(arch, attachment_description: AttachmentDescription):
     with resources.open_binary(wipp_files, attachment_description.filename) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             # sample-specific attr to relay attachment name
-            "rkvst_samples_display_name": attachment_description.attribute_name,
+            "datatrails_samples_display_name": attachment_description.attribute_name,
             "arc_file_name": attachment_description.filename,
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": blob["identity"],
@@ -52,7 +52,7 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
         }
         return attachment
 
-    # Instantiate WIPP object and create an RKVST record to begin
+    # Instantiate WIPP object and create an DataTrails record to begin
     # tracing and publishing its lifecycle
     # Drum Asset
     LOGGER.info("Creating Drum Asset...")
@@ -99,7 +99,7 @@ To create a brand new WIPP Asset and begin tracking and sharing Nuclear Waste li
 
 ### Loading data for an existing Wipp object
 
-If you know the RKVST Asset Identity you can load data directly
+If you know the DataTrails Asset Identity you can load data directly
 to the Drum and/or Cask Assset using `Wipp.read()`:
 
 ```python
@@ -108,7 +108,7 @@ Drum = Wipp(arch, "55 gallon drum")
 drum.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
-If you do not know the RKVST Asset Identity then you can load data based on any unique set of attributes using `Wipp.read_by_signature()`:
+If you do not know the DataTrails Asset Identity then you can load data based on any unique set of attributes using `Wipp.read_by_signature()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -119,7 +119,7 @@ drum.read_by_signature({"wipp_package_id": "wipp"})
 
 ### Loading Characterization
 
-When adding characterization, update the Drum Asset in RKVST with
+When adding characterization, update the Drum Asset in DataTrails with
 `Wipp.characterization()`:
 
 ```python

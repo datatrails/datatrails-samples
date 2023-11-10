@@ -26,7 +26,7 @@ def upload_attachment(arch, attachment_description: AttachmentDescription):
         blob = arch.attachments.upload(fd)
         attachment = {
             # sample-specific attr to relay attachment name
-            "rkvst_samples_display_name": attachment_description.attribute_name,
+            "datatrails_samples_display_name": attachment_description.attribute_name,
             "arc_file_name": attachment_description.filename,
             "arc_attribute_type": "arc_attachment",
             "arc_blob_identity": blob["identity"],
@@ -151,7 +151,7 @@ class Wipp:
         }
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -194,7 +194,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -237,7 +237,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -276,7 +276,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -308,7 +308,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -342,7 +342,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -374,7 +374,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -407,7 +407,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)
@@ -446,7 +446,7 @@ class Wipp:
 
         safe_attachments = attachments or []
         for attachment in safe_attachments:
-            attrs[attachment["rkvst_samples_display_name"]] = attachment
+            attrs[attachment["datatrails_samples_display_name"]] = attachment
 
         if custom_attrs is not None:
             attrs.update(custom_attrs)

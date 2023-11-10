@@ -16,10 +16,10 @@ def run(arch, args):
     """
     runs the sample and returns the system error code.
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     LOGGER.info("Fetching use case test assets namespace %s", args.namespace)
 
-    # SoftwarePackage class encapsulates SBOM object in RKVST
+    # SoftwarePackage class encapsulates SBOM object in DataTrails
     package_name = "ACME Detector Coyote SP1"
     LOGGER.info("Creating Software Package Asset...: %s", package_name)
     package = SoftwarePackage(arch)

@@ -4,18 +4,18 @@ Maintaining and publishing an accurate Software Bill of Materials (SBOM) is an e
 
 In its [recommendations for the minimum required elements of an SBOM](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations"). the NTIA identifies the need to balance transparency with access controls (_"SBOMs should be available in a timely fashion to those who need them and must have appropriate access permissions and roles in place"_), and illustrates in its [NTIA SBOM Proof of Concept](https://www.ntia.doc.gov/files/ntia/publications/ntia_sbom_energy_pocplanning.pdf "NTIA Energy PoC Presentation") the need for strong stakeholder community management and a trusted SBOM data sharing mechanism which protects the interests of all parties.
 
-RKVST Data Assurance Hub offers a solution to this sharing and distribution problem: vendors retain control of their proprietary information and release processes while customers have assured and reliable visibility into their digital supply chain risks with reliable access to current and historical SBOM data for the components they rely on.
+DataTrails Data Assurance Hub offers a solution to this sharing and distribution problem: vendors retain control of their proprietary information and release processes while customers have assured and reliable visibility into their digital supply chain risks with reliable access to current and historical SBOM data for the components they rely on.
 
-This sample shows how to quickly get started with integrating your build and SBOM generation process with RKVST Data Assurance Hub.
+This sample shows how to quickly get started with integrating your build and SBOM generation process with DataTrails Data Assurance Hub.
 
 
 ## Pre-requisites
 
 * Python 3.8 and later versions are supported.
 
-* Install the [RKVST samples Python package](https://pypi.org/project/rkvst-samples/ "PyPi package page")
+* Install the [DataTrails samples Python package](https://pypi.org/project/datatrails-samples/ "PyPi package page")
 
-* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [RKVST documentation](https://docs.rkvst.com/docs/rkvst-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
+* Get an authorization bearer token and store it in the file `credentials/.auth_token`. If you don't know how to do this, please refer to the [DataTrails documentation](https://docs.datatrails.ai/docs/datatrails-basics/getting-access-tokens-using-app-registrations/ "Getting an auth token"). Make sure that the `credentials` folder is suitably restricted by disallowing root and group access.
 
 
 ## Running the sample
@@ -32,7 +32,7 @@ archivist_samples_software_bill_of_materials [-v]
 
 A SoftwarePackage represents the published version history of the evolving Software Bill of Materials for a product line.
 
-This Python class makes it easy to manage SBOM distribution in RKVST and publish the [NTIA minimum required SBOM information](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations") for your own SBOMs, regardless of how you generated them.
+This Python class makes it easy to manage SBOM distribution in DataTrails and publish the [NTIA minimum required SBOM information](https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom "NTIA recommendations") for your own SBOMs, regardless of how you generated them.
 
 
 ### Creating a new SoftwarePackage
@@ -40,7 +40,7 @@ This Python class makes it easy to manage SBOM distribution in RKVST and publish
 To create a brand new SBOM Asset and begin tracking and sharing the release history of a product line, use `SoftwarePackage.create()`:
 
 ```python
-    # Binaries such as images and SBOM XML need to be uploaded to RKVST first
+    # Binaries such as images and SBOM XML need to be uploaded to DataTrails first
     def attachment_create(sboms, attachment_description: AttachmentDescription):
       LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
       with resources.open_binary(sbom_files, attachment_description.filename) as fd:
@@ -55,7 +55,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
         }
         return result
 
-    # Instantiate SoftwarePackage object and create an RKVST record to begin
+    # Instantiate SoftwarePackage object and create an DataTrails record to begin
     # tracing and publishing its version history
     package_name = "ACME Detector Coyote SP1"
     LOGGER.info("Creating Software Package Asset...: %s", package_name)
@@ -80,7 +80,7 @@ To create a brand new SBOM Asset and begin tracking and sharing the release hist
 
 ### Loading an existing SoftwarePackage
 
-If you know the RKVST Asset Identity you can load the SBOM directly as a SoftwarePackage using `SoftwarePackage.read()`:
+If you know the DataTrails Asset Identity you can load the SBOM directly as a SoftwarePackage using `SoftwarePackage.read()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -88,7 +88,7 @@ package = SoftwarePackage(arch)
 package.read("assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 ```
 
-If you do not know the RKVST Asset Identity then you can load the SBOM based on any unique set of attributes using `SoftwarePackage.read_by_signature()`:
+If you do not know the DataTrails Asset Identity then you can load the SBOM based on any unique set of attributes using `SoftwarePackage.read_by_signature()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`
@@ -99,7 +99,7 @@ package.read_by_signature({"sbom_uuid": "com.acme.rrd2013-ce-sp1-v4-1-5-0"})
 
 ### Making a release
 
-When a new official release is issued, update the version history in RKVST with `SoftwarePackage.release()`:
+When a new official release is issued, update the version history in DataTrails with `SoftwarePackage.release()`:
 
 ```python
 # Assume Archivist connection already initialized in `arch`

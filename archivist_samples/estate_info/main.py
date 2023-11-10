@@ -25,7 +25,7 @@ def run(poc, args):
     """
     runs the sample and returns the system error code.
     """
-    LOGGER.info("Using version %s of rkvst-archivist", about.__version__)
+    LOGGER.info("Using version %s of datatrails-archivist", about.__version__)
     if args.quick_count:
         LOGGER.info("Number of events is %d", poc.events.count())
         LOGGER.info("Number of assets is %d", poc.assets.count())
@@ -80,7 +80,7 @@ def run(poc, args):
 
 
 def main():
-    parser = common_parser("Get basic information about your RKVST estate")
+    parser = common_parser("Get basic information about your DataTrails estate")
 
     # per example exclusive options here
     operations = parser.add_mutually_exclusive_group(required=True)
