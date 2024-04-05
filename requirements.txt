@@ -1,4 +1,4 @@
 cryptography~=41.0.2
-# TODO change to datatrails when released
-datatrails-archivist==0.27.1
+importlib-resources==3.0.0; python_version < '3.9'
+datatrails-archivist==0.29.0a1
 pyyaml~=6.0.1
