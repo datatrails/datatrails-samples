@@ -3,7 +3,11 @@
 # pylint:  disable=missing-docstring
 
 
-from importlib import resources
+try:
+    # Python < 3.9
+    import importlib_resources as res
+except ImportError:
+    import importlib.resources as res
 
 from copy import copy
 import logging
@@ -30,7 +34,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def attachment_create(doors, attachment_description: AttachmentDescription):
-    with resources.open_binary(images_assets, attachment_description.filename) as fd:
+    with res.files(images_assets).joinpath(attachment_description.filename).open(
+        "rb"
+    ) as fd:
         attachment = doors.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",
@@ -478,7 +484,7 @@ def open_door(doors, doorid, cards, cardid):
     # time but if the use case demands it is perfectly possible to
     # attach the same attachment ID to multiple assets/events rather
     # than duplicating them
-    with resources.open_binary(images_events, "dooropen.png") as fd:
+    with res.files(images_events).joinpath("dooropen.png").open("rb") as fd:
         image = doors.attachments.upload(fd)
 
     # Issue RecordEvidence logs on each.

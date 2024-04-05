@@ -4,7 +4,11 @@
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
-from importlib import resources
+try:
+    # Python < 3.9
+    import importlib_resources as res
+except ImportError:
+    import importlib.resources as res
 
 import logging
 from sys import exit as sys_exit
@@ -22,7 +26,9 @@ LOGGER = logging.getLogger(__name__)
 
 def attachment_create(arch, attachment_description: AttachmentDescription):
     LOGGER.info("sbom attachment creator: %s", attachment_description.filename)
-    with resources.open_binary(sbom_files, attachment_description.filename) as fd:
+    with res.files(sbom_files).joinpath(attachment_description.filename).open(
+        "rb"
+    ) as fd:
         attachment = arch.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",

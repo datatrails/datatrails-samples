@@ -2,7 +2,11 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
-from importlib import resources
+try:
+    # Python < 3.9
+    import importlib_resources as res
+except ImportError:
+    import importlib.resources as res
 
 import logging
 
@@ -22,7 +26,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def upload_attachment(arch, attachment_description: AttachmentDescription):
-    with resources.open_binary(wipp_files, attachment_description.filename) as fd:
+    with res.files(wipp_files).joinpath(attachment_description.filename).open(
+        "rb"
+    ) as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             # sample-specific attr to relay attachment name
@@ -37,7 +43,9 @@ def upload_attachment(arch, attachment_description: AttachmentDescription):
 
 
 def attachment_create(arch, attachment_description: AttachmentDescription):
-    with resources.open_binary(wipp_files, attachment_description.filename) as fd:
+    with res.files(wipp_files).joinpath(attachment_description.filename).open(
+        "rb"
+    ) as fd:
         attachment = arch.attachments.upload(fd)
         result = {
             "arc_attribute_type": "arc_attachment",

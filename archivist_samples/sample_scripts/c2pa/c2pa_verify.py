@@ -25,9 +25,10 @@ import random
 import sample
 
 try:
-    import importlib.resources as pkg_resources
+    # Python < 3.9
+    import importlib_resources as res
 except ImportError:
-    import importlib_resources as pkg_resources
+    import importlib.resources as res
 
 
 # DataTrails Connection Parameters -- Honest Abe
@@ -72,7 +73,7 @@ def evil_arch():
 
 # Uploads attachments to DataTrails
 def upload_attachment(arch, path, name):
-    with pkg_resources.open_binary(sample, path) as fd:
+    with res.files(sample).joinpath(path).open("rb") as fd:
         blob = arch.attachments.upload(fd)
         attachment = {
             "arc_display_name": name,
