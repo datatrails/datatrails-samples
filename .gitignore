@@ -8,6 +8,7 @@ dist/
 .coverage
 *,cover
 *.xml
+*.whl
 *.pem
 *.aid
 htmlcov/
