@@ -39,7 +39,6 @@ export TEST_ARCHIVIST="https://app.datatrails.ai"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
 export TEST_VERBOSE=-v
-export TEST_PROOF_MECHANISM="-i SIMPLE_HASH"
 ```
 
 If TEST_VERBOSE is "-v" debugging output will appear when running the tests.

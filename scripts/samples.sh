@@ -83,7 +83,7 @@ do
 done
 
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
-ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE $TEST_PROOF_MECHANISM"
+ARGS="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE"
 
 # namespacing ensures that each run  of the tests is independent.
 if [ -n "$TEST_NAMESPACE" ]

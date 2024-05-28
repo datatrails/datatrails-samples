@@ -15,7 +15,6 @@ from datetime import timedelta
 
 from archivist.logger import set_logger
 from archivist.archivist import Archivist
-from archivist.proof_mechanism import ProofMechanism
 from archivist.utils import get_auth
 
 import time

@@ -17,7 +17,6 @@ docker run \
     -e TEST_NAMESPACE \
     -e TEST_SELECTOR \
     -e TEST_VERBOSE \
-    -e TEST_PROOF_MECHANISM \
     -e GITHUB_REF \
     -e TWINE_USERNAME \
     -e TWINE_PASSWORD \
