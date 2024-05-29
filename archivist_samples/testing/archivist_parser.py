@@ -15,7 +15,6 @@ from sys import exit as sys_exit
 
 from archivist.archivist import Archivist
 from archivist.logger import set_logger
-from archivist.proof_mechanism import ProofMechanism
 
 LOGGER = logging.getLogger(__name__)
 
@@ -73,16 +72,6 @@ def common_parser(description):
         help="url of Archivist service",
     )
     parser.add_argument(
-        "-p",
-        "--proof-mechanism",
-        type=ProofMechanism,
-        action=EnumAction,
-        dest="proof_mechanism",
-        default=ProofMechanism.SIMPLE_HASH,
-        help="mechanism for proving the evidence for events on the Asset",
-    )
-
-    parser.add_argument(
         "-t",
         "--auth-token",
         type=str,
@@ -104,17 +93,12 @@ def endpoint(args):
 
     arch = None
     LOGGER.info("Initialising connection to DataTrails...")
-    fixtures = {
-        "assets": {
-            "proof_mechanism": args.proof_mechanism.name,
-        },
-    }
 
     if args.auth_token_file:
         with open(args.auth_token_file, mode="r", encoding="utf-8") as tokenfile:
             authtoken = tokenfile.read().strip()
 
-        arch = Archivist(args.url, authtoken, fixtures=fixtures)
+        arch = Archivist(args.url, authtoken)
 
     if arch is None:
         LOGGER.error("Critical error.  Aborting.")
