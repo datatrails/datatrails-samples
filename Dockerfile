@@ -21,6 +21,6 @@ RUN python3 -m pip -qq install --upgrade pip \
 ENV USER=api
 ENV HOME=/home/${USER}
 RUN mkdir -p ${HOME}
-ENV PYTHONPATH=${HOME}/samples:${PYTHONPATH}
+ENV PYTHONPATH=${HOME}/samples
 ENV PATH=${HOME}/.local/bin:${PATH}
 WORKDIR ${HOME}
