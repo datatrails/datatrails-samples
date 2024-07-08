@@ -28,6 +28,7 @@ jobs:
     - name: Run integrity checks
       run: |
         export PYTHONPATH=samples:${PYTHONPATH}
+        scripts/version.sh
         pycodestyle --format=pylint archivist_samples
         python3 -m pylint archivist_samples
         black archivist_samples

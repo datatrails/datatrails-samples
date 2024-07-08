@@ -100,6 +100,11 @@ else
     echo "No NAMESPACE specified - may share assets etc with someone else on same URL"
 fi
 
+if [ -n "$TEST_PARTNER_ID" ]
+then
+    ARGS="$ARGS --partner_id ${TEST_PARTNER_ID}"
+fi
+
 # emit command if executing tests against the docker image or the installed wheel
 command() {
     if [ "${TASK}" == "samples" ]

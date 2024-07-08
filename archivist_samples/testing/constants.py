@@ -1,4 +1,4 @@
 """Constants
 """
 
-USER_AGENT_PREFIX = "datatrails-samples/"
+USER_AGENT_PREFIX = "samples/"
