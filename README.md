@@ -33,6 +33,7 @@ specify the archivist endpoint:
 export TEST_ARCHIVIST="https://app.datatrails.ai"
 export TEST_AUTHTOKEN_FILENAME=credentials/.auth_token
 export TEST_NAMESPACE="unique label"
+export TEST_PARTNER_ID="acmecorp"
 export TEST_VERBOSE=-v
 ```
 
@@ -44,6 +45,7 @@ Windows using Powershell - at the command prompt set values for environment vari
 $Env:TEST_ARCHIVIST="https://app.datatrails.ai"
 $Env:TEST_AUTHTOKEN_FILENAME = '<path of token location>'
 $Env:TEST_NAMESPACE = Get-Date -UFormat %s
+$Env:TEST_PARTNER_ID = 'acmecorp'
 $Env:TEST_VERBOSE = '-v'
 ```
 
@@ -70,7 +72,7 @@ All examples use a common set of arguments:
 
 ```bash
 export AUTH="-u $TEST_ARCHIVIST -t $TEST_AUTHTOKEN_FILENAME $TEST_VERBOSE"
-export ARGS="$AUTH --namespace $TEST_NAMESPACE"
+export ARGS="$AUTH --namespace $TEST_NAMESPACE --partner_id=$TEST_PARTNER_ID"
 ```
 
 ### Door Entry Control

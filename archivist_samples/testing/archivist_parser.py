@@ -16,6 +16,9 @@ from sys import exit as sys_exit
 from archivist.archivist import Archivist
 from archivist.logger import set_logger
 
+from ..about import __version__ as VERSION
+from .constants import USER_AGENT_PREFIX
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -81,6 +84,15 @@ def common_parser(description):
         required=True,
         help="FILE containing API authentication token",
     )
+    parser.add_argument(
+        "-p",
+        "--partner_id",
+        type=str,
+        dest="partner_id",
+        action="store",
+        default="",
+        help="partner id",
+    )
 
     return parser
 
@@ -98,7 +110,12 @@ def endpoint(args):
         with open(args.auth_token_file, mode="r", encoding="utf-8") as tokenfile:
             authtoken = tokenfile.read().strip()
 
-        arch = Archivist(args.url, authtoken)
+        arch = Archivist(
+            args.url,
+            authtoken,
+            partner_id=args.partner_id,
+            user_agent=f"{USER_AGENT_PREFIX}{VERSION}",
+        )
 
     if arch is None:
         LOGGER.error("Critical error.  Aborting.")

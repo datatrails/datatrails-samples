@@ -7,4 +7,4 @@ pyyaml~=6.0.1
 # the following lines. Also do similar in the Dockerfile.
 # That way one can test an unreleased version of github datatrails-samples.
 # NB dont forget to uncomment before merging !!
-datatrails-archivist==0.31.1
+datatrails-archivist==0.31.2

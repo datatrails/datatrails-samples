@@ -15,6 +15,7 @@ docker run \
     -e TEST_ARCHIVIST \
     -e TEST_AUTHTOKEN_FILENAME \
     -e TEST_NAMESPACE \
+    -e TEST_PARTNER_ID \
     -e TEST_SELECTOR \
     -e TEST_VERBOSE \
     -e GITHUB_REF \

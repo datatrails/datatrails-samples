@@ -73,6 +73,6 @@ tasks:
 
   wheel:
     desc: Builds python wheel package
-    deps: [about, clean]
+    deps: [about]
     cmds:
       - ./scripts/api.sh ./scripts/wheel.sh
