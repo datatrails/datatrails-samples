@@ -15,7 +15,7 @@ from sys import exit as sys_exit
 
 from archivist.logger import set_logger
 
-from .archivist import Archivist
+from ..archivist import Archivist
 
 LOGGER = logging.getLogger(__name__)
 
@@ -118,5 +118,5 @@ def endpoint(args):
         LOGGER.error("Critical error.  Aborting.")
         sys_exit(1)
 
-    LOGGER.info("USer agent is %s", arch.user_agent)
+    LOGGER.info("User agent is %s", arch.user_agent)
     return arch

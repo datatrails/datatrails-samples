@@ -6,7 +6,7 @@
 
 from archivist.archivist import Archivist as _Archivist
 
-from ..about import __version__ as VERSION
+from .about import __version__ as VERSION
 from .constants import USER_AGENT_PREFIX
 
 
