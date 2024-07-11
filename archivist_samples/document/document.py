@@ -21,7 +21,7 @@ from . import document_files
 from ..testing.assets import make_assets_create, AttachmentDescription
 
 if TYPE_CHECKING:
-    from archivist.archivist import Archivist
+    from ..archivist import Archivist
 
 LOGGER = logging.getLogger(__name__)
 

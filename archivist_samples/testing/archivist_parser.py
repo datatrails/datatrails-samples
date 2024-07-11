@@ -13,11 +13,9 @@ from enum import Enum
 import logging
 from sys import exit as sys_exit
 
-from archivist.archivist import Archivist
 from archivist.logger import set_logger
 
-from ..about import __version__ as VERSION
-from .constants import USER_AGENT_PREFIX
+from ..archivist import Archivist
 
 LOGGER = logging.getLogger(__name__)
 
@@ -114,11 +112,11 @@ def endpoint(args):
             args.url,
             authtoken,
             partner_id=args.partner_id,
-            user_agent=f"{USER_AGENT_PREFIX}{VERSION}",
         )
 
     if arch is None:
         LOGGER.error("Critical error.  Aborting.")
         sys_exit(1)
 
+    LOGGER.info("User agent is %s", arch.user_agent)
     return arch

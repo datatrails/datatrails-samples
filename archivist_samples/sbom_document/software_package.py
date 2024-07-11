@@ -14,7 +14,7 @@ import logging
 from sys import exit as sys_exit
 from typing import List, Optional
 
-from archivist import archivist as type_helper
+from .. import archivist as type_helper
 
 from ..testing.assets import make_assets_create, AttachmentDescription
 
