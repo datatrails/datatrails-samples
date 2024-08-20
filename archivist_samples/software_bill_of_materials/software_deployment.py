@@ -130,7 +130,6 @@ class SoftwareDeployment:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     def decommission(
@@ -249,7 +248,6 @@ class SoftwareDeployment:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     def upgrade_plan(
@@ -294,7 +292,9 @@ class SoftwareDeployment:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def upgrade_accepted(
@@ -339,7 +339,9 @@ class SoftwareDeployment:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     # Rollback Events
@@ -402,7 +404,6 @@ class SoftwareDeployment:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     def rollback_plan(
@@ -447,7 +448,9 @@ class SoftwareDeployment:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def rollback_accepted(
@@ -492,7 +495,9 @@ class SoftwareDeployment:
         if custom_attrs is not None:
             attrs.update(custom_attrs)
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     # Vulnerability Events
@@ -538,7 +543,9 @@ class SoftwareDeployment:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def vuln_update(
@@ -581,7 +588,9 @@ class SoftwareDeployment:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def _add_attachments(self, attachments: list):

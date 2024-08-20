@@ -152,7 +152,7 @@ def generate_crypto_asset(archivist, asset_name):
         "arc_display_type": "Crypto endpoint",
         "arc_evidence_signing_pubkey": pubkey_pem.decode("utf-8"),
     }
-    newasset = archivist.assets.create(attrs=attrs, confirm=True)
+    newasset = archivist.assets.create(attrs=attrs)
     LOGGER.debug(newasset)
     if not newasset:
         LOGGER.error("Failed to register new asset with Archivist")
@@ -243,7 +243,7 @@ def submit_signed_evidence(archivist, asset_name, message, corrupt_sig):
         # should cover the complete 'arc_evidence' field (and no more)
         "arc_evidence_signature": signature,
     }
-    archivist.events.create(a_id, props, attrs, confirm=True)
+    archivist.events.create(a_id, props, attrs)
 
 
 def print_history(archivist, asset_name):

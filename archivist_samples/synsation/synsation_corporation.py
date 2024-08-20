@@ -32,7 +32,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
 
 
 machines_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=False
+    attachment_creator=attachment_create,
 )
 
 

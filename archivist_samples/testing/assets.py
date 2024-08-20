@@ -20,7 +20,7 @@ class AttachmentDescription:
     attribute_name: str
 
 
-def assets_create_if_not_exists(arch, attrs, *, confirm=False):
+def assets_create_if_not_exists(arch, attrs):
     asset = None
     try:
         asset = arch.assets.read_by_signature(
@@ -37,14 +37,13 @@ def assets_create_if_not_exists(arch, attrs, *, confirm=False):
     else:
         return asset
 
-    return arch.assets.create(attrs=attrs, confirm=confirm)
+    return arch.assets.create(attrs=attrs)
 
 
 def make_assets_create(
     attachment_creator: Optional[
         Callable[[type_helper.Archivist, AttachmentDescription], Dict]
     ] = None,
-    confirm=False,
     public=False,
 ):
     """
@@ -104,9 +103,7 @@ def make_assets_create(
                 asset_attrs[selector_key] = selector_value
 
             LOGGER.debug("asset_attrs %s", asset_attrs)
-            asset = arch.assets.create(
-                attrs=asset_attrs, confirm=confirm, props={"public": public}
-            )
+            asset = arch.assets.create(attrs=asset_attrs, props={"public": public})
 
         else:
             LOGGER.info("%s already existed", display_name)

@@ -26,7 +26,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
     return result
 
 
-crates_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
+crates_creator = make_assets_create(attachment_creator=attachment_create)
 
 
 def initialise_asset_types():

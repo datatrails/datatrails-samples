@@ -61,7 +61,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
 
 
 document_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=True
+    attachment_creator=attachment_create,
 )
 
 
@@ -165,28 +165,4 @@ class Document:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
-        )
-
-    # Withdraw version of the document
-    def withdraw(self, document: dict, version: str, doc_hash: str, name: str):
-        props = {
-            "operation": "Record",
-            "behaviour": "RecordEvidence",
-        }
-        attrs = {"arc_display_type": "Withdraw", "document_status": "Withdrawn"}
-
-        asset_attrs = {
-            "arc_display_name": name,
-            "document_document": document,
-            "document_hash_value": doc_hash,
-            "document_version": version,
-        }
-
-        return self.arch.events.create(
-            self.asset["identity"],
-            props=props,
-            attrs=attrs,
-            asset_attrs=asset_attrs,
-            confirm=True,
         )

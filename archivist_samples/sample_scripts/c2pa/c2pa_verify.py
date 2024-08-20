@@ -126,7 +126,7 @@ def create_asset(
     }
     props = {"public": True}
 
-    return arch.assets.create(props=props, attrs=attrs, confirm=True)
+    return arch.assets.create(props=props, attrs=attrs)
 
 
 # Uploads primary image and related attachments to DataTrails

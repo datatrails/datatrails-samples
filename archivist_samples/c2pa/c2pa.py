@@ -61,7 +61,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
 
 
 document_creator = make_assets_create(
-    attachment_creator=attachment_create, confirm=True
+    attachment_creator=attachment_create,
 )
 
 
@@ -170,7 +170,6 @@ class C2PADocument:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     # info_report
@@ -189,7 +188,6 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # ingredients
@@ -214,7 +212,6 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # external_manifest
@@ -243,7 +240,6 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # details_report
@@ -272,7 +268,6 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # parent
@@ -302,7 +297,6 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # edit_manifest
@@ -327,5 +321,4 @@ class C2PADocument:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )

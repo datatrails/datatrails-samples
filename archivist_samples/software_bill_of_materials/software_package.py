@@ -41,7 +41,7 @@ def attachment_create(sboms, attachment_description: AttachmentDescription):
         return result
 
 
-sboms_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
+sboms_creator = make_assets_create(attachment_creator=attachment_create)
 
 
 class SoftwarePackage:
@@ -170,7 +170,6 @@ class SoftwarePackage:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     def release_plan(
@@ -204,7 +203,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def release_accepted(
@@ -239,7 +240,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     # Patch Events
@@ -275,7 +278,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def private_patch(
@@ -311,7 +316,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     # Vulnerability Events
@@ -350,7 +357,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     def vuln_update(
@@ -387,7 +396,9 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
 
     # EOL/Deprecation
@@ -422,5 +433,7 @@ class SoftwarePackage:
             attrs.update(custom_attrs)
 
         return self.arch.events.create(
-            self._asset["identity"], props=props, attrs=attrs, confirm=True
+            self._asset["identity"],
+            props=props,
+            attrs=attrs,
         )
