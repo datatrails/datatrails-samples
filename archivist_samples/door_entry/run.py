@@ -49,7 +49,7 @@ def attachment_create(doors, attachment_description: AttachmentDescription):
         return result
 
 
-doors_creator = make_assets_create(attachment_creator=attachment_create, confirm=False)
+doors_creator = make_assets_create(attachment_creator=attachment_create)
 
 
 # Create actual door assets
@@ -269,7 +269,7 @@ def create_doors(doors):
 ############
 
 
-cards_creator = make_assets_create(confirm=False)
+cards_creator = make_assets_create()
 
 
 def create_cards(cards):
@@ -531,7 +531,6 @@ def open_door(doors, doorid, cards, cardid):
                 "arc_blob_hash_value": image["hash"]["value"],
             },
         },
-        confirm=True,
     )
 
     unused_card_record_evidence = cards.events.create(
@@ -568,7 +567,6 @@ def open_door(doors, doorid, cards, cardid):
             "wavestone_evt_type": "door_open",
             "arc_primary_image": [door_image],
         },
-        confirm=True,
     )
     LOGGER.info("Opening door '%s' with card '%s': FINISHED", doorid, cardid)
 

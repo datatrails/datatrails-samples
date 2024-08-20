@@ -59,7 +59,7 @@ def attachment_create(arch, attachment_description: AttachmentDescription):
         return result
 
 
-wipp_creator = make_assets_create(attachment_creator=attachment_create, confirm=True)
+wipp_creator = make_assets_create(attachment_creator=attachment_create)
 
 
 class Wipp:
@@ -178,7 +178,6 @@ class Wipp:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     # Tomography Events
@@ -221,7 +220,6 @@ class Wipp:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     # Loading Events
@@ -261,7 +259,6 @@ class Wipp:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     # Pre-Shipping Events
@@ -293,7 +290,6 @@ class Wipp:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # Departure Events
@@ -325,7 +321,6 @@ class Wipp:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # Waypoint Events
@@ -359,7 +354,6 @@ class Wipp:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # Arrival Events
@@ -391,7 +385,6 @@ class Wipp:
             self.asset["identity"],
             props=props,
             attrs=attrs,
-            confirm=True,
         )
 
     # Unloading Events
@@ -430,7 +423,6 @@ class Wipp:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )
 
     # Emplacement Events
@@ -471,5 +463,4 @@ class Wipp:
             props=props,
             attrs=attrs,
             asset_attrs=asset_attrs,
-            confirm=True,
         )

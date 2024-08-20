@@ -47,7 +47,6 @@ class MyAsset:
                 "arc_description": desc,
                 "arc_evidence": evidence,
             },
-            confirm=True,
         )
 
     def certify_patch(self, desc, evidence, attachments, extra_attrs=None):
@@ -72,7 +71,6 @@ class MyAsset:
                 },
             },
             attrs,
-            confirm=True,
         )
 
     def move(self, desc, lat, lng):
@@ -91,7 +89,6 @@ class MyAsset:
                 "arc_gis_lat": lat,
                 "arc_gis_lng": lng,
             },
-            confirm=True,
         )
 
     def patch_vulnerability(self, desc, evidence):
@@ -109,7 +106,6 @@ class MyAsset:
                 "arc_description": desc,
                 "arc_evidence": evidence,
             },
-            confirm=True,
         )
 
     def report_vulnerability(self, desc, cve_id, cve_corval):
@@ -128,7 +124,6 @@ class MyAsset:
                 "arc_cve_id": cve_id,
                 "arc_correlation_value": cve_corval,
             },
-            confirm=True,
         )
 
     def service_required(self, desc, corval):
@@ -146,7 +141,6 @@ class MyAsset:
                 "arc_description": desc,
                 "arc_correlation_value": corval,
             },
-            confirm=True,
         )
 
     def service(self, desc, corval):
@@ -164,7 +158,6 @@ class MyAsset:
                 "arc_description": desc,
                 "arc_correlation_value": corval,
             },
-            confirm=True,
         )
 
     def update_firmware(self, desc, fw_version, corval):
@@ -184,5 +177,4 @@ class MyAsset:
                 "arc_correlation_value": corval,
             },
             asset_attrs={"arc_firmware_version": fw_version},
-            confirm=True,
         )
