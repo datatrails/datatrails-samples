@@ -132,6 +132,7 @@ class C2PADocument:
     #
     # authors is a list in the form {'display_name': 'Bob', 'email':'Bob@example.com'}
     #
+    # pylint: disable=too-many-positional-arguments
     # pylint: disable=too-many-arguments
     def publish(
         self,

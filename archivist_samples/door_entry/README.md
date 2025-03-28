@@ -9,7 +9,7 @@ This sample simulates a set of smart connected door locks processing and reporti
 
 ## Pre-requisites
 
-* Python 3.8 and later versions are supported.
+* Python 3.9 and later versions are supported.
 
 * Install the DataTrails samples package. If you are just trying out the pre-made samples you should get the official [DataTrails samples Python package](https://pypi.org/project/datatrails-samples/ "PyPi package page") from PyPi. If you are modifying this sample and want to try out your changes then you'll need to rebuild the wheel: please refer to the developer instructions in the top level of this repository to see how to do that.
 

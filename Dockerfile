@@ -1,4 +1,4 @@
-ARG VERSION=3.8
+ARG VERSION=3.9
 FROM python:${VERSION}-bookworm
 
 COPY requirements.txt requirements-dev.txt /tmp/

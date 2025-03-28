@@ -1,6 +1,7 @@
 # Definitions and data for Synsation Smart City demo data
 
 # pylint: disable=missing-docstring
+# pylint: disable=too-many-positional-arguments
 
 import logging
 

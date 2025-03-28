@@ -12,11 +12,6 @@ tasks:
   api:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
-      - docker build --no-cache --build-arg VERSION=3.8 -f Dockerfile -t datatrails-samples-api .
-  
-  api-3.9:
-    desc: Build a docker environment with the right dependencies and utilities
-    cmds:
       - docker build --no-cache --build-arg VERSION=3.9 -f Dockerfile -t datatrails-samples-api .
   
   api-3.10:
@@ -33,6 +28,11 @@ tasks:
     desc: Build a docker environment with the right dependencies and utilities
     cmds:
       - docker build --no-cache --build-arg VERSION=3.12 -f Dockerfile -t datatrails-samples-api .
+
+  api-3.13:
+    desc: Build a docker environment with the right dependencies and utilities
+    cmds:
+      - docker build --no-cache --build-arg VERSION=3.13 -f Dockerfile -t datatrails-samples-api .
 
   check:
     desc: Check the style, bug and quality of the code

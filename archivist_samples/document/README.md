@@ -17,7 +17,7 @@ If the document contains sensitive information, it is also possible to just prov
 
 ## Pre-requisites
 
-* Python 3.8 and later versions are supported.
+* Python 3.9 and later versions are supported.
 
 * Install the [DataTrails samples Python package](https://pypi.org/project/datatrails-samples/ "PyPi package page")
 
