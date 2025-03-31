@@ -1,6 +1,7 @@
 # pylint:disable=missing-function-docstring      # docstrings
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
+# pylint:disable=too-many-positional-arguments
 
 try:
     # Python < 3.9

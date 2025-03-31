@@ -2,6 +2,7 @@
 
 # pylint: disable=missing-docstring
 # pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
 
 import string
 import random

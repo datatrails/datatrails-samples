@@ -5,6 +5,7 @@
 # This also demonstrates the capability to make locations and assets 1:1
 
 # pylint: disable=missing-docstring
+# pylint: disable=too-many-positional-arguments
 
 import logging
 import random

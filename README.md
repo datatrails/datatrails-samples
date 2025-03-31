@@ -3,9 +3,13 @@
 Sample python code that uses the datatrails python SDK to manage particular types of assets
 such as 'doors', 'cards', 'containers' etc.
 
+Only supplied as examples of python code that accesses the datatrails archivist.
+
+No tests - released 'AS-IS'
+
 # Installing the samples code
 
-Python 3.8 and later versions are supported.
+Python 3.9 and later versions are supported.
 
 Use the standard python pip utility:
 

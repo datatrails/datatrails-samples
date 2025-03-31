@@ -83,7 +83,6 @@ def make_assets_create(
             )
 
         except ArchivistNotFoundError:
-            LOGGER.info("%s does not exist", display_name)
             asset_attrs["arc_display_name"] = display_name
             if location is not None:
                 location = locations_create_if_not_exists(
