@@ -29,11 +29,6 @@ def common_endpoint(label, args):
                     "arc_namespace": namespace,
                 },
             },
-            "locations": {
-                "attributes": {
-                    "arc_namespace": namespace,
-                },
-            },
         }
 
     return arch

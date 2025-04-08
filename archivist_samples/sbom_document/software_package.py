@@ -4,11 +4,7 @@
 # pylint:disable=unused-import      # To prevent cyclical import errors forward referencing is used
 # pylint:disable=cyclic-import      # but pylint doesn't understand this feature
 
-try:
-    # Python < 3.9
-    import importlib_resources as res
-except ImportError:
-    import importlib.resources as res
+import importlib.resources as res
 
 import logging
 from sys import exit as sys_exit

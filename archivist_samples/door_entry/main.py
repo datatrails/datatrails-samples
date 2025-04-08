@@ -41,7 +41,7 @@ def main():
         dest="create_assets",
         action="store_true",
         default=False,
-        help="create the locations and assets. DO THIS ONLY ONCE.",
+        help="create the assets. DO THIS ONLY ONCE.",
     )
     operations.add_argument(
         "-l",

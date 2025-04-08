@@ -2,11 +2,7 @@
 # pylint:disable=missing-module-docstring      # docstrings
 # pylint:disable=missing-class-docstring      # docstrings
 
-try:
-    # Python < 3.9
-    import importlib_resources as res
-except ImportError:
-    import importlib.resources as res
+import importlib.resources as res
 
 import logging
 

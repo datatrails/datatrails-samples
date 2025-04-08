@@ -29,7 +29,6 @@ def run(poc, args):
     if args.quick_count:
         LOGGER.info("Number of events is %d", poc.events.count())
         LOGGER.info("Number of assets is %d", poc.assets.count())
-        LOGGER.info("Number of locations is %d", poc.locations.count())
         return 0
 
     if args.double_check:
@@ -61,16 +60,14 @@ def run(poc, args):
 
         num_events = poc.events.count()
         num_assets = poc.assets.count()
-        num_locations = poc.locations.count()
 
         LOGGER.info(
             (
                 "There are %s events registered against %s assets"
-                " in the system spread over %s locations."
+                " in the system spread."
             ),
             num_events,
             num_assets,
-            num_locations,
         )
 
         LOGGER.info("Performing double-check... FINISH")

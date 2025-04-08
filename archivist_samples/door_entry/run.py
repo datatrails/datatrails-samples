@@ -2,12 +2,7 @@
 
 # pylint:  disable=missing-docstring
 
-
-try:
-    # Python < 3.9
-    import importlib_resources as res
-except ImportError:
-    import importlib.resources as res
+import importlib.resources as res
 
 from copy import copy
 import logging
@@ -71,18 +66,6 @@ def create_datatrails_paris(doors):
             ),
             "wavestone_asset_id": "paris.france.datatrails.das",
         },
-        location={
-            "props": {
-                "display_name": "DataTrails Paris",
-                "description": "Sales and sales support for the French region",
-                "latitude": 48.8339211,
-                "longitude": 2.371345,
-            },
-            "attrs": {
-                "address": "5 Parvis Alan Turing, 75013 Paris, France",
-                "wavestone_ext": "managed",
-            },
-        },
         attachments=[
             AttachmentDescription("entry_terminal.jpg", "arc_primary_image"),
         ],
@@ -101,18 +84,6 @@ def create_cityhall(doors):
                 "staff entrance to Paris City Hall"
             ),
             "wavestone_asset_id": "cityhall.paris.wavestonedas",
-        },
-        location={
-            "props": {
-                "display_name": "Paris City Hall",
-                "description": "Seat of Paris local city adminstration",
-                "latitude": 48.856389,
-                "longitude": 2.352222,
-            },
-            "attrs": {
-                "address": "Place de l'Hôtel de Ville, 75004 Paris, France",
-                "wavestone_ext": "managed",
-            },
         },
         attachments=[
             AttachmentDescription("cityhall.jpg", "arc_primary_image"),
@@ -133,18 +104,6 @@ def create_courts(doors):
             ),
             "wavestone_asset_id": "courts.paris.wavestonedas",
         },
-        location={
-            "props": {
-                "display_name": "Paris Courts of Justice",
-                "description": ("Public museum in the former Palais de Justice"),
-                "latitude": 48.855722,
-                "longitude": 2.345051,
-            },
-            "attrs": {
-                "address": "10 Boulevard du Palais, 75001 Paris, France",
-                "wavestone_ext": "managed",
-            },
-        },
         attachments=[
             AttachmentDescription("courts.jpg", "arc_primary_image"),
         ],
@@ -163,20 +122,6 @@ def create_bastille(doors):
                 "staff entrance to Bastille"
             ),
             "wavestone_asset_id": "bastille.paris.wavestonedas",
-        },
-        location={
-            "props": {
-                "display_name": "Bastille",
-                "description": (
-                    "Medieval fortress, made famous by the " "French Revolution"
-                ),
-                "latitude": 48.85333,
-                "longitude": 2.36917,
-            },
-            "attrs": {
-                "address": "Place de la Bastille, 75011 Paris, France",
-                "wavestone_ext": "managed",
-            },
         },
         attachments=[
             AttachmentDescription("bastille.jpg", "arc_primary_image"),
@@ -197,20 +142,6 @@ def create_gdn_front(doors):
             ),
             "wavestone_asset_id": "front.gdn.paris.wavestonedas",
         },
-        location={
-            "props": {
-                "display_name": "Apartements du Gare du Nord",
-                "description": (
-                    "Residential apartment building in new complex " "above GdN station"
-                ),
-                "latitude": 48.8809,
-                "longitude": 2.3553,
-            },
-            "attrs": {
-                "address": "18 Rue de Dunkerque, 75010 Paris, France",
-                "wavestone_ext": "managed",
-            },
-        },
         attachments=[
             AttachmentDescription("gdn_front.jpg", "arc_primary_image"),
         ],
@@ -229,20 +160,6 @@ def create_gdn_side(doors):
                 "residential entrance to Apartements du Gare du Nord"
             ),
             "wavestone_asset_id": "side.gdn.paris.wavestonedas",
-        },
-        location={
-            "props": {
-                "display_name": "Apartements du Gare du Nord",
-                "description": (
-                    "Residential apartment building in new complex " "above GdN station"
-                ),
-                "latitude": 48.8809,
-                "longitude": 2.3553,
-            },
-            "attrs": {
-                "address": "18 Rue de Dunkerque, 75010 Paris, France",
-                "wavestone_ext": "managed",
-            },
         },
         attachments=[
             AttachmentDescription("gdn_side.jpg", "arc_primary_image"),
@@ -274,9 +191,8 @@ cards_creator = make_assets_create()
 
 def create_cards(cards):
     LOGGER.info("Creating all cards...")
-    # We don't create locations for cards - they float free.
     # If there's a natural affinity between cards and home
-    # locations/owners in the real world then of course we
+    # owners in the real world then of course we
     # can add this.
     # Similarly there's no real benefit to creating a
     # Primary_image for them so leave that empty too
@@ -320,13 +236,10 @@ def list_doors(doors):
     LOGGER.info("Listing all doors tracked by the system:")
     for door in doors.assets.list():
         attrs = door["attributes"]
-        location = doors.locations.read(attrs["arc_home_location_identity"])
         attachments = find_attachment_attributes(attrs)
 
         print(f"\tAsset name:\t{attrs['arc_display_name']}")
         print(f"\tAsset type:\t{attrs['arc_display_type']}")
-        print(f"\tAsset location:\t{location['display_name']}")
-        print(f"\tAsset address:\t{location['attributes']['address']}")
         print(f"\tArchivist ID:\t{door['identity']}")
         for a in attachments:
             print(f"\tAttachment identity: \t{a['arc_blob_identity']}")
@@ -460,12 +373,6 @@ def open_door(doors, doorid, cards, cardid):
     wsext_door_wsid = door["attributes"]["wavestone_asset_id"]
     corval = str(uuid.uuid4())
 
-    # Work out where we are
-    location = doors.locations.read(door["attributes"]["arc_home_location_identity"])
-    if not location:
-        LOGGER.error("Door location is missing")
-        return
-
     # Capture a picture of the building entrance
     # In this example we just dig out the main image of the building
     # but the principle here is that the operative could snap it from
@@ -554,14 +461,6 @@ def open_door(doors, doorid, cards, cardid):
             "arc_display_type": "Door Open",
             "arc_evidence": "ARQC: 0x12345678",
             "arc_correlation_value": corval,
-            # Events take optional GIS coordinates to record where
-            # they happened and trace movements. In this case things
-            # are very simple - we just record the fixed location of
-            # the door being opened - but it can be used for any
-            # mobile asset such as a self-driving car, a drone, or a
-            # container in supply chain events
-            "arc_gis_lat": f"{location['latitude']}",
-            "arc_gis_lng": f"{location['longitude']}",
             "wavestone_door_name": wsext_doorname,
             "wavestone_door_archivist_id": door["identity"],
             "wavestone_evt_type": "door_open",

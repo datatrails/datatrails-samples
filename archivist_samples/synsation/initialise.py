@@ -68,7 +68,7 @@ def entry():
         dest="create_corporation",
         action="store_false",
         default=True,
-        help="don't create the Synsation Corporation locations and assets",
+        help="don't create the Synsation Corporation assets",
     )
     parser.add_argument(
         "-M",
@@ -76,7 +76,7 @@ def entry():
         dest="create_manufacturing",
         action="store_false",
         default=True,
-        help="don't create the Synsation Manufacturing locations and assets",
+        help="don't create the Synsation Manufacturing assets",
     )
     parser.add_argument(
         "-I",
@@ -84,7 +84,7 @@ def entry():
         dest="create_industries",
         action="store_false",
         default=True,
-        help="don't create the Synsation Industries locations and assets",
+        help="don't create the Synsation Industries assets",
     )
     parser.add_argument(
         "-S",
@@ -92,7 +92,7 @@ def entry():
         dest="create_smartcity",
         action="store_false",
         default=True,
-        help="don't create the Synsation Smart City locations and assets",
+        help="don't create the Synsation Smart City assets",
     )
     parser.add_argument(
         "-n",

@@ -57,13 +57,13 @@ TEST_NAMESPACE is set to the date and time value in Unix format, thus providing 
 
 ## TEST_NAMESPACE
 
-If TEST_NAMESPACE is blank or unspecified, any assets events, locations will be visible to other users running the same examples
+If TEST_NAMESPACE is blank or unspecified, any assets or events will be visible to other users running the same examples
 on the same URL.
 
-Each example creates assets,events,locations that are not visible to other examples.
+Each example creates assets,events that are not visible to other examples.
 For example the door_entry assets,events etc are not visible to the synsation example.
 
-***Note: Assets and locations are only created if they do not already exist according to namespace.  If one wants to execute a sample multiple 
+***Note: Assets are only created if they do not already exist according to namespace.  If one wants to execute a sample multiple 
 times, feel free to set TEST_NAMESPACE to a different unique id.***
 
 Due to restrictions attachments are always uploaded during every example execution.
