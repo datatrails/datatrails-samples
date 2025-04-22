@@ -1,7 +1,7 @@
 """common parser argument
 
-   This is copied from datatrails-python repo. When acceptable this file will
-   be copied back to the datatrails-python repo.
+This is copied from datatrails-python repo. When acceptable this file will
+be copied back to the datatrails-python repo.
 """
 
 # pylint:  disable=missing-docstring

@@ -1,7 +1,7 @@
 # WARNING: Proof of concept code: Not for release
 
 """Class that implements common actions on an asset. This is the secret sauce
-   and this code may be added to the python SDK at some later date...
+and this code may be added to the python SDK at some later date...
 """
 
 # pylint:  disable=missing-docstring

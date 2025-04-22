@@ -1,2 +1,1 @@
-"""estate info
-"""
+"""estate info"""

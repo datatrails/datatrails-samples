@@ -1,5 +1,4 @@
-"""Local Archivist class
-"""
+"""Local Archivist class"""
 
 # pylint:  disable=missing-docstring
 # pylint:  disable=too-few-public-methods

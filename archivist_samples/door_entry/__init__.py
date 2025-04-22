@@ -1,2 +1,1 @@
-"""door entry
-"""
+"""door entry"""
