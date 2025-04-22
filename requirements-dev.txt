@@ -4,7 +4,7 @@
 autopep8~=2.3
 black~=24.10
 pycodestyle~=2.13
-pylint~=3.0
+pylint~=3.3
 
 # uploading to pypi
 build~=1.2
