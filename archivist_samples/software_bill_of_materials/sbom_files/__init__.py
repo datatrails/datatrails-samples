@@ -1,1 +1,1 @@
-"""Sbom files """
+"""Sbom files"""

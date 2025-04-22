@@ -1,2 +1,1 @@
-"""Archivist samples code
-"""
+"""Archivist samples code"""

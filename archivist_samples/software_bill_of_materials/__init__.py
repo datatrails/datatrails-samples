@@ -1,2 +1,1 @@
-"""software bill of materials
-"""
+"""software bill of materials"""

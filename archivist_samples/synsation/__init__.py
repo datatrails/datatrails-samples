@@ -1,2 +1,1 @@
-"""synsation data
-"""
+"""synsation data"""

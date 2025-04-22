@@ -1,2 +1,1 @@
-"""signed records
-"""
+"""signed records"""

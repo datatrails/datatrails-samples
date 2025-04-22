@@ -1,5 +1,4 @@
-"""Convenience functions
-"""
+"""Convenience functions"""
 
 # pylint:  disable=missing-docstring
 

@@ -1,5 +1,4 @@
-"""common parser arguments for all samples code
-"""
+"""common parser arguments for all samples code"""
 
 # pylint:  disable=missing-docstring
 # pylint:  disable=too-few-public-methods

@@ -1,7 +1,6 @@
 # WARNING: Proof of concept code: Not for release
 
-"""Key management
-"""
+"""Key management"""
 
 # pylint:  disable=missing-docstring
 

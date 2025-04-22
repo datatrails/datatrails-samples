@@ -1,2 +1,1 @@
-"""sbom document
-"""
+"""sbom document"""
