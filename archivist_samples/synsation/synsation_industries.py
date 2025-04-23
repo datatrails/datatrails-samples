@@ -2,7 +2,7 @@
 # In this scenario Synsation Industries runs a series of
 # electric vehicle charging points
 #
-# This also demonstrates the capability to make locations and assets 1:1
+# This also demonstrates the capability to make assets 1:1
 
 # pylint: disable=missing-docstring
 # pylint: disable=too-many-positional-arguments
@@ -36,26 +36,12 @@ def initialise_asset_types(ac):
     return type_map
 
 
-def make_charger_location(ac, displayname, description, plat, plong):
-    props = {
-        "display_name": displayname,
-        "description": description,
-        "latitude": float(plat),
-        "longitude": float(plong),
-    }
-    newlocation = ac.locations.create(props)
-    return newlocation
-
-
-def make_charger_asset(
-    ac, displayname, serial, description, image, loc_id, charger_type
-):
+def make_charger_asset(ac, displayname, serial, description, image, charger_type):
     attrs = {
         "arc_firmware_version": "1.0",
         "arc_serial_number": serial,
         "arc_display_name": displayname,
         "arc_description": description,
-        "arc_home_location_identity": loc_id,
         "arc_display_type": "EV charging station",
         "synsation_ev_charger_type": charger_type,
         "arc_primary_image": {
@@ -76,18 +62,17 @@ def create_charging_stations(ac, stations, airport_code, charger_type, attachmen
     )
     for i, station in enumerate(stations):
         displayname = f"{airport_code}-{airport_code}-{i}"
-        description = f"{charger_type} charging station at {airport_code}, position {i}"
-        serial = f"evc-{serialrand}-{i}"
-        newlocation = make_charger_location(
-            ac, displayname, description, station[0], station[1]
+        description = (
+            f"{charger_type} charging station at {airport_code}"
+            f", position ({station[0]}, {station[1]})"
         )
+        serial = f"evc-{serialrand}-{i}"
         make_charger_asset(
             ac,
             displayname,
             serial,
             description,
             attachment,
-            newlocation["identity"],
             charger_type,
         )
 

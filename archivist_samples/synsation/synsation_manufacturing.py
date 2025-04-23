@@ -37,50 +37,7 @@ def initialise_asset_types():
     return type_map
 
 
-def create_locations():
-    locations = {}
-
-    # According to wikipedia, the canonical location of
-    # Flint, Michigan is 43° 1′ 8″ N, 83° 41′ 36″ W
-    displayname = "Flint Manufacturing Center"
-    locations[displayname] = {
-        "props": {
-            "display_name": displayname,
-            "description": "Global Headquarters",
-            "latitude": 43.018889,
-            "longitude": -83.693333,
-        },
-        "attrs": {
-            "address": "Flint 48501, Michigan",
-            "Facility Type": "Manufacturing",
-            "reception_email": "reception_FM@synsation.io",
-            "reception_phone": "+1 (810) 123-4567",
-        },
-    }
-
-    # According to wikipedia, the canonical location of
-    # Stuttgart is 48° 47′ 0″ N, 9° 11′ 0″ E
-    displayname = "Stuttgart Finishing Plant"
-    locations[displayname] = {
-        "props": {
-            "display_name": displayname,
-            "description": "European Distribution Center",
-            "latitude": 48.783333,
-            "longitude": 9.183333,
-        },
-        "attrs": {
-            "address": "70173 Stuttgart, Germany",
-            "Facility Type": "Manufacturing",
-            "reception_email": "reception_ST@synsation.io",
-            "reception_phone": "+49 (711) 123-456",
-        },
-    }
-    return locations
-
-
-def create_shipping_crate(
-    arch, name, serial, description, track_id, image, loc_id, capacity
-):
+def create_shipping_crate(arch, name, serial, description, track_id, image, capacity):
     newasset, existed = crates_creator(
         arch,
         name,
@@ -92,7 +49,6 @@ def create_shipping_crate(
             "synsation_crate_tracking_id": track_id,
             "synsation_crate_capacity": capacity,
         },
-        location=loc_id,
         attachments=[
             AttachmentDescription(image, "arc_primary_image"),
         ],
@@ -102,7 +58,6 @@ def create_shipping_crate(
 
 def initialise_all(arch):
     asset_types = initialise_asset_types()
-    manufacturing_locations = create_locations()
 
     # Create a single crate to demonstrate mobile assets use case
     tracking_id = "FLINT-" + "".join(
@@ -119,6 +74,5 @@ def initialise_all(arch):
         description,
         tracking_id,
         asset_types["Shipping Crate"],
-        manufacturing_locations["Flint Manufacturing Center"],
         "500",
     )

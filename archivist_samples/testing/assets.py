@@ -8,7 +8,6 @@ from typing import Callable, Dict, List, Optional
 from archivist import archivist as type_helper
 
 from archivist.errors import ArchivistNotFoundError
-from .locations import locations_create_if_not_exists
 
 LOGGER = logging.getLogger(__name__)
 
@@ -46,7 +45,7 @@ def make_assets_create(
     public=False,
 ):
     """
-    Creates a general function that creates an asset with a location
+    Creates a general function that creates an asset
     and a list of attachments but only if the asset does not already exist.
 
     By default the selector for, if the asset already exists, is the `arc_display_name`.
@@ -62,7 +61,6 @@ def make_assets_create(
         display_name,
         asset_attrs,
         *,
-        location=None,
         attachments: Optional[List[AttachmentDescription]] = None,
         selector_key="arc_display_name",
         selector_value=None
@@ -83,14 +81,6 @@ def make_assets_create(
 
         except ArchivistNotFoundError:
             asset_attrs["arc_display_name"] = display_name
-            if location is not None:
-                location = locations_create_if_not_exists(
-                    arch,
-                    location["props"],
-                    attrs=location["attrs"],
-                )
-                asset_attrs["arc_home_location_identity"] = location["identity"]
-
             if attachments is not None and attachment_creator is not None:
                 for attachment in attachments:
                     attachment_attr = attachment_creator(arch, attachment)

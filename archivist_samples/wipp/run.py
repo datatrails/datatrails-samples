@@ -475,7 +475,7 @@ def run(arch, args):
     LOGGER.info("Loading emplacement...")
     drum.emplacement(
         {
-            "description": "Emplacement in location D-32",
+            "description": "Emplacement at D-32",
             "location": "D-32",
         },
         attachments=[

@@ -45,15 +45,12 @@ def initialise_asset_types(ac):
     return type_map
 
 
-def create_smartcity_device(
-    ac, locationid, displayname, displaytype, serial, description, image
-):
+def create_smartcity_device(ac, displayname, displaytype, serial, description, image):
     attrs = {
         "arc_firmware_version": "1.0",
         "arc_serial_number": serial,
         "arc_display_name": displayname,
         "arc_description": description,
-        "arc_home_location_identity": locationid,
         "arc_display_type": displaytype,
         "arc_primary_image": {
             "arc_attribute_type": "arc_attachment",
@@ -72,24 +69,8 @@ def create_newmarketroad_roundabout(ac, asset_types):
     #  - 4-way traffic lights with red light violation cameras
     #  - 2 general CCTV stand
     #  - 2 streetlight controller
-    props = {
-        "display_name": "Newmarket Road Roundabout",
-        "description": (
-            "Circulatory intersection between Newmarket " "Road and East Road"
-        ),
-        "latitude": 52.208479,
-        "longitude": 0.137648,
-    }
-    attrs = {
-        "intersection_type": "roundabout",
-    }
-    newlocation = ac.locations.create(props, attrs=attrs)
-    LOGGER.debug(newlocation)
-    location_identity = newlocation["identity"]
-
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.nmr.n01",
         "Traffic light with violation camera",
         "vtl-x4-01",
@@ -98,7 +79,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.nmr.002",
         "Traffic light with violation camera",
         "vtl-x4-02",
@@ -107,7 +87,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.nmr.003",
         "Traffic light with violation camera",
         "vtl-x4-03",
@@ -116,7 +95,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.nmr.004",
         "Traffic light with violation camera",
         "vtl-x4-04",
@@ -126,7 +104,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-01-01",
         "Outdoor security camera",
         "gmr-123-01",
@@ -135,7 +112,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-01-02",
         "Outdoor security camera",
         "gmr-123-02",
@@ -145,7 +121,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c022",
         "Street light controller",
         "ssl-a4l-01",
@@ -154,7 +129,6 @@ def create_newmarketroad_roundabout(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c023",
         "Street light controller",
         "ssl-a4l-02",
@@ -168,21 +142,8 @@ def create_parkside_junction(ac, asset_types):
     #  - 4-way traffic lights with red light violation cameras
     #  - 1 general CCTV stand
     #  - 1 streetlight controller
-    props = {
-        "display_name": "Parkside Junction",
-        "description": "Box intersection between Mill Road and East Road",
-        "latitude": 52.202502,
-        "longitude": 0.131148,
-    }
-    attrs = {
-        "intersection_type": "box",
-    }
-    newlocation = ac.locations.create(props, attrs=attrs)
-    location_identity = newlocation["identity"]
-
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ppj.n01",
         "Traffic light with violation camera",
         "vtl-x4-05",
@@ -191,7 +152,6 @@ def create_parkside_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ppj.002",
         "Traffic light with violation camera",
         "vtl-x4-06",
@@ -200,7 +160,6 @@ def create_parkside_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ppj.003",
         "Traffic light with violation camera",
         "vtl-x4-07",
@@ -209,7 +168,6 @@ def create_parkside_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ppj.004",
         "Traffic light with violation camera",
         "vtl-x4-08",
@@ -219,7 +177,6 @@ def create_parkside_junction(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-02-01",
         "Outdoor security camera",
         "gmr-123-03",
@@ -229,7 +186,6 @@ def create_parkside_junction(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c010",
         "Street light controller",
         "ssl-a4l-03",
@@ -244,21 +200,8 @@ def create_drummerstreet_terminal(ac, asset_types):
     #  - 4 general CCTV stand
     #  - 4 streetlight controller
     #  - 1 air quality meter
-    props = {
-        "display_name": "Drummer Street Terminal",
-        "description": "Drummer Street Bus Terminal",
-        "latitude": 52.205345,
-        "longitude": 0.123922,
-    }
-    attrs = {
-        "intersection_type": "terminal",
-    }
-    newlocation = ac.locations.create(props, attrs=attrs)
-    location_identity = newlocation["identity"]
-
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.dst.n01",
         "Traffic light",
         "tl-x1-01",
@@ -268,7 +211,6 @@ def create_drummerstreet_terminal(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-03-01",
         "Outdoor security camera",
         "gmr-123-04",
@@ -277,7 +219,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-03-02",
         "Outdoor security camera",
         "gmr-123-05",
@@ -286,7 +227,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-03-03",
         "Outdoor security camera",
         "gmr-123-06",
@@ -295,7 +235,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "cctv-04-04",
         "Outdoor security camera",
         "gmr-123-07",
@@ -305,7 +244,6 @@ def create_drummerstreet_terminal(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c106",
         "Street light controller",
         "ssl-a4l-04",
@@ -314,7 +252,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c108",
         "Street light controller",
         "ssl-a4l-05",
@@ -323,7 +260,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c110",
         "Street light controller",
         "ssl-a4l-06",
@@ -332,7 +268,6 @@ def create_drummerstreet_terminal(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c112",
         "Street light controller",
         "ssl-a4l-07",
@@ -342,7 +277,6 @@ def create_drummerstreet_terminal(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "airqualmet00",
         "Outdoor air quality meter",
         "tm-1417-a61",
@@ -356,24 +290,8 @@ def create_catholicchurch_junction(ac, asset_types):
     #  - 4-way traffic light
     #  - 1 streetlight controller
     #  - 1 air quality monitor
-    props = {
-        "display_name": "Catholic Church Junction",
-        "description": (
-            "Junction of Lensfield Road and Hills Road at the "
-            "Church of Our Lady and the English Martyrs"
-        ),
-        "latitude": 52.199308,
-        "longitude": 0.127378,
-    }
-    attrs = {
-        "intersection_type": "cross",
-    }
-    newlocation = ac.locations.create(props, attrs=attrs)
-    location_identity = newlocation["identity"]
-
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ccj.001",
         "Traffic light",
         "vtl-x4-05",
@@ -382,7 +300,6 @@ def create_catholicchurch_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ccj.002",
         "Traffic light",
         "vtl-x4-06",
@@ -391,7 +308,6 @@ def create_catholicchurch_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ccj.003",
         "Traffic light",
         "vtl-x4-07",
@@ -400,7 +316,6 @@ def create_catholicchurch_junction(ac, asset_types):
     )
     create_smartcity_device(
         ac,
-        location_identity,
         "tcl.ccj.004",
         "Traffic light",
         "vtl-x4-08",
@@ -410,7 +325,6 @@ def create_catholicchurch_junction(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "lighting.street.22c045",
         "Street light controller",
         "ssl-a4l-08",
@@ -420,7 +334,6 @@ def create_catholicchurch_junction(ac, asset_types):
 
     create_smartcity_device(
         ac,
-        location_identity,
         "airqualmet01",
         "Outdoor air quality meter",
         "tm-1416-a61",
@@ -435,8 +348,8 @@ def create_catholicchurch_junction(ac, asset_types):
 def initialise_all(ac):
     LOGGER.info("Creating data for Synsation Services Smart City...")
     # Unlike the others, the smartcity scenario is not randomly created
-    # and distributed, and does not allow changing the number of locations
-    # and so on.  Everything is planned and fixed in place
+    # and distributed, and does not allow changing things.
+    # Everything is planned and fixed in place
     asset_types = initialise_asset_types(ac)
 
     create_newmarketroad_roundabout(ac, asset_types)

@@ -46,13 +46,13 @@ If TEST_VERBOSE is "-v" debugging output will appear when running the tests.
 ## TEST_NAMESPACE
 
 If TEST_NAMESPACE is blank or unspecified then each execution of './scripts/samples.sh' will not be
-independent. Any assets events, locations will be visible to other users running the same tests
+independent. Any assets or events will be visible to other users running the same tests
 on the same URL.
 
-Each example test creates assets,events,locations that are not visible to other example tests.
+Each example test creates assets,events that are not visible to other example tests.
 For example the door_entry assets,events etc are not visible to the synsation example tests.
 
-Assets and locations are only created if they do not already exist according to namespace.
+Assets are only created if they do not already exist according to namespace.
 
 Due to restrictions attachments are always uploaded during every test execution.
 
