@@ -1,4 +1,4 @@
-cryptography~=41.0.2
+cryptography~=45.0.2
 pyyaml~=6.0.1
 
 # when testing a new version of the github datatrails-python repo copy the wheel
