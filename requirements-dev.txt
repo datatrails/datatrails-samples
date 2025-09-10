@@ -8,4 +8,4 @@ pylint~=3.3
 
 # uploading to pypi
 build~=1.2
-twine~=6.1
+twine~=6.2
